@@ -1,0 +1,99 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# QR-Dine — full local stack in Docker
+#
+# Everything runs in containers. The developer only needs Docker Desktop.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up --build     # start + build
+#   docker compose -f docker-compose.dev.yml up             # start (cached build)
+#   docker compose -f docker-compose.dev.yml logs -f web    # tail app logs
+#   docker compose -f docker-compose.dev.yml exec web bash  # shell into app
+#   docker compose -f docker-compose.dev.yml down           # stop (keeps data)
+#   docker compose -f docker-compose.dev.yml down -v        # stop + wipe data
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: TAVLIQO-web
+    env_file:
+      - .env
+    environment:
+      # These override whatever is in .env — inside Docker, databases are
+      # reached by service name, not localhost.
+      CONTROL_DATABASE_URL: postgres://TAVLIQO:qrdine_dev_only@control-db:5432/qrdine_control
+      TENANT_DATABASE_URL:  postgres://TAVLIQO:qrdine_dev_only@tenant-db:5432/qrdine_tenant
+      REDIS_URL:            redis://redis:6379/0
+      DEBUG:                "True"
+    ports:
+      - "8000:8000"
+    volumes:
+      # Bind mount for hot reload during development.
+      # Production image ships code baked in; dev re-mounts the host folder.
+      - .:/app
+    depends_on:
+      control-db:
+        condition: service_healthy
+      tenant-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    command: python manage.py runserver 0.0.0.0:8000
+
+  control-db:
+    image: postgres:16-alpine
+    container_name: TAVLIQO-control-db
+    environment:
+      POSTGRES_DB: qrdine_control
+      POSTGRES_USER: TAVLIQO
+      POSTGRES_PASSWORD: qrdine_dev_only
+    ports:
+      - "5433:5432"
+    volumes:
+      - control-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U TAVLIQO -d qrdine_control"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  tenant-db:
+    image: postgres:16-alpine
+    container_name: TAVLIQO-tenant-db
+    environment:
+      POSTGRES_DB: qrdine_tenant
+      POSTGRES_USER: TAVLIQO
+      POSTGRES_PASSWORD: qrdine_dev_only
+    ports:
+      - "5434:5432"
+    volumes:
+      - tenant-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U TAVLIQO -d qrdine_tenant"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: TAVLIQO-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  control-data:
+  tenant-data:
+  redis-data:

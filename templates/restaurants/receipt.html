@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt #{{ order.id }} — {{ restaurant.name }}</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: #fff;
+            color: #000;
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+        }
+        .receipt-container {
+            max-width: 300px;
+            margin: 0 auto;
+            border: 1px dashed #ccc;
+            padding: 20px;
+        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 18px; margin: 0 0 5px 0; text-transform: uppercase; }
+        .header p { margin: 2px 0; font-size: 12px; }
+        .divider { border-top: 1px dashed #000; margin: 15px 0; }
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .items-table th { text-align: left; font-size: 12px; border-bottom: 1px solid #000; padding-bottom: 5px; }
+        .items-table td { padding: 5px 0; vertical-align: top; font-size: 13px; }
+        .items-table .qty { width: 20%; text-align: center; }
+        .items-table .amount { text-align: right; width: 30%; }
+        .totals { margin-top: 10px; font-size: 13px; }
+        .totals-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .grand-total { font-weight: bold; font-size: 16px; border-top: 1px solid #000; padding-top: 10px; margin-top: 10px; }
+        .footer { text-align: center; margin-top: 25px; font-size: 11px; }
+        .footer p { margin: 3px 0; }
+        .no-print { text-align: center; margin-top: 20px; }
+        .no-print button { background: #0B1D42; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-family: inherit; font-size: 14px; }
+        
+        @media print {
+            .no-print { display: none; }
+            body { padding: 0; }
+            .receipt-container { border: none; padding: 0; max-width: 100%; }
+        }
+    </style>
+</head>
+<body onload="window.print()">
+
+<div class="receipt-container">
+    <div class="header">
+        <h1>{{ restaurant.name }}</h1>
+        {% if restaurant.address %}<p>{{ restaurant.address }}</p>{% endif %}
+        {% if restaurant.phone %}<p>Ph: {{ restaurant.phone }}</p>{% endif %}
+        {% if restaurant.email %}<p>GSTIN: {{ restaurant.email }}</p>{% endif %}
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="font-size: 12px; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between;">
+            <span>Bill No: #{{ order.id }}</span>
+            <span>{{ order.created_at|date:"d/m/y H:i" }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+            <span>Table: {{ order.table_label }}</span>
+            <span>{{ order.staff_name }}</span>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th class="qty">Qty</th>
+                <th class="amount">Amt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.name_snapshot }}</td>
+                <td class="qty">{{ item.qty }}</td>
+                <td class="amount">{{ item.line_total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="totals">
+        <div class="totals-row">
+            <span>Subtotal</span>
+            <span>₹{{ order.subtotal }}</span>
+        </div>
+        <div class="totals-row">
+            <span>GST ({{ restaurant.tax_percentage }}%)</span>
+            <span>₹{{ order.tax_amount }}</span>
+        </div>
+        <div class="totals-row grand-total">
+            <span>TOTAL</span>
+            <span>₹{{ order.total }}</span>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+    
+    <div style="font-size: 12px; text-align: center;">
+        Payment Mode: <strong>{{ order.get_payment_intent_display }}</strong>
+    </div>
+
+    <div class="footer">
+        <p>Thank you for dining with us!</p>
+        <p>Powered by TAVLIQO</p>
+    </div>
+</div>
+
+<div class="no-print">
+    <button onclick="window.print()">Print Receipt</button>
+</div>
+
+</body>
+</html>

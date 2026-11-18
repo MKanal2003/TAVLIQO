@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}TAVLIQO — Smart Dining. One Scan.{% endblock %}
+
+{% block body %}
+<div class="bg-[#F4F6FA] text-[#0B1D42] font-sans">
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0B1D42]/95 backdrop-blur-md border-b border-white/10 transition-all">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2">
+        <!-- Text logo replacing the old image -->
+        <span class="text-3xl font-heading font-extrabold tracking-tight text-white">
+          TAVLIQ<span class="text-[#0BA6A0]">O</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Features</a>
+        <a href="#how-it-works" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">How It Works</a>
+        <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">About</a>
+      </div>
+
+      <!-- CTA -->
+      <div class="hidden md:flex items-center">
+        <a href="#contact" class="bg-[#0BA6A0] hover:bg-[#098b86] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-all shadow-lg shadow-[#0BA6A0]/20">
+          Contact Sales
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       HERO SECTION
+  =========================================== -->
+  <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0B1D42]">
+    <!-- Background decorations -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(11,166,160,0.15),transparent_50%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(11,166,160,0.1),transparent_50%)]"></div>
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+      
+      <!-- Left Copy -->
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0BA6A0]/10 border border-[#0BA6A0]/30 mb-8">
+          <span class="w-2 h-2 rounded-full bg-[#0BA6A0] animate-pulse"></span>
+          <span class="text-xs font-semibold text-[#0BA6A0] uppercase tracking-wider">The Future of Dining</span>
+        </div>
+        
+        <h1 class="text-5xl lg:text-7xl font-heading font-extrabold text-white leading-[1.1] mb-6">
+          Smart Dining.<br>
+          <span class="text-[#0BA6A0]">One Scan.</span>
+        </h1>
+        
+        <p class="text-lg text-gray-400 mb-10 max-w-lg leading-relaxed">
+          TAVLIQO replaces physical menus with a lightning-fast QR experience. No apps to download. No friction for your customers. Just seamless ordering and real-time menu management for your restaurant.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#contact" class="bg-[#0BA6A0] hover:bg-[#098b86] text-white text-center font-semibold px-8 py-4 rounded-xl transition-all shadow-xl shadow-[#0BA6A0]/20">
+            Get Onboarded
+          </a>
+          <a href="#features" class="bg-white/5 hover:bg-white/10 text-white border border-white/10 text-center font-semibold px-8 py-4 rounded-xl transition-all">
+            Explore Features
+          </a>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="mt-10 flex items-center gap-6 text-sm text-gray-400">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            No app required
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Zero setup fees
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Visual (Phone Mockup) -->
+      <div class="relative mx-auto w-full max-w-sm lg:max-w-md">
+        <!-- Glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#0BA6A0] rounded-full blur-[100px] opacity-20"></div>
+        
+        <!-- Phone Frame -->
+        <div class="relative bg-[#0D0D0D] rounded-[3rem] border-[6px] border-gray-800 p-3 shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+          <!-- Notch -->
+          <div class="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-full z-20"></div>
+          
+          <!-- Screen -->
+          <div class="bg-[#F4F6FA] rounded-[2.5rem] overflow-hidden relative">
+            <!-- App Header -->
+            <div class="bg-[#0B1D42] pt-12 pb-4 px-5 rounded-b-3xl">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#0BA6A0] flex items-center justify-center text-white font-bold font-heading">T</div>
+                <div>
+                  <p class="text-white font-semibold text-sm">The Bistro</p>
+                  <p class="text-gray-400 text-xs">Mumbai, MH</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- App Content -->
+            <div class="p-5 space-y-4 bg-white min-h-[400px]">
+              <!-- Search -->
+              <div class="flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2 text-gray-400 text-xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                Search menu...
+              </div>
+
+              <!-- Tabs -->
+              <div class="flex gap-2 text-[10px] font-semibold overflow-hidden">
+                <span class="bg-[#0BA6A0] text-white px-3 py-1.5 rounded-full whitespace-nowrap">Starters</span>
+                <span class="bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full whitespace-nowrap">Mains</span>
+                <span class="bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full whitespace-nowrap">Drinks</span>
+              </div>
+
+              <!-- Menu Item -->
+              <div class="flex items-center gap-3 p-2 border border-gray-100 rounded-xl shadow-sm">
+                <div class="w-12 h-12 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                <div class="flex-1">
+                  <div class="w-24 h-3 bg-gray-200 rounded mb-2"></div>
+                  <div class="w-16 h-2 bg-gray-100 rounded"></div>
+                </div>
+                <div class="text-[#0B1D42] font-bold text-xs">₹240</div>
+              </div>
+              <div class="flex items-center gap-3 p-2 border border-gray-100 rounded-xl shadow-sm">
+                <div class="w-12 h-12 bg-gray-200 rounded-lg flex-shrink-0"></div>
+                <div class="flex-1">
+                  <div class="w-20 h-3 bg-gray-200 rounded mb-2"></div>
+                  <div class="w-12 h-2 bg-gray-100 rounded"></div>
+                </div>
+                <div class="text-[#0B1D42] font-bold text-xs">₹320</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Badge -->
+        <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
+          <div class="w-10 h-10 bg-[#E0F2FE] rounded-full flex items-center justify-center text-[#0BA6A0]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 font-medium">Menu updated</p>
+            <p class="text-sm text-[#0B1D42] font-bold">Just now</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FEATURES SECTION
+  =========================================== -->
+  <section id="features" class="py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-[#0BA6A0] font-semibold tracking-wide uppercase text-sm mb-3">Everything You Need</h2>
+        <h3 class="text-4xl font-heading font-bold text-[#0B1D42] mb-4">Built for modern restaurants.</h3>
+        <p class="text-gray-500 text-lg">No complex hardware. No app downloads. Just your menu, intelligently connected to your customers.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          </div>
+          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Instant QR Menus</h4>
+          <p class="text-gray-500 text-sm leading-relaxed">Customers scan the code on the table and instantly view your menu. No app store downloads, no delays.</p>
+        </div>
+        <!-- Feature 2 -->
+        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </div>
+          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Real-Time Updates</h4>
+          <p class="text-gray-500 text-sm leading-relaxed">Out of stock? Changed a price? Update it in your dashboard and it reflects instantly on every customer's phone.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Live Order Management</h4>
+          <p class="text-gray-500 text-sm leading-relaxed">Receive orders straight to your dashboard. Accept, prepare, and serve—all without writing anything down.</p>
+        </div>
+        <!-- Feature 4 -->
+        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          </div>
+          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Smart Filtering</h4>
+          <p class="text-gray-500 text-sm leading-relaxed">Built-in Veg/Non-Veg indicators, category sorting, and live search make it incredibly easy for customers to find what they want.</p>
+        </div>
+        <!-- Feature 5 -->
+        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Rich Visual Menus</h4>
+          <p class="text-gray-500 text-sm leading-relaxed">Upload high-quality photos of your dishes. People eat with their eyes, and photos drive more orders.</p>
+        </div>
+        <!-- Feature 6 -->
+        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Hygienic & Contactless</h4>
+          <p class="text-gray-500 text-sm leading-relaxed">Ditch the worn-out laminated menus. Give every customer a clean, digital experience on their own device.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       HOW IT WORKS
+  =========================================== -->
+  <section id="how-it-works" class="py-24 bg-[#0B1D42] text-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-[#0BA6A0] font-semibold tracking-wide uppercase text-sm mb-3">Simple Process</h2>
+        <h3 class="text-4xl font-heading font-bold mb-4">How TAVLIQO works.</h3>
+        <p class="text-gray-400 text-lg">We handle the tech. You focus on the food.</p>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-8 relative">
+        <!-- Connecting line -->
+        <div class="hidden md:block absolute top-8 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#0BA6A0]/0 via-[#0BA6A0] to-[#0BA6A0]/0"></div>
+
+        <!-- Step 1 -->
+        <div class="relative text-center">
+          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
+            <span class="font-heading font-bold text-[#0BA6A0]">01</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">We Onboard You</h4>
+          <p class="text-gray-400 text-sm">Contact our team. We create your restaurant profile, upload your menu, and hand over your private dashboard link.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative text-center">
+          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
+            <span class="font-heading font-bold text-[#0BA6A0]">02</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Print Your QR</h4>
+          <p class="text-gray-400 text-sm">Download your custom, unguessable QR code from your dashboard. Place it on tables, counters, or entrance.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative text-center">
+          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
+            <span class="font-heading font-bold text-[#0BA6A0]">03</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Customers Scan</h4>
+          <p class="text-gray-400 text-sm">No app to download. They scan with their camera, browse the menu, and place an order instantly.</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="relative text-center">
+          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
+            <span class="font-heading font-bold text-[#0BA6A0]">04</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">You Serve</h4>
+          <p class="text-gray-400 text-sm">Orders appear live on your dashboard. Accept, prepare, and mark as paid all in one place.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       ABOUT / B2B FOCUS
+  =========================================== -->
+  <section id="about" class="py-24 bg-[#F4F6FA]">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+      <div>
+        <h2 class="text-[#0BA6A0] font-semibold tracking-wide uppercase text-sm mb-3">About TAVLIQO</h2>
+        <h3 class="text-4xl font-heading font-bold text-[#0B1D42] mb-6">Built for the restaurant owner, not the IT team.</h3>
+        <p class="text-gray-600 mb-6 text-lg leading-relaxed">
+          TAVLIQO was born from a simple frustration — restaurants spend thousands on reprinting menus every season, and customers are stuck handling the same laminated cards as everyone else.
+        </p>
+        <p class="text-gray-600 mb-8 text-lg leading-relaxed">
+          We built a platform that gives you complete control over your menu. Because TAVLIQO is sales-led, we set everything up for you. You don't need developers, designers, or a monthly agency bill.
+        </p>
+        
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-[#0BA6A0]/10 flex items-center justify-center flex-shrink-0 mt-1">
+              <svg class="w-4 h-4 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <p class="text-gray-700"><strong class="text-[#0B1D42]">Simple by design.</strong> If a restaurant owner can't figure it out in 5 minutes, we've failed.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-[#0BA6A0]/10 flex items-center justify-center flex-shrink-0 mt-1">
+              <svg class="w-4 h-4 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <p class="text-gray-700"><strong class="text-[#0B1D42]">Zero hardware.</strong> Run it off any laptop, tablet, or smartphone you already own.</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-[#0BA6A0]/10 flex items-center justify-center flex-shrink-0 mt-1">
+              <svg class="w-4 h-4 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <p class="text-gray-700"><strong class="text-[#0B1D42]">Customer-first.</strong> Your menu page loads incredibly fast and looks great on every device.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Card -->
+      <div class="bg-[#0B1D42] p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-[#0BA6A0] rounded-full blur-[80px] opacity-20 -mr-20 -mt-20"></div>
+        <div class="relative z-10">
+          <p class="text-[#0BA6A0] font-semibold uppercase tracking-wider text-xs mb-6">Your Private Dashboard</p>
+          
+          <div class="bg-black/30 p-5 rounded-xl border border-white/10 mb-8 font-mono text-sm overflow-x-auto">
+            <p class="text-gray-400 mb-1">TAVLIQO.com/app/dashboard</p>
+            <p class="text-white">your-restaurant-name</p>
+          </div>
+
+          <p class="text-gray-400 mb-8 leading-relaxed">
+            You get a private link to your dashboard. Manage your menu, view live orders, and update prices from anywhere.
+          </p>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white/5 border border-white/10 p-4 rounded-xl">
+              <p class="text-2xl font-heading font-bold text-white mb-1">100%</p>
+              <p class="text-xs text-gray-400">Mobile optimised</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-4 rounded-xl">
+              <p class="text-2xl font-heading font-bold text-white mb-1">0</p>
+              <p class="text-xs text-gray-400">Apps to download</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CONTACT / SALES CTA (Replaced fake form)
+  =========================================== -->
+  <section id="contact" class="py-24 bg-white relative overflow-hidden">
+    <!-- Decor -->
+    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(11,166,160,0.05),transparent_50%)]"></div>
+    
+    <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+      <div class="w-20 h-20 bg-[#0BA6A0]/10 rounded-full flex items-center justify-center mx-auto mb-8">
+        <svg class="w-10 h-10 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </div>
+      
+      <h2 class="text-4xl lg:text-5xl font-heading font-bold text-[#0B1D42] mb-6">
+        Ready to upgrade your restaurant?
+      </h2>
+      <p class="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">
+        We are currently onboarding a limited number of restaurants. Contact our team to get your custom QR menu set up today.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="mailto:hello@tavliqo.com?subject=Restaurant%20Onboarding%20Request" class="w-full sm:w-auto bg-[#0B1D42] hover:bg-[#152c5c] text-white font-semibold px-10 py-4 rounded-xl transition-all shadow-xl shadow-[#0B1D42]/20 flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Contact via Email
+        </a>
+        <a href="https://wa.me/919999999999" target="_blank" class="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd59] text-white font-semibold px-10 py-4 rounded-xl transition-all shadow-xl shadow-[#25D366]/20 flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+  <footer class="bg-[#0B1D42] pt-16 pb-8 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        
+        <!-- Brand -->
+        <div class="md:col-span-2">
+          <a href="/" class="inline-block mb-4">
+            <span class="text-3xl font-heading font-extrabold tracking-tight text-white">
+              TAVLIQ<span class="text-[#0BA6A0]">O</span>
+            </span>
+          </a>
+          <p class="text-gray-400 text-sm max-w-xs leading-relaxed mb-6">
+            Smart Dining. One Scan.<br>
+            A restaurant technology platform connecting menus, tables, and customers.
+          </p>
+          <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">
+            Product by <span class="text-white">ARJUNIX Labs</span>
+          </p>
+        </div>
+
+        <!-- Product -->
+        <div>
+          <h4 class="text-white font-semibold mb-4">Product</h4>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li><a href="#features" class="hover:text-[#0BA6A0] transition-colors">Features</a></li>
+            <li><a href="#how-it-works" class="hover:text-[#0BA6A0] transition-colors">How it Works</a></li>
+            <li><a href="#about" class="hover:text-[#0BA6A0] transition-colors">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 class="text-white font-semibold mb-4">Legal</h4>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li><a href="{% url 'core:terms' %}" class="hover:text-[#0BA6A0] transition-colors">Terms of Service</a></li>
+            <li><a href="{% url 'core:privacy' %}" class="hover:text-[#0BA6A0] transition-colors">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom -->
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-gray-500">
+          &copy; 2026 TAVLIQO. All rights reserved.
+        </p>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#0BA6A0]"></span>
+          <span class="text-sm text-gray-400">All systems operational</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Smooth scroll script -->
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const offset = 80; // navbar height
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+{% endblock %}

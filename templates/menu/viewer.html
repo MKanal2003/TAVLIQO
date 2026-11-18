@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+{% block title %}{{ restaurant.name }} — Menu{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#0A0A0A] text-white pb-24">
+
+  {# Header #}
+  <div class="bg-[#0B1D42] py-8">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="flex items-center gap-4 mb-4">
+        {% if restaurant.logo %}
+        <img src="{{ restaurant.logo.url }}" alt="{{ restaurant.name }}" class="w-16 h-16 rounded-xl object-cover border-2 border-white/20">
+        {% else %}
+        <div class="w-16 h-16 rounded-xl bg-white/10 flex items-center justify-center border-2 border-white/20">
+          <span class="text-2xl font-bold" style="font-family:'Fraunces',serif;">{{ restaurant.name|first|upper }}</span>
+        </div>
+        {% endif %}
+        <div class="flex-1">
+          <h1 class="text-2xl font-medium mb-1" style="font-family:'Fraunces',serif;">{{ restaurant.name }}</h1>
+          {% if restaurant.address %}<p class="text-sm text-white/70">{{ restaurant.address }}</p>{% endif %}
+        </div>
+      </div>
+      {% if restaurant.description %}<p class="text-sm text-white/80">{{ restaurant.description }}</p>{% endif %}
+    </div>
+  </div>
+
+  {# Menu Content #}
+  <div class="max-w-4xl mx-auto px-6 py-8">
+
+    {# Search #}
+    <div class="mb-6">
+      <div class="relative flex gap-2">
+        <div class="relative flex-1">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" id="search-input" placeholder="Search dishes..."
+                 class="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:border-[#0BA6A0] focus:ring-2 focus:ring-[#0BA6A0]/50 outline-none">
+        </div>
+        <button onclick="toggleFilters()" id="filter-toggle" class="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white hover:bg-white/20 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+          </svg>
+          <span class="hidden sm:inline text-sm font-medium">Filters</span>
+        </button>
+      </div>
+    </div>
+
+    {# Filter panel #}
+    <div id="filter-panel" class="mb-8 space-y-4 overflow-hidden transition-all" style="max-height: 0;">
+      {% if categories %}
+      <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+        <p class="text-xs text-white/50 mb-3 uppercase tracking-wider font-medium">Categories</p>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filterCategory('all')" class="category-filter active px-4 py-2 rounded-lg text-sm font-medium bg-[#0BA6A0] text-white">All Items</button>
+          {% for cat in categories %}
+          <button onclick="filterCategory('{{ cat.pk }}')" class="category-filter px-4 py-2 rounded-lg text-sm font-medium bg-white/10 text-white/70 hover:bg-white/20">{{ cat.name }}</button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-xs text-white/50 uppercase tracking-wider font-medium">Quick Filters</p>
+          <button onclick="clearAllFilters()" class="text-xs text-white/50 hover:text-white/80">Clear All</button>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="toggleVegFilter()" id="veg-filter" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white/10 text-white/70 hover:bg-white/20 flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-green-500 rounded flex items-center justify-center"><span class="w-2 h-2 bg-green-500 rounded-full"></span></span>
+            Veg Only
+          </button>
+          <button onclick="toggleNonVegFilter()" id="nonveg-filter" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white/10 text-white/70 hover:bg-white/20 flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-red-500 rounded flex items-center justify-center"><span class="w-2 h-2 bg-red-500 rounded-full rotate-45"></span></span>
+            Non-Veg Only
+          </button>
+          <button onclick="toggleAvailableFilter()" id="available-filter" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white/10 text-white/70 hover:bg-white/20 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Available Only
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {# Categories #}
+    <div id="menu-container">
+      {% for cat in categories %}
+      <div class="category-section mb-8" data-category="{{ cat.pk }}">
+        <h2 class="text-xl font-medium mb-4 text-[#E0F2FE]" style="font-family:'Fraunces',serif;">{{ cat.name }} <span class="text-sm text-white/50 font-normal">({{ cat.items.count }})</span></h2>
+        <div class="space-y-4">
+          {% for item in cat.items.all %}
+          <div class="menu-item bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors {% if not item.is_available %}opacity-60{% endif %}"
+               data-name="{{ item.name|lower }}"
+               data-category="{{ cat.pk }}"
+               data-vegetarian="{{ item.is_vegetarian|yesno:'true,false' }}"
+               data-available="{{ item.is_available|yesno:'true,false' }}">
+            <div class="flex gap-4">
+              {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">{% endif %}
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-2 mb-1">
+                  <div class="flex items-center gap-2">
+                    {% if item.is_vegetarian %}
+                    <span class="w-4 h-4 border-2 border-green-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-green-500 rounded-full"></span></span>
+                    {% else %}
+                    <span class="w-4 h-4 border-2 border-red-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-red-500 rounded-full rotate-45"></span></span>
+                    {% endif %}
+                    <h3 class="font-medium text-white">{{ item.name }}</h3>
+                  </div>
+                  <span class="text-[#E0F2FE] font-medium flex-shrink-0" style="font-family:'Fraunces',serif;">₹{{ item.price }}</span>
+                </div>
+                {% if item.description %}<p class="text-sm text-white/70 mb-2 ml-6">{{ item.description }}</p>{% endif %}
+                <div class="ml-6 mt-2">
+                  {% if item.is_available %}
+                  <button onclick="addToCart({{ item.id }}, this)" class="text-xs font-semibold bg-[#0BA6A0] text-white px-3 py-1.5 rounded-lg hover:bg-[#047857] transition-colors">+ Add</button>
+                  {% else %}
+                  <span class="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> Sold Out
+                  </span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+
+      {# Uncategorised #}
+      {% with uncategorised=all_items|dictsort:"name" %}
+      {% if uncategorised %}
+      <div class="category-section" data-category="uncategorised">
+        <h2 class="text-xl font-medium mb-4 text-[#E0F2FE]" style="font-family:'Fraunces',serif;">Other Items</h2>
+        <div class="space-y-4">
+          {% for item in uncategorised %}{% if not item.category %}
+          <div class="menu-item bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors {% if not item.is_available %}opacity-60{% endif %}"
+               data-name="{{ item.name|lower }}"
+               data-category="uncategorised"
+               data-vegetarian="{{ item.is_vegetarian|yesno:'true,false' }}"
+               data-available="{{ item.is_available|yesno:'true,false' }}">
+            <div class="flex gap-4">
+              {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-20 h-20 rounded-lg object-cover flex-shrink-0">{% endif %}
+              <div class="flex-1">
+                <div class="flex items-start justify-between gap-2 mb-1">
+                  <div class="flex items-center gap-2">
+                    {% if item.is_vegetarian %}
+                    <span class="w-4 h-4 border-2 border-green-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-green-500 rounded-full"></span></span>
+                    {% else %}
+                    <span class="w-4 h-4 border-2 border-red-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-red-500 rounded-full rotate-45"></span></span>
+                    {% endif %}
+                    <h3 class="font-medium text-white">{{ item.name }}</h3>
+                  </div>
+                  <span class="text-[#E0F2FE] font-medium" style="font-family:'Fraunces',serif;">₹{{ item.price }}</span>
+                </div>
+                {% if item.description %}<p class="text-sm text-white/70 mb-2 ml-6">{{ item.description }}</p>{% endif %}
+                <div class="ml-6 mt-2">
+                  {% if item.is_available %}
+                  <button onclick="addToCart({{ item.id }}, this)" class="text-xs font-semibold bg-[#0BA6A0] text-white px-3 py-1.5 rounded-lg hover:bg-[#047857]">+ Add</button>
+                  {% else %}
+                  <span class="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-300"><span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> Sold Out</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}{% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      {% endwith %}
+    </div>
+
+    <div id="no-results" class="hidden text-center py-12"><p class="text-white/50">No items found</p></div>
+  </div>
+
+  <div class="border-t border-white/10 py-4 text-center">
+    <p class="text-xs text-white/40">Powered by <span class="text-[#0BA6A0] font-medium">TAVLIQO</span></p>
+  </div>
+</div>
+
+{# Sticky cart bar #}
+<div id="cart-bar" class="fixed bottom-0 left-0 right-0 bg-[#0B1D42] text-white p-4 shadow-2xl z-50 {% if not cart_count %}hidden{% endif %}">
+  <div class="max-w-4xl mx-auto flex items-center justify-between">
+    <div>
+      <span id="cart-count" class="font-bold text-xl">{{ cart_count|default:0 }}</span>
+      <span class="text-sm text-white/70 ml-1">item{{ cart_count|default:0|pluralize }} in basket</span>
+    </div>
+    <a href="/r/{{ restaurant.qr_token }}/cart/" class="bg-white text-[#0B1D42] px-6 py-2.5 rounded-xl font-medium hover:bg-white/90 transition-colors">View Basket →</a>
+  </div>
+</div>
+
+<script>
+function getCookie(name) {
+  const v = document.cookie.split('; ').find(r => r.startsWith(name + '='));
+  return v ? decodeURIComponent(v.split('=')[1]) : '';
+}
+
+async function addToCart(itemId, btn) {
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.textContent = 'Adding…';
+  try {
+    const res = await fetch(`/r/{{ restaurant.qr_token }}/cart/add/${itemId}/`, {
+      method: 'POST',
+      headers: {'X-CSRFToken': getCookie('csrftoken')},
+    });
+    if (!res.ok) throw new Error('Failed');
+    const data = await res.json();
+    document.getElementById('cart-count').textContent = data.count;
+    document.getElementById('cart-bar').classList.remove('hidden');
+    btn.textContent = '✓ Added';
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 800);
+  } catch (e) {
+    alert('Could not add to cart.');
+    btn.textContent = original;
+    btn.disabled = false;
+  }
+}
+
+// Filters (unchanged)
+let activeCategory = 'all';
+let vegFilterActive = false;
+let nonVegFilterActive = false;
+let availableFilterActive = false;
+let searchQuery = '';
+let filtersOpen = false;
+
+const searchInput = document.getElementById('search-input');
+const menuItems = document.querySelectorAll('.menu-item');
+const noResults = document.getElementById('no-results');
+
+function toggleFilters() {
+  const panel = document.getElementById('filter-panel');
+  const btn = document.getElementById('filter-toggle');
+  filtersOpen = !filtersOpen;
+  panel.style.maxHeight = filtersOpen ? panel.scrollHeight + 'px' : '0';
+  btn.classList.toggle('bg-[#0BA6A0]', filtersOpen);
+  btn.classList.toggle('border-[#0BA6A0]', filtersOpen);
+}
+
+searchInput.addEventListener('input', function() {
+  searchQuery = this.value.toLowerCase();
+  applyFilters();
+});
+
+function filterCategory(category) {
+  activeCategory = category;
+  document.querySelectorAll('.category-filter').forEach(btn => {
+    btn.classList.remove('active', 'bg-[#0BA6A0]');
+    btn.classList.add('bg-white/10', 'text-white/70');
+  });
+  event.target.classList.add('active', 'bg-[#0BA6A0]');
+  event.target.classList.remove('bg-white/10', 'text-white/70');
+  applyFilters();
+}
+
+function toggleVegFilter() {
+  vegFilterActive = !vegFilterActive;
+  if (vegFilterActive && nonVegFilterActive) { nonVegFilterActive = false; updateFilterButton('nonveg-filter', false); }
+  updateFilterButton('veg-filter', vegFilterActive); applyFilters();
+}
+
+function toggleNonVegFilter() {
+  nonVegFilterActive = !nonVegFilterActive;
+  if (nonVegFilterActive && vegFilterActive) { vegFilterActive = false; updateFilterButton('veg-filter', false); }
+  updateFilterButton('nonveg-filter', nonVegFilterActive); applyFilters();
+}
+
+function toggleAvailableFilter() {
+  availableFilterActive = !availableFilterActive;
+  updateFilterButton('available-filter', availableFilterActive); applyFilters();
+}
+
+function updateFilterButton(id, active) {
+  const btn = document.getElementById(id);
+  if (active) {
+    btn.classList.remove('bg-white/10', 'text-white/70');
+    btn.classList.add('bg-[#0BA6A0]', 'text-white');
+  } else {
+    btn.classList.add('bg-white/10', 'text-white/70');
+    btn.classList.remove('bg-[#0BA6A0]', 'text-white');
+  }
+}
+
+function clearAllFilters() {
+  vegFilterActive = nonVegFilterActive = availableFilterActive = false;
+  searchQuery = ''; activeCategory = 'all';
+  searchInput.value = '';
+  updateFilterButton('veg-filter', false);
+  updateFilterButton('nonveg-filter', false);
+  updateFilterButton('available-filter', false);
+  document.querySelectorAll('.category-filter').forEach(btn => {
+    btn.classList.remove('active', 'bg-[#0BA6A0]');
+    btn.classList.add('bg-white/10', 'text-white/70');
+  });
+  document.querySelector('.category-filter').classList.add('active', 'bg-[#0BA6A0]');
+  applyFilters();
+}
+
+function applyFilters() {
+  let hasResults = false;
+  document.querySelectorAll('.category-section').forEach(section => {
+    section.classList.toggle('hidden', activeCategory !== 'all' && section.dataset.category !== activeCategory);
+  });
+  menuItems.forEach(item => {
+    let show = true;
+    if (searchQuery && !item.dataset.name.includes(searchQuery)) show = false;
+    if (activeCategory !== 'all' && item.dataset.category !== activeCategory) show = false;
+    if (vegFilterActive && item.dataset.vegetarian !== 'true') show = false;
+    if (nonVegFilterActive && item.dataset.vegetarian === 'true') show = false;
+    if (availableFilterActive && item.dataset.available !== 'true') show = false;
+    item.classList.toggle('hidden', !show);
+    if (show) hasResults = true;
+  });
+  document.querySelectorAll('.category-section').forEach(section => {
+    const visible = section.querySelectorAll('.menu-item:not(.hidden)');
+    if (visible.length === 0) section.classList.add('hidden');
+    else if (activeCategory === 'all' || section.dataset.category === activeCategory) section.classList.remove('hidden');
+  });
+  noResults.classList.toggle('hidden', hasResults);
+}
+</script>
+
+{% endblock %}

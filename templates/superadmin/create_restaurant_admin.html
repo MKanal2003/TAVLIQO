@@ -1,0 +1,84 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Create Restaurant — TAVLIQO{% endblock %}
+{% block page_title %}Create Restaurant{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B7280]">Super Admin · Restaurant Onboarding</p>{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-3xl">
+  <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 mb-4">
+    <p class="text-sm text-[#6B7280]">
+      This creates the Restaurant Admin account and the Restaurant profile in a single step.
+      Share the temporary password with the owner over a secure channel — not plain email or chat.
+    </p>
+  </div>
+
+  <form method="post" class="bg-white rounded-2xl border border-[#E7E7E0] p-6 space-y-6">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+      {{ form.non_field_errors.0 }}
+    </div>
+    {% endif %}
+
+    <div>
+      <h3 class="font-medium text-[#0A0A0A] mb-4" style="font-family:'Fraunces',serif;">Owner Account</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs text-[#6B7280] font-medium mb-1">Owner email *</label>
+          {{ form.owner_email }}
+          {% if form.owner_email.errors %}<p class="text-xs text-red-600 mt-1">{{ form.owner_email.errors.0 }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block text-xs text-[#6B7280] font-medium mb-1">Owner phone</label>
+          {{ form.owner_phone }}
+          {% if form.owner_phone.errors %}<p class="text-xs text-red-600 mt-1">{{ form.owner_phone.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-xs text-[#6B7280] font-medium mb-1">Temporary password *</label>
+          {{ form.password }}
+          {% if form.password.errors %}<p class="text-xs text-red-600 mt-1">{{ form.password.errors.0 }}</p>{% endif %}
+          <p class="text-xs text-[#9CA3AF] mt-1">Minimum 8 characters. Owner can change this after first login.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-[#E7E7E0]">
+
+    <div>
+      <h3 class="font-medium text-[#0A0A0A] mb-4" style="font-family:'Fraunces',serif;">Restaurant Profile</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label class="block text-xs text-[#6B7280] font-medium mb-1">Restaurant name *</label>
+          {{ form.restaurant_name }}
+          {% if form.restaurant_name.errors %}<p class="text-xs text-red-600 mt-1">{{ form.restaurant_name.errors.0 }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block text-xs text-[#6B7280] font-medium mb-1">Restaurant phone</label>
+          {{ form.restaurant_phone }}
+          {% if form.restaurant_phone.errors %}<p class="text-xs text-red-600 mt-1">{{ form.restaurant_phone.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-xs text-[#6B7280] font-medium mb-1">Address *</label>
+          {{ form.address }}
+          {% if form.address.errors %}<p class="text-xs text-red-600 mt-1">{{ form.address.errors.0 }}</p>{% endif %}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-xs text-[#6B7280] font-medium mb-1">Description</label>
+          {{ form.description }}
+          {% if form.description.errors %}<p class="text-xs text-red-600 mt-1">{{ form.description.errors.0 }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-3 pt-2">
+      <a href="{% url 'superadmin:restaurants' %}"
+         class="px-4 py-2 rounded-xl text-sm text-[#6B7280] hover:text-[#0A0A0A] transition-colors">Cancel</a>
+      <button type="submit"
+              class="bg-[#0BA6A0] text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-[#0B1D42] transition-colors">
+        Create restaurant
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

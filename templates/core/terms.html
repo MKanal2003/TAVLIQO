@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Terms of Service - TAVLIQO{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#F4F6FA] font-sans text-[#0B1D42]">
+
+  <!-- Header Navigation -->
+  <nav class="bg-[#0B1D42]/95 backdrop-blur-md sticky top-0 z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="{% url 'core:landing' %}" class="flex items-center">
+        <span class="text-3xl font-heading font-extrabold tracking-tight text-white">
+          TAVLIQ<span class="text-[#0BA6A0]">O</span>
+        </span>
+      </a>
+      <a href="{% url 'core:landing' %}" class="text-sm font-medium text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to Home
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="bg-[#0B1D42] py-20 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(11,166,160,0.15),transparent_50%)]"></div>
+    <div class="max-w-3xl mx-auto relative z-10">
+      <p class="text-xs font-bold tracking-widest text-[#0BA6A0] uppercase mb-4">Legal</p>
+      <h1 class="text-4xl md:text-5xl font-heading font-bold text-white mb-4">Terms of Service</h1>
+      <p class="text-gray-400">Last updated: March 5, 2026</p>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="py-16 px-6">
+    <div class="max-w-3xl mx-auto space-y-6">
+
+      <!-- Introduction -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <p class="text-gray-600 leading-relaxed mb-4">
+          Welcome to TAVLIQO. By accessing or using our platform, you agree to be bound by these Terms of Service. 
+          Please read them carefully before using our services.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          These terms govern your use of TAVLIQO's digital menu platform, including our website, dashboard, 
+          and QR code menu services for restaurants and their customers.
+        </p>
+      </div>
+
+      <!-- Section 1 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">1. Acceptance of Terms</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          By accessing the TAVLIQO platform or using our services, you acknowledge that you have read, understood, 
+          and agree to be bound by these Terms of Service and our Privacy Policy.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          If you are using TAVLIQO on behalf of a restaurant or business, you represent that you have 
+          the authority to bind that entity to these terms.
+        </p>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">2. Onboarding & Eligibility</h2>
+        <ul class="list-disc pl-5 space-y-3 text-gray-600">
+          <li>You must be at least 18 years old to manage a TAVLIQO account.</li>
+          <li>Accounts are provisioned by TAVLIQO administrators. You must provide accurate, complete, and current information during onboarding.</li>
+          <li>You are responsible for maintaining the security of your dashboard credentials.</li>
+          <li>You agree not to share your account with others or allow unauthorized access.</li>
+          <li>One account per restaurant/business. Multiple establishments require separate accounts.</li>
+        </ul>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">3. Service Description</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">TAVLIQO provides a digital menu platform that allows restaurants to:</p>
+        <ul class="list-disc pl-5 space-y-3 text-gray-600">
+          <li>Create and manage digital menus with items, categories, descriptions, and images.</li>
+          <li>Generate secure, unguessable QR codes that link to their digital menu.</li>
+          <li>Update menu content in real-time without reprinting materials.</li>
+          <li>Provide customers with a mobile-optimized menu browsing and ordering experience.</li>
+          <li>Access analytics and insights about menu views and customer behavior.</li>
+        </ul>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">4. User Responsibilities</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">As a restaurant user, you agree to:</p>
+        <ul class="list-disc pl-5 space-y-3 text-gray-600">
+          <li><strong class="text-[#0B1D42]">Accurate Information:</strong> Ensure all menu items, prices, descriptions, and allergen information are accurate and up-to-date.</li>
+          <li><strong class="text-[#0B1D42]">Content Ownership:</strong> Only upload images and content that you own or have the right to use.</li>
+          <li><strong class="text-[#0B1D42]">Compliance:</strong> Comply with all applicable laws, including food safety, labeling, and advertising regulations.</li>
+          <li><strong class="text-[#0B1D42]">No Misuse:</strong> Not use the platform for illegal, harmful, or fraudulent purposes.</li>
+          <li><strong class="text-[#0B1D42]">Regular Updates:</strong> Keep your menu information current, especially regarding item availability and pricing.</li>
+        </ul>
+      </div>
+
+      <!-- Section 5 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">5. Prohibited Activities</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">You may not:</p>
+        <ul class="list-disc pl-5 space-y-3 text-gray-600">
+          <li>Attempt to gain unauthorized access to TAVLIQO systems or other user accounts.</li>
+          <li>Use automated systems or scripts to scrape or extract data from TAVLIQO.</li>
+          <li>Upload malicious code, viruses, or any harmful software.</li>
+          <li>Impersonate another restaurant or misrepresent your affiliation.</li>
+          <li>Use the service to distribute spam or unsolicited communications.</li>
+          <li>Reverse engineer, decompile, or attempt to extract source code from the platform.</li>
+        </ul>
+      </div>
+
+      <!-- Section 6 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">6. Fees & Payment</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          <strong class="text-[#0B1D42]">Subscription Plans:</strong> Access to TAVLIQO is provided on a subscription or contractual basis as agreed during your onboarding. 
+        </p>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          <strong class="text-[#0B1D42]">Premium Features:</strong> Additional features may be offered as paid upgrades. Pricing will be clearly displayed before purchase.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          We reserve the right to modify pricing with 30 days' notice to existing users. Changes will not affect active subscription periods.
+        </p>
+      </div>
+
+      <!-- Section 7 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">7. Intellectual Property</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          <strong class="text-[#0B1D42]">Platform Ownership:</strong> TAVLIQO retains all rights, title, and interest in the platform, including its design, code, features, and branding.
+        </p>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          <strong class="text-[#0B1D42]">Your Content:</strong> You retain ownership of the menu content, images, and descriptions you upload. By using TAVLIQO, you grant us a limited license to display, store, and transmit your content as necessary to provide the service.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          <strong class="text-[#0B1D42]">Licensed Use:</strong> We grant you a non-exclusive, non-transferable license to use the platform in accordance with these terms.
+        </p>
+      </div>
+
+      <!-- Section 8 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">8. Service Availability & Modifications</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          We strive to maintain 99.9% uptime but cannot guarantee uninterrupted service. TAVLIQO may be unavailable due to maintenance, updates, or circumstances beyond our control.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          We reserve the right to modify, suspend, or discontinue features with reasonable notice. Critical bug fixes and security updates may be applied without notice.
+        </p>
+      </div>
+
+      <!-- Section 9 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">9. Limitation of Liability</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          TAVLIQO is provided "as is" without warranties of any kind. We are not liable for:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600 mb-4">
+          <li>Loss of revenue, profits, or business opportunities.</li>
+          <li>Inaccurate menu information or pricing errors you publish.</li>
+          <li>Data loss (though we maintain regular backups).</li>
+          <li>Customer disputes arising from your menu content or table service.</li>
+          <li>Indirect, incidental, or consequential damages.</li>
+        </ul>
+        <p class="text-gray-600 leading-relaxed">
+          Our total liability shall not exceed the fees you paid to TAVLIQO in the 12 months preceding the claim.
+        </p>
+      </div>
+
+      <!-- Section 10 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">10. Termination</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          <strong class="text-[#0B1D42]">By You:</strong> You may request the deletion of your account at any time by contacting support or using your dashboard settings. Your menu will be removed within 24 hours.
+        </p>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          <strong class="text-[#0B1D42]">By Us:</strong> We may suspend or terminate your account if:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-gray-600 mb-4">
+          <li>You violate these Terms of Service.</li>
+          <li>Your account is inactive for more than 12 months.</li>
+          <li>We detect fraudulent or abusive behavior.</li>
+          <li>Required by law or legal process.</li>
+        </ul>
+        <p class="text-gray-600 leading-relaxed">
+          Upon termination, your right to use TAVLIQO immediately ceases. We may retain certain data for legal and backup purposes.
+        </p>
+      </div>
+
+      <!-- Section 11 -->
+      <div class="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-gray-200">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-6">11. Changes to Terms</h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          We may update these Terms of Service from time to time. Material changes will be communicated via email and/or a dashboard notification.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          Continued use of TAVLIQO after changes take effect constitutes acceptance of the new terms. If you disagree, you may terminate your account.
+        </p>
+      </div>
+
+      <!-- Contact -->
+      <div class="bg-gradient-to-br from-[#0BA6A0]/5 to-[#0BA6A0]/10 rounded-2xl p-8 md:p-10 border border-[#0BA6A0]/20">
+        <h2 class="text-2xl font-heading font-bold text-[#0B1D42] mb-4">Questions?</h2>
+        <p class="text-gray-600 leading-relaxed mb-6">If you have questions about these Terms of Service, please contact us:</p>
+        <div class="space-y-3 text-sm">
+          <p class="text-[#0B1D42]"><strong>Email:</strong> <a href="mailto:legal@tavliqo.com" class="text-[#0BA6A0] hover:underline">legal@tavliqo.com</a></p>
+          <p class="text-[#0B1D42]"><strong>Support:</strong> <a href="mailto:support@tavliqo.com" class="text-[#0BA6A0] hover:underline">support@tavliqo.com</a></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+{% endblock body %}

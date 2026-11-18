@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Staff Panel — TAVLIQO{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #F4F6FA; color: #0B1D42; }
+    .font-heading { font-family: 'Montserrat', sans-serif; }
+  </style>
+</head>
+<body class="antialiased">
+  
+  <!-- Simple Top Bar -->
+  <header class="bg-[#0B1D42] text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-xl font-heading font-extrabold tracking-tight">
+          TAVLIQ<span class="text-[#0BA6A0]">O</span>
+        </span>
+        <span class="px-2 py-0.5 bg-[#0BA6A0]/20 text-[#0BA6A0] text-xs font-semibold rounded uppercase tracking-wider">Staff Mode</span>
+      </div>
+      <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="text-sm text-gray-300 hover:text-white flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Exit
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6">
+    {% block staff_content %}{% endblock %}
+  </main>
+
+</body>
+</html>

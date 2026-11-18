@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }} — {{ restaurant.name }}{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-[#0A0A0A] text-white py-8">
+  <div class="max-w-2xl mx-auto px-6">
+
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full
+        {% if order.status == 'PENDING_ACCEPTANCE' %}bg-yellow-500/20 text-yellow-400
+        {% elif order.status == 'REJECTED' %}bg-red-500/20 text-red-400
+        {% elif order.status == 'PAID' %}bg-green-500/20 text-green-400
+        {% else %}bg-[#0BA6A0]/20 text-[#E0F2FE]{% endif %}
+        mb-4">
+        {% if order.status == 'PENDING_ACCEPTANCE' %}⏳
+        {% elif order.status == 'REJECTED' %}✕
+        {% elif order.status == 'PAID' %}✓
+        {% else %}🍽{% endif %}
+      </div>
+      <h1 class="text-2xl font-medium" style="font-family:'Fraunces',serif;">Order #{{ order.id }}</h1>
+      <p class="text-white/60 mt-2">
+        {% if order.status == 'PENDING_ACCEPTANCE' %}Waiting for staff to accept your order…
+        {% elif order.status == 'CONFIRMED' %}Order accepted! Preparing shortly.
+        {% elif order.status == 'PREPARING' %}Your order is being prepared.
+        {% elif order.status == 'SERVED' %}Enjoy your meal! Please pay when ready.
+        {% elif order.status == 'PAID' %}Thank you! Order complete.
+        {% elif order.status == 'REJECTED' %}Your order was rejected: {{ order.rejection_reason }}
+        {% else %}{{ order.get_status_display }}{% endif %}
+      </p>
+    </div>
+
+    <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm text-white/50">Table</span>
+        <span class="font-medium">{{ order.table_label }}</span>
+      </div>
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm text-white/50">Placed</span>
+        <span class="text-sm text-white/80">{{ order.created_at|date:"H:i" }}</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-white/50">Payment</span>
+        <span class="text-sm">{% if order.payment_intent == 'CASH' %}Cash{% else %}Online (UPI){% endif %}</span>
+      </div>
+    </div>
+
+    <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-6">
+      <h2 class="text-sm uppercase tracking-wider text-white/50 mb-3">Items</h2>
+      {% for item in order.items.all %}
+      <div class="flex items-center justify-between text-sm py-1.5">
+        <span>{{ item.name_snapshot }} × {{ item.qty }}</span>
+        <span class="text-white/80">₹{{ item.line_total }}</span>
+      </div>
+      {% endfor %}
+      <div class="border-t border-white/10 mt-3 pt-3 flex items-center justify-between">
+        <span class="font-medium">Total</span>
+        <span class="text-xl font-semibold" style="font-family:'Fraunces',serif;">₹{{ order.total }}</span>
+      </div>
+    </div>
+
+    {% if order.status == 'PENDING_ACCEPTANCE' or order.status == 'CONFIRMED' or order.status == 'PREPARING' %}
+    <p class="text-xs text-white/40 text-center">Keep this page open to see live updates. Refresh to check status.</p>
+    {% endif %}
+
+    <a href="/r/{{ restaurant.qr_token }}/" class="block text-center text-sm text-white/50 hover:text-white/80 mt-6">Back to menu</a>
+  </div>
+</div>
+{% endblock %}
