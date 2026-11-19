@@ -17,17 +17,42 @@ from accounts.models import StaffUser
 @restaurant_admin_required
 def dashboard(request):
     restaurant = request.user.restaurant
-    from orders.models import Order
-    pending_count = Order.objects.filter(
-        restaurant_id=restaurant.id, status='PENDING_ACCEPTANCE'
+    from orders.models import Order, OrderItem
+
+    # localdate() respects TIME_ZONE; timezone.now().date() would be the UTC date
+    today = timezone.localdate()
+    orders_qs = Order.objects.filter(restaurant_id=restaurant.id)
+
+    # Today's paid revenue
+    today_revenue = orders_qs.filter(
+        status='PAID', updated_at__date=today
+    ).aggregate(Sum('total'))['total__sum'] or 0
+
+    # Orders still in progress
+    active_orders_count = orders_qs.exclude(
+        status__in=['CLOSED', 'REJECTED', 'CANCELLED', 'EXPIRED', 'PAID']
     ).count()
+
+    # Top 3 sellers (paid orders only)
+    top_items = (
+        OrderItem.objects.filter(order__restaurant_id=restaurant.id, order__status='PAID')
+        .values('name_snapshot')
+        .annotate(total_qty=Sum('qty'))
+        .order_by('-total_qty')[:3]
+    )
+
     context = {
+        # New KPIs
+        'today_revenue': today_revenue,
+        'active_orders_count': active_orders_count,
+        'top_items': top_items,
+        # Kept so the current dashboard.html keeps working
         'total_items': restaurant.total_items,
         'available_items': restaurant.available_items_count,
         'sold_out_items': restaurant.sold_out_count,
         'total_categories': restaurant.categories.count(),
         'recent_items': restaurant.menu_items.select_related('category')[:8],
-        'pending_orders_count': pending_count,
+        'pending_orders_count': orders_qs.filter(status='PENDING_ACCEPTANCE').count(),
     }
     return render(request, 'restaurants/dashboard.html', context)
 

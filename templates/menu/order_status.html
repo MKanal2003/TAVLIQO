@@ -2,48 +2,49 @@
 {% block title %}Order #{{ order.id }} — {{ restaurant.name }}{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#0A0A0A] text-white py-8">
+<div class="min-h-screen bg-[#0A0A0A] text-white py-8 pb-24">
   <div class="max-w-2xl mx-auto px-6">
 
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full
-        {% if order.status == 'PENDING_ACCEPTANCE' %}bg-yellow-500/20 text-yellow-400
-        {% elif order.status == 'REJECTED' %}bg-red-500/20 text-red-400
-        {% elif order.status == 'PAID' %}bg-green-500/20 text-green-400
-        {% else %}bg-[#0BA6A0]/20 text-[#E0F2FE]{% endif %}
-        mb-4">
-        {% if order.status == 'PENDING_ACCEPTANCE' %}⏳
-        {% elif order.status == 'REJECTED' %}✕
-        {% elif order.status == 'PAID' %}✓
-        {% else %}🍽{% endif %}
-      </div>
-      <h1 class="text-2xl font-medium" style="font-family:'Fraunces',serif;">Order #{{ order.id }}</h1>
-      <p class="text-white/60 mt-2">
-        {% if order.status == 'PENDING_ACCEPTANCE' %}Waiting for staff to accept your order…
-        {% elif order.status == 'CONFIRMED' %}Order accepted! Preparing shortly.
-        {% elif order.status == 'PREPARING' %}Your order is being prepared.
-        {% elif order.status == 'SERVED' %}Enjoy your meal! Please pay when ready.
-        {% elif order.status == 'PAID' %}Thank you! Order complete.
-        {% elif order.status == 'REJECTED' %}Your order was rejected: {{ order.rejection_reason }}
-        {% else %}{{ order.get_status_display }}{% endif %}
-      </p>
+    <div class="text-center mb-10">
+      <h1 class="text-2xl font-heading font-bold mb-2">Order #{{ order.id }}</h1>
+      <p class="text-white/60 text-sm">Table: {{ order.table_label }}</p>
     </div>
 
-    <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-4">
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-sm text-white/50">Table</span>
-        <span class="font-medium">{{ order.table_label }}</span>
-      </div>
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-sm text-white/50">Placed</span>
-        <span class="text-sm text-white/80">{{ order.created_at|date:"H:i" }}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-sm text-white/50">Payment</span>
-        <span class="text-sm">{% if order.payment_intent == 'CASH' %}Cash{% else %}Online (UPI){% endif %}</span>
+    <!-- Progress Stepper -->
+    <div class="relative mb-12">
+      <div class="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -translate-y-1/2 z-0"></div>
+      <div class="absolute top-1/2 left-0 h-1 bg-[#0BA6A0] -translate-y-1/2 z-0 transition-all duration-500" id="progress-bar" style="width: 0%;"></div>
+      
+      <div class="relative z-10 flex justify-between">
+        <!-- Step 1: Accepted -->
+        <div class="flex flex-col items-center step-node" id="step-CONFIRMED">
+          <div class="w-10 h-10 rounded-full bg-[#0BA6A0] flex items-center justify-center text-white font-bold text-sm border-4 border-[#0A0A0A]">1</div>
+          <span class="text-xs mt-2 text-white font-medium">Accepted</span>
+        </div>
+        <!-- Step 2: Preparing -->
+        <div class="flex flex-col items-center step-node" id="step-PREPARING">
+          <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/50 font-bold text-sm border-4 border-[#0A0A0A]">2</div>
+          <span class="text-xs mt-2 text-white/50">Preparing</span>
+        </div>
+        <!-- Step 3: Served -->
+        <div class="flex flex-col items-center step-node" id="step-SERVED">
+          <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/50 font-bold text-sm border-4 border-[#0A0A0A]">3</div>
+          <span class="text-xs mt-2 text-white/50">Served</span>
+        </div>
+        <!-- Step 4: Paid -->
+        <div class="flex flex-col items-center step-node" id="step-PAID">
+          <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/50 font-bold text-sm border-4 border-[#0A0A0A]">4</div>
+          <span class="text-xs mt-2 text-white/50">Paid</span>
+        </div>
       </div>
     </div>
 
+    <!-- Current Status Message -->
+    <div class="text-center mb-8 bg-white/5 border border-white/10 rounded-xl p-6" id="status-message-box">
+      <p class="text-lg font-medium" id="status-text">Waiting for staff to accept your order…</p>
+    </div>
+
+    <!-- Order Details -->
     <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-6">
       <h2 class="text-sm uppercase tracking-wider text-white/50 mb-3">Items</h2>
       {% for item in order.items.all %}
@@ -54,15 +55,106 @@
       {% endfor %}
       <div class="border-t border-white/10 mt-3 pt-3 flex items-center justify-between">
         <span class="font-medium">Total</span>
-        <span class="text-xl font-semibold" style="font-family:'Fraunces',serif;">₹{{ order.total }}</span>
+        <span class="text-xl font-heading font-bold text-[#0BA6A0]">₹{{ order.total }}</span>
       </div>
+      {% if order.notes %}
+      <div class="mt-3 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-sm text-yellow-200">
+        <strong>Note:</strong> {{ order.notes }}
+      </div>
+      {% endif %}
     </div>
 
-    {% if order.status == 'PENDING_ACCEPTANCE' or order.status == 'CONFIRMED' or order.status == 'PREPARING' %}
-    <p class="text-xs text-white/40 text-center">Keep this page open to see live updates. Refresh to check status.</p>
-    {% endif %}
-
-    <a href="/r/{{ restaurant.qr_token }}/" class="block text-center text-sm text-white/50 hover:text-white/80 mt-6">Back to menu</a>
+    <a href="/r/{{ restaurant.qr_token }}/" class="block text-center text-sm text-white/50 hover:text-white/80">Back to menu</a>
   </div>
 </div>
+
+<!-- Floating Call Waiter Button -->
+{% if order.status != 'PAID' and order.status != 'REJECTED' %}
+<button onclick="callWaiter()" class="fixed bottom-6 right-6 bg-white text-[#0B1D42] shadow-xl px-6 py-3 rounded-full font-bold text-sm flex items-center gap-2 hover:bg-gray-100 transition-transform active:scale-95 z-50">
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+  Call Waiter
+</button>
+{% endif %}
+
+<script>
+  const orderStatus = "{{ order.status }}";
+  const orderToken = "{{ order.public_token }}";
+  const restaurantToken = "{{ restaurant.qr_token }}";
+
+  function updateStepper(status) {
+    const steps = ['CONFIRMED', 'PREPARING', 'SERVED', 'PAID'];
+    const currentIndex = steps.indexOf(status);
+    
+    // If PENDING_ACCEPTANCE, progress is 0
+    const progressPercent = status === 'PENDING_ACCEPTANCE' ? 0 : ((currentIndex + 1) / 4) * 100;
+    document.getElementById('progress-bar').style.width = progressPercent + '%';
+
+    steps.forEach((step, idx) => {
+      const node = document.getElementById('step-' + step);
+      const circle = node.querySelector('div');
+      const label = node.querySelector('span');
+      
+      if (idx <= currentIndex && status !== 'PENDING_ACCEPTANCE') {
+        circle.classList.remove('bg-white/10', 'text-white/50');
+        circle.classList.add('bg-[#0BA6A0]', 'text-white');
+        label.classList.remove('text-white/50');
+        label.classList.add('text-white');
+      } else {
+        circle.classList.add('bg-white/10', 'text-white/50');
+        circle.classList.remove('bg-[#0BA6A0]', 'text-white');
+        label.classList.add('text-white/50');
+        label.classList.remove('text-white');
+      }
+    });
+
+    // Update message
+    const msgMap = {
+      'PENDING_ACCEPTANCE': 'Waiting for staff to accept your order…',
+      'CONFIRMED': 'Order accepted! Preparing shortly.',
+      'PREPARING': 'Your order is being prepared.',
+      'SERVED': 'Enjoy your meal! Please pay when ready.',
+      'PAID': 'Thank you! Order complete.',
+      'REJECTED': 'Your order was rejected.'
+    };
+    document.getElementById('status-text').textContent = msgMap[status] || status;
+  }
+
+  // Initial setup
+  updateStepper(orderStatus);
+
+  // Polling
+  if (orderStatus !== 'PAID' && orderStatus !== 'REJECTED') {
+    setInterval(async () => {
+      try {
+        const res = await fetch(`/r/${restaurantToken}/api/order/${orderToken}/status/`);
+        const data = await res.json();
+        if (data.status !== orderStatus) {
+          // Status changed! Reload to show latest UI safely
+          window.location.reload();
+        }
+      } catch (e) { console.error("Polling error", e); }
+    }, 5000);
+  }
+
+  // Call Waiter
+  async function callWaiter() {
+    const btn = event.target.closest('button');
+    btn.innerHTML = 'Calling...';
+    btn.disabled = true;
+    try {
+      await fetch(`/r/${restaurantToken}/api/order/${orderToken}/call-waiter/`);
+      btn.innerHTML = '✓ Waiter Notified';
+      btn.classList.replace('bg-white', 'bg-green-500');
+      btn.classList.replace('text-[#0B1D42]', 'text-white');
+      setTimeout(() => {
+        btn.innerHTML = 'Call Waiter';
+        btn.classList.replace('bg-green-500', 'bg-white');
+        btn.classList.replace('text-white', 'text-[#0B1D42]');
+        btn.disabled = false;
+      }, 3000);
+    } catch (e) {
+      btn.innerHTML = 'Error';
+    }
+  }
+</script>
 {% endblock %}

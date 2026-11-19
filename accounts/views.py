@@ -36,6 +36,8 @@ def logout_view(request):
     return redirect('core:landing')
 
 
+# BUG FIX: Added rate limit to prevent brute forcing the 4-digit PIN
+@ratelimit(key='ip', rate='5/m', block=True)
 def staff_login_view(request, slug):
     restaurant = get_object_or_404(Restaurant, slug=slug)
     

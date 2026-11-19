@@ -5,88 +5,65 @@
 
 {% block dashboard_content %}
 
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-  <div class="bg-white rounded-2xl p-5 border border-[#E7E7E0]">
-    <p class="text-xs text-[#6B7280] uppercase tracking-widest font-medium mb-3">Total Items</p>
-    <p class="text-4xl font-light text-[#0A0A0A]" style="font-family:'Fraunces',serif;">{{ total_items }}</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <!-- Revenue Card -->
+  <div class="bg-gradient-to-br from-[#0B1D42] to-[#152c5c] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+    <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-bl-full"></div>
+    <p class="text-sm text-gray-300 font-medium mb-2">Today's Revenue</p>
+    <p class="text-4xl font-heading font-bold">₹{{ today_revenue }}</p>
+    <a href="{% url 'restaurants:analytics' %}" class="inline-block mt-4 text-xs font-semibold text-[#0BA6A0] hover:text-white transition-colors">View Analytics →</a>
   </div>
 
-  <div class="bg-white rounded-2xl p-5 border border-[#E7E7E0]">
-    <p class="text-xs text-[#6B7280] uppercase tracking-widest font-medium mb-3">Available</p>
-    <p class="text-4xl font-light text-[#0BA6A0]" style="font-family:'Fraunces',serif;">{{ available_items }}</p>
+  <!-- Active Orders Card -->
+  <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm flex flex-col justify-between">
+    <div>
+      <p class="text-sm text-gray-500 font-medium mb-2">Active Orders</p>
+      <p class="text-4xl font-heading font-bold text-[#0B1D42]">{{ active_orders_count }}</p>
+    </div>
+    <a href="{% url 'restaurants:orders' %}" class="inline-block mt-4 text-xs font-semibold text-[#0BA6A0] hover:text-[#0B1D42] transition-colors">Go to Live Board →</a>
   </div>
 
-  <div class="bg-white rounded-2xl p-5 border border-[#E7E7E0]">
-    <p class="text-xs text-[#6B7280] uppercase tracking-widest font-medium mb-3">Sold Out</p>
-    <p class="text-4xl font-light text-[#D97706]" style="font-family:'Fraunces',serif;">{{ sold_out_items }}</p>
-  </div>
-
-  <div class="bg-white rounded-2xl p-5 border border-[#E7E7E0]">
-    <p class="text-xs text-[#6B7280] uppercase tracking-widest font-medium mb-3">Categories</p>
-    <p class="text-4xl font-light text-[#0A0A0A]" style="font-family:'Fraunces',serif;">{{ total_categories }}</p>
-  </div>
-</div>
-
-<div class="grid md:grid-cols-2 gap-6 mb-8">
-  <div class="bg-gradient-to-br from-[#0B1D42] to-[#0BA6A0] rounded-2xl p-6 text-white">
-    <h3 class="text-xl font-medium mb-2" style="font-family:'Fraunces',serif;">Your Menu is Live</h3>
-    <p class="text-sm text-white/80 mb-4">Share your QR code with customers</p>
-    <a href="{% url 'restaurants:qr_code_view' %}"
-       class="inline-block bg-white text-[#0B1D42] text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-white/90 transition-colors">
-      View QR Code
-    </a>
-  </div>
-
-  <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0]">
-    <h3 class="text-xl font-medium mb-2" style="font-family:'Fraunces',serif;">Quick Actions</h3>
+  <!-- Quick Actions -->
+  <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm">
+    <p class="text-sm text-gray-500 font-medium mb-3">Quick Actions</p>
     <div class="space-y-2">
-      <a href="{% url 'restaurants:add_item' %}" class="flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#0B1D42] transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-        </svg>
-        Add Menu Item
-      </a>
-      <a href="{% url 'restaurants:categories' %}" class="flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#0B1D42] transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-        </svg>
-        Manage Categories
-      </a>
-      <a href="{{ restaurant.get_menu_url }}" target="_blank" class="flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#0B1D42] transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-        </svg>
-        Preview Live Menu
-      </a>
+      <a href="{% url 'restaurants:add_item' %}" class="flex items-center gap-2 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0]"><div class="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">+</div> Add Menu Item</a>
+      <a href="{% url 'restaurants:qr_code_view' %}" class="flex items-center gap-2 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0]"><div class="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">◫</div> View QR Code</a>
+      <a href="{% url 'restaurants:manage_staff' %}" class="flex items-center gap-2 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0]"><div class="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">👤</div> Manage Staff</a>
     </div>
   </div>
 </div>
 
-{% if recent_items %}
-<div class="bg-white rounded-2xl border border-[#E7E7E0] overflow-hidden">
-  <div class="px-6 py-4 border-b border-[#E7E7E0]">
-    <h2 class="font-medium text-[#0A0A0A]" style="font-family:'Fraunces',serif;">Recent Items</h2>
+<!-- Top Sellers & Menu Info -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 shadow-sm">
+    <h3 class="text-lg font-heading font-bold text-[#0B1D42] mb-4">Top 3 Best Sellers (Paid)</h3>
+    {% if top_items %}
+      <div class="space-y-4">
+        {% for item in top_items %}
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-full bg-[#0BA6A0]/10 text-[#0BA6A0] font-bold flex items-center justify-center text-sm">{{ forloop.counter }}</span>
+            <span class="font-medium text-[#0B1D42]">{{ item.name_snapshot }}</span>
+          </div>
+          <span class="text-sm font-bold bg-gray-100 px-3 py-1 rounded-full">{{ item.total_qty }} sold</span>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-500">No paid orders yet to calculate top sellers.</p>
+    {% endif %}
   </div>
-  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
-    {% for item in recent_items %}
-    <div class="border border-[#E7E7E0] rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-      {% if item.image %}
-      <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-32 object-cover">
-      {% else %}
-      <div class="w-full h-32 bg-[#F5F5F0] flex items-center justify-center">
-        <svg class="w-10 h-10 text-[#E7E7E0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-        </svg>
-      </div>
-      {% endif %}
-      <div class="p-3">
-        <p class="font-medium text-sm text-[#0A0A0A] truncate">{{ item.name }}</p>
-        <p class="text-xs text-[#6B7280]">₹{{ item.price }}</p>
-      </div>
+
+  <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 shadow-sm flex flex-col justify-center items-center text-center">
+    <div class="w-16 h-16 bg-[#0BA6A0]/10 rounded-full flex items-center justify-center mb-4">
+      <svg class="w-8 h-8 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
     </div>
-    {% endfor %}
+    <h3 class="text-lg font-heading font-bold text-[#0B1D42] mb-1">Menu Size</h3>
+    <p class="text-3xl font-bold text-[#0BA6A0] mb-1">{{ total_items }} items</p>
+    <p class="text-sm text-gray-500">across {{ total_categories }} categories</p>
+    <a href="{% url 'restaurants:menu_items' %}" class="mt-4 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0] underline">Manage Menu</a>
   </div>
 </div>
-{% endif %}
 
 {% endblock %}

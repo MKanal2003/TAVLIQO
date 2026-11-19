@@ -5,13 +5,10 @@ from django.conf.urls.static import static
 from menu.views import menu_viewer_by_token
 
 urlpatterns = [
-    path('manage-TAVLIQO/', admin.site.urls),
-
-    # Public menu — token-based, followed by customer order URLs
+    path('manage-qrdine/', admin.site.urls),
+    
     path('r/<str:token>/', menu_viewer_by_token, name='menu_by_token'),
     path('r/<str:token>/', include('orders.urls')),
-
-    # Legacy slug URL — redirects to token URL
     path('menu/', include('menu.urls')),
 
     path('', include('core.urls')),

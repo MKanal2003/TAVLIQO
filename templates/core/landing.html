@@ -1,449 +1,1273 @@
-{% extends "base.html" %}
-{% load static %}
-{% block title %}TAVLIQO — Smart Dining. One Scan.{% endblock %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TAVLIQO — Bespoke QR Dining for Indian Hospitality</title>
+  <meta name="description" content="TAVLIQO replaces laminated menus with a tactile, zero-app QR dining experience. Real-time stock sync, FSSAI veg/non-veg clarity, and live kitchen order tickets." />
 
-{% block body %}
-<div class="bg-[#F4F6FA] text-[#0B1D42] font-sans">
+  <!-- Editorial & Technical Typography: Fraunces, Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            alabaster: '#FAF8F5',
+            linen: '#F3EFEA',
+            stone: '#E6E0D6',
+            espresso: '#14110F',
+            charcoal: '#2A2421',
+            muted: '#6E655F',
+            copper: '#C85A17',
+            copperDark: '#A8480E',
+            cardamom: '#1E4D3B',
+            cardamomLight: '#28644D',
+          },
+          boxShadow: {
+            'editorial': '0 1px 2px rgba(20, 17, 15, 0.04), 0 12px 32px -8px rgba(20, 17, 15, 0.08)',
+            'hardware': '0 28px 60px -15px rgba(20, 17, 15, 0.28), 0 0 0 1px rgba(20, 17, 15, 0.08)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Subtle tactile cotton-paper grain overlay */
+    .paper-grain::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Clean thin scrollbars for phone viewport and legal drawers */
+    .thin-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .thin-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .thin-scroll::-webkit-scrollbar-thumb {
+      background: rgba(20, 17, 15, 0.16);
+      border-radius: 9999px;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+
+<body class="bg-alabaster text-espresso font-sans antialiased paper-grain selection:bg-copper selection:text-white">
 
   <!-- ==========================================
-       NAVIGATION
+       1. MINIMAL ARCHITECTURAL TOP BAR (NO LOGIN)
   =========================================== -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0B1D42]/95 backdrop-blur-md border-b border-white/10 transition-all">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2">
-        <!-- Text logo replacing the old image -->
-        <span class="text-3xl font-heading font-extrabold tracking-tight text-white">
-          TAVLIQ<span class="text-[#0BA6A0]">O</span>
+  <header class="sticky top-0 z-40 bg-alabaster/90 backdrop-blur-md border-b border-stone">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
+      <!-- Brand Wordmark -->
+      <a href="#top" class="flex items-baseline gap-2.5 group focus:outline-none">
+        <span class="font-serif text-2xl sm:text-[26px] font-bold tracking-tight text-espresso">
+          TAVLIQ<span class="text-copper italic">O</span>
+        </span>
+        <span class="hidden sm:inline-block font-mono text-[11px] uppercase tracking-widest text-muted border-l border-stone pl-2.5">
+          Bengaluru
         </span>
       </a>
 
-      <!-- Desktop Nav -->
-      <div class="hidden md:flex items-center gap-8">
-        <a href="#features" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Features</a>
-        <a href="#how-it-works" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">How It Works</a>
-        <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">About</a>
-      </div>
+      <!-- Clean Anchor Navigation (3 Links) -->
+      <nav class="hidden md:flex items-center gap-10">
+        <a href="#experience" class="text-sm font-medium text-charcoal hover:text-copper transition-colors">Experience</a>
+        <a href="#workflow" class="text-sm font-medium text-charcoal hover:text-copper transition-colors">Workflow</a>
+        <a href="#live-demo" class="text-sm font-medium text-charcoal hover:text-copper transition-colors flex items-center gap-2">
+          <span>Live Demo</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-cardamom"></span>
+        </a>
+      </nav>
 
-      <!-- CTA -->
-      <div class="hidden md:flex items-center">
-        <a href="#contact" class="bg-[#0BA6A0] hover:bg-[#098b86] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-all shadow-lg shadow-[#0BA6A0]/20">
-          Contact Sales
+      <!-- Single Primary Action -->
+      <div class="flex items-center gap-3">
+        <a href="#onboarding" class="bg-espresso hover:bg-charcoal text-alabaster text-xs sm:text-sm font-semibold px-5 py-2.5 rounded-full transition-all shadow-sm active:scale-[0.98]">
+          Book Onboarding
+        </a>
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-nav-toggle" type="button" aria-label="Toggle Menu" class="md:hidden p-2.5 rounded-full border border-stone text-espresso hover:bg-linen transition-colors">
+          <svg id="nav-icon-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 7h16M4 17h16" />
+          </svg>
+          <svg id="nav-icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav-drawer" class="hidden md:hidden bg-alabaster border-b border-stone px-6 py-5 space-y-3">
+      <a href="#experience" class="mobile-link block py-2 text-base font-medium text-espresso hover:text-copper">Experience</a>
+      <a href="#workflow" class="mobile-link block py-2 text-base font-medium text-espresso hover:text-copper">Workflow</a>
+      <a href="#live-demo" class="mobile-link block py-2 text-base font-medium text-espresso hover:text-copper">Live Demo</a>
+      <div class="pt-2">
+        <a href="#onboarding" class="mobile-link block w-full text-center bg-espresso text-alabaster text-sm font-semibold py-3.5 rounded-full">
+          Book Onboarding
         </a>
       </div>
     </div>
-  </nav>
+  </header>
 
   <!-- ==========================================
-       HERO SECTION
+       2. ASYMMETRIC EDITORIAL SPLIT HERO
   =========================================== -->
-  <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0B1D42]">
-    <!-- Background decorations -->
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(11,166,160,0.15),transparent_50%)]"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(11,166,160,0.1),transparent_50%)]"></div>
-    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
-
-    <div class="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
-      
-      <!-- Left Copy -->
-      <div class="max-w-2xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0BA6A0]/10 border border-[#0BA6A0]/30 mb-8">
-          <span class="w-2 h-2 rounded-full bg-[#0BA6A0] animate-pulse"></span>
-          <span class="text-xs font-semibold text-[#0BA6A0] uppercase tracking-wider">The Future of Dining</span>
-        </div>
+  <section id="top" class="relative border-b border-stone">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-14 lg:py-24">
+      <div class="grid lg:grid-cols-12 gap-12 lg:gap-10 items-center">
         
-        <h1 class="text-5xl lg:text-7xl font-heading font-extrabold text-white leading-[1.1] mb-6">
-          Smart Dining.<br>
-          <span class="text-[#0BA6A0]">One Scan.</span>
-        </h1>
-        
-        <p class="text-lg text-gray-400 mb-10 max-w-lg leading-relaxed">
-          TAVLIQO replaces physical menus with a lightning-fast QR experience. No apps to download. No friction for your customers. Just seamless ordering and real-time menu management for your restaurant.
-        </p>
-
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="#contact" class="bg-[#0BA6A0] hover:bg-[#098b86] text-white text-center font-semibold px-8 py-4 rounded-xl transition-all shadow-xl shadow-[#0BA6A0]/20">
-            Get Onboarded
-          </a>
-          <a href="#features" class="bg-white/5 hover:bg-white/10 text-white border border-white/10 text-center font-semibold px-8 py-4 rounded-xl transition-all">
-            Explore Features
-          </a>
-        </div>
-
-        <!-- Trust indicators -->
-        <div class="mt-10 flex items-center gap-6 text-sm text-gray-400">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            No app required
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            Zero setup fees
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Visual (Phone Mockup) -->
-      <div class="relative mx-auto w-full max-w-sm lg:max-w-md">
-        <!-- Glow -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#0BA6A0] rounded-full blur-[100px] opacity-20"></div>
-        
-        <!-- Phone Frame -->
-        <div class="relative bg-[#0D0D0D] rounded-[3rem] border-[6px] border-gray-800 p-3 shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-          <!-- Notch -->
-          <div class="absolute top-6 left-1/2 -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-full z-20"></div>
-          
-          <!-- Screen -->
-          <div class="bg-[#F4F6FA] rounded-[2.5rem] overflow-hidden relative">
-            <!-- App Header -->
-            <div class="bg-[#0B1D42] pt-12 pb-4 px-5 rounded-b-3xl">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-[#0BA6A0] flex items-center justify-center text-white font-bold font-heading">T</div>
-                <div>
-                  <p class="text-white font-semibold text-sm">The Bistro</p>
-                  <p class="text-gray-400 text-xs">Mumbai, MH</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- App Content -->
-            <div class="p-5 space-y-4 bg-white min-h-[400px]">
-              <!-- Search -->
-              <div class="flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2 text-gray-400 text-xs">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                Search menu...
-              </div>
-
-              <!-- Tabs -->
-              <div class="flex gap-2 text-[10px] font-semibold overflow-hidden">
-                <span class="bg-[#0BA6A0] text-white px-3 py-1.5 rounded-full whitespace-nowrap">Starters</span>
-                <span class="bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full whitespace-nowrap">Mains</span>
-                <span class="bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full whitespace-nowrap">Drinks</span>
-              </div>
-
-              <!-- Menu Item -->
-              <div class="flex items-center gap-3 p-2 border border-gray-100 rounded-xl shadow-sm">
-                <div class="w-12 h-12 bg-gray-200 rounded-lg flex-shrink-0"></div>
-                <div class="flex-1">
-                  <div class="w-24 h-3 bg-gray-200 rounded mb-2"></div>
-                  <div class="w-16 h-2 bg-gray-100 rounded"></div>
-                </div>
-                <div class="text-[#0B1D42] font-bold text-xs">₹240</div>
-              </div>
-              <div class="flex items-center gap-3 p-2 border border-gray-100 rounded-xl shadow-sm">
-                <div class="w-12 h-12 bg-gray-200 rounded-lg flex-shrink-0"></div>
-                <div class="flex-1">
-                  <div class="w-20 h-3 bg-gray-200 rounded mb-2"></div>
-                  <div class="w-12 h-2 bg-gray-100 rounded"></div>
-                </div>
-                <div class="text-[#0B1D42] font-bold text-xs">₹320</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Floating Badge -->
-        <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 animate-bounce">
-          <div class="w-10 h-10 bg-[#E0F2FE] rounded-full flex items-center justify-center text-[#0BA6A0]">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          </div>
-          <div>
-            <p class="text-xs text-gray-500 font-medium">Menu updated</p>
-            <p class="text-sm text-[#0B1D42] font-bold">Just now</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================
-       FEATURES SECTION
-  =========================================== -->
-  <section id="features" class="py-24 bg-white relative">
-    <div class="max-w-7xl mx-auto px-6">
-      
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <h2 class="text-[#0BA6A0] font-semibold tracking-wide uppercase text-sm mb-3">Everything You Need</h2>
-        <h3 class="text-4xl font-heading font-bold text-[#0B1D42] mb-4">Built for modern restaurants.</h3>
-        <p class="text-gray-500 text-lg">No complex hardware. No app downloads. Just your menu, intelligently connected to your customers.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Feature 1 -->
-        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
-          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-          </div>
-          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Instant QR Menus</h4>
-          <p class="text-gray-500 text-sm leading-relaxed">Customers scan the code on the table and instantly view your menu. No app store downloads, no delays.</p>
-        </div>
-        <!-- Feature 2 -->
-        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
-          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-          </div>
-          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Real-Time Updates</h4>
-          <p class="text-gray-500 text-sm leading-relaxed">Out of stock? Changed a price? Update it in your dashboard and it reflects instantly on every customer's phone.</p>
-        </div>
-        <!-- Feature 3 -->
-        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
-          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          </div>
-          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Live Order Management</h4>
-          <p class="text-gray-500 text-sm leading-relaxed">Receive orders straight to your dashboard. Accept, prepare, and serve—all without writing anything down.</p>
-        </div>
-        <!-- Feature 4 -->
-        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
-          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-          </div>
-          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Smart Filtering</h4>
-          <p class="text-gray-500 text-sm leading-relaxed">Built-in Veg/Non-Veg indicators, category sorting, and live search make it incredibly easy for customers to find what they want.</p>
-        </div>
-        <!-- Feature 5 -->
-        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
-          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          </div>
-          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Rich Visual Menus</h4>
-          <p class="text-gray-500 text-sm leading-relaxed">Upload high-quality photos of your dishes. People eat with their eyes, and photos drive more orders.</p>
-        </div>
-        <!-- Feature 6 -->
-        <div class="bg-[#F4F6FA] p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow">
-          <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#0BA6A0] mb-6">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-          </div>
-          <h4 class="text-xl font-bold text-[#0B1D42] mb-3">Hygienic & Contactless</h4>
-          <p class="text-gray-500 text-sm leading-relaxed">Ditch the worn-out laminated menus. Give every customer a clean, digital experience on their own device.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================
-       HOW IT WORKS
-  =========================================== -->
-  <section id="how-it-works" class="py-24 bg-[#0B1D42] text-white">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <h2 class="text-[#0BA6A0] font-semibold tracking-wide uppercase text-sm mb-3">Simple Process</h2>
-        <h3 class="text-4xl font-heading font-bold mb-4">How TAVLIQO works.</h3>
-        <p class="text-gray-400 text-lg">We handle the tech. You focus on the food.</p>
-      </div>
-
-      <div class="grid md:grid-cols-4 gap-8 relative">
-        <!-- Connecting line -->
-        <div class="hidden md:block absolute top-8 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#0BA6A0]/0 via-[#0BA6A0] to-[#0BA6A0]/0"></div>
-
-        <!-- Step 1 -->
-        <div class="relative text-center">
-          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
-            <span class="font-heading font-bold text-[#0BA6A0]">01</span>
-          </div>
-          <h4 class="text-lg font-bold mb-2">We Onboard You</h4>
-          <p class="text-gray-400 text-sm">Contact our team. We create your restaurant profile, upload your menu, and hand over your private dashboard link.</p>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="relative text-center">
-          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
-            <span class="font-heading font-bold text-[#0BA6A0]">02</span>
-          </div>
-          <h4 class="text-lg font-bold mb-2">Print Your QR</h4>
-          <p class="text-gray-400 text-sm">Download your custom, unguessable QR code from your dashboard. Place it on tables, counters, or entrance.</p>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="relative text-center">
-          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
-            <span class="font-heading font-bold text-[#0BA6A0]">03</span>
-          </div>
-          <h4 class="text-lg font-bold mb-2">Customers Scan</h4>
-          <p class="text-gray-400 text-sm">No app to download. They scan with their camera, browse the menu, and place an order instantly.</p>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="relative text-center">
-          <div class="w-16 h-16 bg-[#0B1D42] border-2 border-[#0BA6A0] rounded-full flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_0_20px_rgba(11,166,160,0.3)]">
-            <span class="font-heading font-bold text-[#0BA6A0]">04</span>
-          </div>
-          <h4 class="text-lg font-bold mb-2">You Serve</h4>
-          <p class="text-gray-400 text-sm">Orders appear live on your dashboard. Accept, prepare, and mark as paid all in one place.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================
-       ABOUT / B2B FOCUS
-  =========================================== -->
-  <section id="about" class="py-24 bg-[#F4F6FA]">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-      <div>
-        <h2 class="text-[#0BA6A0] font-semibold tracking-wide uppercase text-sm mb-3">About TAVLIQO</h2>
-        <h3 class="text-4xl font-heading font-bold text-[#0B1D42] mb-6">Built for the restaurant owner, not the IT team.</h3>
-        <p class="text-gray-600 mb-6 text-lg leading-relaxed">
-          TAVLIQO was born from a simple frustration — restaurants spend thousands on reprinting menus every season, and customers are stuck handling the same laminated cards as everyone else.
-        </p>
-        <p class="text-gray-600 mb-8 text-lg leading-relaxed">
-          We built a platform that gives you complete control over your menu. Because TAVLIQO is sales-led, we set everything up for you. You don't need developers, designers, or a monthly agency bill.
-        </p>
-        
-        <div class="space-y-4">
-          <div class="flex items-start gap-3">
-            <div class="w-6 h-6 rounded-full bg-[#0BA6A0]/10 flex items-center justify-center flex-shrink-0 mt-1">
-              <svg class="w-4 h-4 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <p class="text-gray-700"><strong class="text-[#0B1D42]">Simple by design.</strong> If a restaurant owner can't figure it out in 5 minutes, we've failed.</p>
-          </div>
-          <div class="flex items-start gap-3">
-            <div class="w-6 h-6 rounded-full bg-[#0BA6A0]/10 flex items-center justify-center flex-shrink-0 mt-1">
-              <svg class="w-4 h-4 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <p class="text-gray-700"><strong class="text-[#0B1D42]">Zero hardware.</strong> Run it off any laptop, tablet, or smartphone you already own.</p>
-          </div>
-          <div class="flex items-start gap-3">
-            <div class="w-6 h-6 rounded-full bg-[#0BA6A0]/10 flex items-center justify-center flex-shrink-0 mt-1">
-              <svg class="w-4 h-4 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <p class="text-gray-700"><strong class="text-[#0B1D42]">Customer-first.</strong> Your menu page loads incredibly fast and looks great on every device.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Card -->
-      <div class="bg-[#0B1D42] p-10 rounded-3xl shadow-2xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-[#0BA6A0] rounded-full blur-[80px] opacity-20 -mr-20 -mt-20"></div>
-        <div class="relative z-10">
-          <p class="text-[#0BA6A0] font-semibold uppercase tracking-wider text-xs mb-6">Your Private Dashboard</p>
-          
-          <div class="bg-black/30 p-5 rounded-xl border border-white/10 mb-8 font-mono text-sm overflow-x-auto">
-            <p class="text-gray-400 mb-1">TAVLIQO.com/app/dashboard</p>
-            <p class="text-white">your-restaurant-name</p>
-          </div>
-
-          <p class="text-gray-400 mb-8 leading-relaxed">
-            You get a private link to your dashboard. Manage your menu, view live orders, and update prices from anywhere.
-          </p>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-white/5 border border-white/10 p-4 rounded-xl">
-              <p class="text-2xl font-heading font-bold text-white mb-1">100%</p>
-              <p class="text-xs text-gray-400">Mobile optimised</p>
-            </div>
-            <div class="bg-white/5 border border-white/10 p-4 rounded-xl">
-              <p class="text-2xl font-heading font-bold text-white mb-1">0</p>
-              <p class="text-xs text-gray-400">Apps to download</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================
-       CONTACT / SALES CTA (Replaced fake form)
-  =========================================== -->
-  <section id="contact" class="py-24 bg-white relative overflow-hidden">
-    <!-- Decor -->
-    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(11,166,160,0.05),transparent_50%)]"></div>
-    
-    <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
-      <div class="w-20 h-20 bg-[#0BA6A0]/10 rounded-full flex items-center justify-center mx-auto mb-8">
-        <svg class="w-10 h-10 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-      </div>
-      
-      <h2 class="text-4xl lg:text-5xl font-heading font-bold text-[#0B1D42] mb-6">
-        Ready to upgrade your restaurant?
-      </h2>
-      <p class="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">
-        We are currently onboarding a limited number of restaurants. Contact our team to get your custom QR menu set up today.
-      </p>
-
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="mailto:hello@tavliqo.com?subject=Restaurant%20Onboarding%20Request" class="w-full sm:w-auto bg-[#0B1D42] hover:bg-[#152c5c] text-white font-semibold px-10 py-4 rounded-xl transition-all shadow-xl shadow-[#0B1D42]/20 flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          Contact via Email
-        </a>
-        <a href="https://wa.me/919999999999" target="_blank" class="w-full sm:w-auto bg-[#25D366] hover:bg-[#1ebd59] text-white font-semibold px-10 py-4 rounded-xl transition-all shadow-xl shadow-[#25D366]/20 flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          Chat on WhatsApp
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==========================================
-       FOOTER
-  =========================================== -->
-  <footer class="bg-[#0B1D42] pt-16 pb-8 border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid md:grid-cols-4 gap-12 mb-12">
-        
-        <!-- Brand -->
-        <div class="md:col-span-2">
-          <a href="/" class="inline-block mb-4">
-            <span class="text-3xl font-heading font-extrabold tracking-tight text-white">
-              TAVLIQ<span class="text-[#0BA6A0]">O</span>
+        <!-- Left Column: Editorial Typography & Value Prop (7 Cols) -->
+        <div class="lg:col-span-7 max-w-2xl">
+          <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-linen border border-stone mb-8">
+            <span class="w-2 h-2 rounded-full bg-copper"></span>
+            <span class="font-mono text-[11px] uppercase tracking-wider text-charcoal font-medium">
+              Hospitality Operating System • Zero App Friction
             </span>
+          </div>
+
+          <h1 class="font-serif text-4xl sm:text-5xl lg:text-[64px] font-semibold text-espresso leading-[1.05] tracking-[-0.02em] mb-7">
+            Your menu, printed in pixels. <span class="italic font-normal text-copper">Not laminated plastic.</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-muted leading-relaxed max-w-xl mb-10">
+            Crafted for modern Indian dining rooms, specialty cafes, and brasseries. Guests scan an engraved brass table standee, filter by FSSAI Pure Veg, and send orders directly to your kitchen pass—without downloading a single app.
+          </p>
+
+          <!-- Primary & Secondary Editorial Actions -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-12">
+            <a href="#onboarding" class="bg-copper hover:bg-copperDark text-white font-semibold text-sm sm:text-base px-8 py-4 rounded-full text-center transition-all shadow-editorial active:scale-[0.99]">
+              Schedule White-Glove Setup
+            </a>
+            <button type="button" id="scroll-to-phone-btn" class="bg-transparent hover:bg-linen text-espresso border border-stone font-semibold text-sm sm:text-base px-7 py-4 rounded-full transition-colors flex items-center justify-center gap-2.5">
+              <span>Test Dakshin &amp; Co. Menu</span>
+              <svg class="w-4 h-4 text-copper" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Architectural Metric Strip (Hairline Rules, No Floating Badges) -->
+          <div class="grid grid-cols-3 border-t border-stone pt-7 gap-4">
+            <div>
+              <p class="font-mono text-xl sm:text-2xl font-semibold text-espresso">0.6s</p>
+              <p class="text-xs text-muted mt-1">Cold scan load on 4G</p>
+            </div>
+            <div class="border-l border-stone pl-4 sm:pl-6">
+              <p class="font-mono text-xl sm:text-2xl font-semibold text-cardamom">100%</p>
+              <p class="text-xs text-muted mt-1">Browser-native, zero APK</p>
+            </div>
+            <div class="border-l border-stone pl-4 sm:pl-6">
+              <p class="font-mono text-xl sm:text-2xl font-semibold text-copper">Live KOT</p>
+              <p class="text-xs text-muted mt-1">Instant kitchen sync</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: True-to-Scale iPhone Hardware Frame (5 Cols) -->
+        <div id="hero-phone-container" class="lg:col-span-5 flex flex-col items-center">
+          <!-- Subtle Caption Above Phone -->
+          <div class="w-full max-w-[380px] flex items-center justify-between mb-3 px-1">
+            <span class="font-mono text-[11px] uppercase tracking-wider text-muted">Interactive Guest View</span>
+            <span class="font-mono text-[11px] text-cardamom font-medium flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cardamom animate-pulse"></span>
+              Synced with Kitchen
+            </span>
+          </div>
+
+          <!-- iPhone Hardware Bezel -->
+          <div class="w-full max-w-[385px] bg-[#161413] rounded-[3.1rem] p-[11px] shadow-hardware border border-[#332E2B] relative">
+            <!-- Dynamic Island -->
+            <div class="absolute top-[22px] left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-30 flex items-center justify-end px-2.5">
+              <span class="w-2 h-2 rounded-full bg-[#1C2733]"></span>
+            </div>
+
+            <!-- Inner Screen Viewport -->
+            <div class="bg-alabaster rounded-[2.45rem] overflow-hidden relative flex flex-col h-[630px]">
+              
+              <!-- Restaurant Masthead inside Phone -->
+              <div class="bg-espresso text-alabaster pt-11 pb-4 px-5 flex-shrink-0">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h2 class="font-serif text-lg font-semibold tracking-tight text-white">Dakshin &amp; Co.</h2>
+                      <span class="font-mono text-[10px] px-2 py-0.5 rounded bg-cardamom text-white">OPEN</span>
+                    </div>
+                    <p class="text-[11px] text-[#B8AFA8] mt-0.5">12th Main, Indiranagar • Bengaluru</p>
+                  </div>
+                  <div class="text-right">
+                    <span class="inline-block font-mono text-[11px] font-semibold bg-white/10 text-amber-200 px-2.5 py-1 rounded-lg border border-white/10">
+                      TABLE 04
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Search + Pure Veg Toggle + Category Strip -->
+              <div class="bg-alabaster border-b border-stone px-4 pt-3 pb-2.5 flex-shrink-0 space-y-2.5">
+                <div class="flex items-center gap-2">
+                  <!-- Search Input -->
+                  <div class="relative flex-1">
+                    <svg class="w-3.5 h-3.5 text-muted absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input 
+                      id="guest-search-input" 
+                      type="text" 
+                      placeholder="Search biryani, paneer, chai..." 
+                      class="w-full bg-white text-espresso placeholder-muted text-xs rounded-xl pl-8 pr-3 py-2 border border-stone focus:outline-none focus:border-espresso transition-colors"
+                    />
+                  </div>
+
+                  <!-- FSSAI Pure Veg Filter Toggle -->
+                  <button 
+                    id="guest-veg-toggle" 
+                    type="button"
+                    aria-pressed="false"
+                    class="flex items-center gap-1.5 px-2.5 py-2 rounded-xl border border-stone bg-white text-[11px] font-semibold text-charcoal hover:border-cardamom transition-colors select-none"
+                  >
+                    <span class="w-3.5 h-3.5 rounded-[3px] border-[1.5px] border-cardamom flex items-center justify-center bg-white">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cardamom"></span>
+                    </span>
+                    <span>Pure Veg</span>
+                  </button>
+                </div>
+
+                <!-- Category Pills -->
+                <div id="guest-category-strip" class="flex gap-1.5 overflow-x-auto no-scrollbar">
+                  <button type="button" data-cat="All" class="guest-cat-pill bg-espresso text-alabaster text-[11px] font-semibold px-3 py-1.5 rounded-full whitespace-nowrap transition-colors">
+                    All
+                  </button>
+                  <button type="button" data-cat="Small Plates" class="guest-cat-pill bg-white text-charcoal border border-stone text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap transition-colors">
+                    Small Plates
+                  </button>
+                  <button type="button" data-cat="Tandoor & Mains" class="guest-cat-pill bg-white text-charcoal border border-stone text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap transition-colors">
+                    Tandoor &amp; Mains
+                  </button>
+                  <button type="button" data-cat="Breads & Rice" class="guest-cat-pill bg-white text-charcoal border border-stone text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap transition-colors">
+                    Breads &amp; Rice
+                  </button>
+                  <button type="button" data-cat="Chai & Coolers" class="guest-cat-pill bg-white text-charcoal border border-stone text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap transition-colors">
+                    Chai &amp; Coolers
+                  </button>
+                </div>
+              </div>
+
+              <!-- Scrollable Menu Feed -->
+              <div id="guest-menu-feed" class="flex-1 overflow-y-auto thin-scroll px-4 py-3 pb-24 space-y-3">
+                <!-- Dynamically rendered Indian dishes -->
+              </div>
+
+              <!-- Sticky Bottom 'View Tray' Bar -->
+              <div id="guest-tray-bar" class="hidden absolute bottom-3 left-3.5 right-3.5 bg-espresso text-alabaster px-4 py-3 rounded-2xl shadow-xl border border-white/10 flex items-center justify-between z-20">
+                <div class="flex items-center gap-3">
+                  <span id="tray-item-count" class="font-mono text-xs font-semibold bg-copper text-white w-7 h-7 rounded-xl flex items-center justify-center">
+                    0
+                  </span>
+                  <div>
+                    <p class="font-mono text-[10px] uppercase tracking-wider text-[#B8AFA8]">Table 04 Tray</p>
+                    <p id="tray-subtotal-label" class="font-mono text-sm font-semibold text-white">₹0</p>
+                  </div>
+                </div>
+                <button id="open-tray-drawer-btn" type="button" class="bg-alabaster hover:bg-white text-espresso text-xs font-bold px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5">
+                  <span>View Tray</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- In-Phone Order & 5% GST Summary Drawer -->
+              <div id="guest-tray-drawer" class="hidden absolute inset-0 bg-espresso/55 backdrop-blur-[2px] z-30 flex flex-col justify-end">
+                <div class="bg-alabaster rounded-t-3xl border-t border-stone p-5 max-h-[82%] flex flex-col shadow-2xl">
+                  <div class="flex items-center justify-between pb-3 border-b border-stone">
+                    <div>
+                      <p class="font-mono text-[10px] uppercase tracking-wider text-muted">Dakshin &amp; Co. • Table 04</p>
+                      <h3 class="font-serif text-lg font-semibold text-espresso">Your Order Tray</h3>
+                    </div>
+                    <button id="close-tray-drawer-btn" type="button" aria-label="Close Tray" class="p-1.5 rounded-full bg-linen text-espresso hover:bg-stone transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- Selected Items List -->
+                  <div id="tray-drawer-items" class="flex-1 overflow-y-auto thin-scroll py-3 space-y-2.5">
+                    <!-- Rendered dynamically -->
+                  </div>
+
+                  <!-- GST Breakdown & Fire KOT Button -->
+                  <div class="border-t border-stone pt-3 space-y-2">
+                    <div class="flex justify-between text-xs text-muted">
+                      <span>Item Subtotal</span>
+                      <span id="drawer-subtotal" class="font-mono text-espresso">₹0</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-muted">
+                      <span>Restaurant GST (5%)</span>
+                      <span id="drawer-gst" class="font-mono text-espresso">₹0</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-bold text-espresso pt-1 border-t border-dashed border-stone">
+                      <span>Grand Total</span>
+                      <span id="drawer-grand-total" class="font-mono text-base">₹0</span>
+                    </div>
+
+                    <button id="fire-kot-btn" type="button" class="w-full mt-2 bg-cardamom hover:bg-cardamomLight text-white font-semibold text-xs py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm">
+                      <span>Send Order to Kitchen</span>
+                      <span id="next-kot-pill" class="font-mono text-[10px] bg-white/15 px-2 py-0.5 rounded">KOT #104</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- In-Phone Confirmation Banner after Firing KOT -->
+              <div id="guest-kot-confirmation" class="hidden absolute inset-x-3.5 bottom-3.5 bg-cardamom text-white p-3.5 rounded-2xl shadow-xl z-30 flex items-center justify-between gap-2">
+                <div>
+                  <p id="kot-confirm-title" class="font-mono text-xs font-semibold">KOT #104 FIRED TO PASS</p>
+                  <p class="text-[11px] text-white/85 mt-0.5">Scroll down to see it live on the Kitchen Board.</p>
+                </div>
+                <a href="#live-demo" class="bg-white text-cardamom font-bold text-[11px] px-3 py-1.5 rounded-xl whitespace-nowrap">
+                  View KOT
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       3. ARCHITECTURAL BENTO SHOWCASE & LIVE KITCHEN SYNC
+  =========================================== -->
+  <section id="live-demo" class="py-20 lg:py-28 border-b border-stone">
+    <div id="experience" class="max-w-7xl mx-auto px-5 sm:px-8">
+      
+      <!-- Section Editorial Header -->
+      <div class="max-w-2xl mb-14">
+        <span class="font-mono text-xs uppercase tracking-widest text-copper font-semibold block mb-3">
+          01 / The Kitchen &amp; Floor Engine
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-espresso tracking-tight leading-[1.12]">
+          One live source of truth from the tandoor pass to Table 04.
+        </h2>
+      </div>
+
+      <!-- Asymmetric 12-Column Architectural Bento Grid -->
+      <div class="grid lg:grid-cols-12 gap-6">
+        
+        <!-- BENTO CARD A (7 Cols): Real-Time Stock Toggle & Live Kitchen KOT Queue -->
+        <div class="lg:col-span-7 bg-white rounded-3xl border border-stone p-6 sm:p-8 shadow-editorial flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-stone">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-cardamom animate-pulse"></span>
+                  <span class="font-mono text-xs uppercase tracking-wider text-cardamom font-semibold">Kitchen Pass Console • Dakshin &amp; Co.</span>
+                </div>
+                <h3 class="font-serif text-2xl font-semibold text-espresso mt-1">Instant 86 / Stock Control</h3>
+              </div>
+              <span class="font-mono text-[11px] text-muted bg-linen px-3 py-1.5 rounded-full border border-stone">
+                Updates iPhone above in 0.2s
+              </span>
+            </div>
+
+            <p class="text-sm text-muted mt-4 mb-6 leading-relaxed">
+              Ran out of <strong class="text-espresso">Hyderabadi Dum Biryani</strong> mid-service? Toggle any dish below to <span class="font-mono text-xs text-copper">SOLD OUT</span> and watch it immediately lock inside the customer phone menu above.
+            </p>
+
+            <!-- Interactive Stock Controls -->
+            <div id="kitchen-stock-list" class="space-y-2.5 mb-8">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Live Kitchen Order Ticket (KOT) Feed -->
+          <div class="bg-linen rounded-2xl border border-stone p-4 sm:p-5">
+            <div class="flex items-center justify-between mb-3">
+              <span class="font-mono text-xs font-semibold uppercase tracking-wider text-espresso">Live KOT Queue</span>
+              <span class="font-mono text-[11px] text-muted">Orders fired from iPhone appear here</span>
+            </div>
+            <div id="live-kot-feed" class="space-y-2.5">
+              <!-- Pre-populated with an active KOT + receives new KOTs fired from phone -->
+            </div>
+          </div>
+        </div>
+
+        <!-- BENTO RIGHT STACK (5 Cols): Two Complementary Editorial Cards -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          
+          <!-- BENTO CARD B: Sub-Second Zero-App Scan Architecture -->
+          <div class="bg-espresso text-alabaster rounded-3xl p-7 sm:p-8 border border-charcoal flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-6">
+                <span class="font-mono text-xs uppercase tracking-widest text-amber-300">Zero-App Architecture</span>
+                <span class="font-mono text-xs text-[#B8AFA8]">HTML5 / Edge Cached</span>
+              </div>
+              <h3 class="font-serif text-2xl sm:text-3xl font-semibold text-white leading-snug mb-4">
+                Opens before the water glasses hit the table.
+              </h3>
+              <p class="text-sm text-[#C9C0B9] leading-relaxed mb-6">
+                Diners never tolerate forced app installs or bloated PDF downloads. TAVLIQO serves a featherweight, tactile web menu directly inside Safari and Chrome—even inside basement dining rooms with weak 4G reception.
+              </p>
+            </div>
+
+            <!-- Clean Architectural Spec Table -->
+            <div class="border-t border-white/15 pt-5 grid grid-cols-2 gap-4">
+              <div>
+                <p class="font-mono text-xs text-[#B8AFA8]">Payload Size</p>
+                <p class="font-mono text-lg font-semibold text-white mt-0.5">&lt; 48 KB</p>
+              </div>
+              <div>
+                <p class="font-mono text-xs text-[#B8AFA8]">FSSAI Compliance</p>
+                <p class="font-mono text-lg font-semibold text-amber-300 mt-0.5">Built-In</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- BENTO CARD C: White-Glove Setup & Brass Standees -->
+          <div class="bg-linen rounded-3xl p-7 sm:p-8 border border-stone flex-1 flex flex-col justify-between">
+            <div>
+              <span class="font-mono text-xs uppercase tracking-widest text-copper font-semibold block mb-4">
+                White-Glove Onboarding
+              </span>
+              <h3 class="font-serif text-2xl font-semibold text-espresso leading-snug mb-3">
+                We digitize your menu and craft your table QR standees.
+              </h3>
+              <p class="text-sm text-muted leading-relaxed mb-6">
+                Send us your existing menu card on WhatsApp. Within 24 hours, our hospitality team structures your categories, configures GST rules, and delivers custom-engraved table QR codes ready for service.
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-stone text-xs font-medium text-charcoal">
+              <span>No POS replacement required</span>
+              <span class="font-mono text-cardamom font-semibold">24h Turnaround</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       4. CLEAN 3-STEP HORIZONTAL TIMELINE
+  =========================================== -->
+  <section id="workflow" class="py-20 lg:py-28 bg-linen/60 border-b border-stone">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div class="max-w-xl">
+          <span class="font-mono text-xs uppercase tracking-widest text-copper font-semibold block mb-3">
+            02 / Deployment Timeline
+          </span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-espresso tracking-tight">
+            From printed card to live QR service in three steps.
+          </h2>
+        </div>
+        <p class="text-sm text-muted max-w-sm">
+          Designed for busy restaurateurs—zero self-serve form fatigue or technical configuration on your end.
+        </p>
+      </div>
+
+      <!-- Horizontal Architectural Timeline -->
+      <div class="grid md:grid-cols-3 gap-8 lg:gap-12 relative">
+        <!-- Step 01 -->
+        <div class="border-t-2 border-espresso pt-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-mono text-xs font-semibold text-copper">STEP 01</span>
+            <span class="font-mono text-[11px] text-muted">Day 1</span>
+          </div>
+          <h3 class="font-serif text-2xl font-semibold text-espresso mb-3">Menu Digitized</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            Share your current menu photos or spreadsheet. Our team curates every dish with crisp descriptions, FSSAI Veg/Non-Veg markers, and spice notes.
+          </p>
+        </div>
+
+        <!-- Step 02 -->
+        <div class="border-t-2 border-copper pt-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-mono text-xs font-semibold text-copper">STEP 02</span>
+            <span class="font-mono text-[11px] text-muted">Day 2</span>
+          </div>
+          <h3 class="font-serif text-2xl font-semibold text-espresso mb-3">Table Standees Placed</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            Receive table-mapped QR standees engineered for your dining room aesthetic—from intimate courtyard tables to multi-floor family halls.
+          </p>
+        </div>
+
+        <!-- Step 03 -->
+        <div class="border-t-2 border-cardamom pt-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="font-mono text-xs font-semibold text-cardamom">STEP 03</span>
+            <span class="font-mono text-[11px] text-muted">Live Service</span>
+          </div>
+          <h3 class="font-serif text-2xl font-semibold text-espresso mb-3">Live Orders Flowing</h3>
+          <p class="text-sm text-muted leading-relaxed">
+            Guests scan and order effortlessly while your kitchen receives structured KOT tickets and controls real-time dish availability from any tablet or phone.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       5. DIRECT SALES-LED ONBOARDING CTA
+  =========================================== -->
+  <section id="onboarding" class="py-20 lg:py-28">
+    <div class="max-w-5xl mx-auto px-5 sm:px-8">
+      <div class="bg-espresso text-alabaster rounded-[2rem] p-8 sm:p-14 lg:p-16 border border-charcoal shadow-editorial relative overflow-hidden">
+        <div class="max-w-2xl">
+          <span class="font-mono text-xs uppercase tracking-widest text-amber-300 block mb-4">
+            Partner With TAVLIQO
+          </span>
+          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-white leading-[1.1] mb-5">
+            Ready to retire your laminated menus?
+          </h2>
+          <p class="text-base text-[#C9C0B9] leading-relaxed mb-9">
+            We onboard a select cohort of restaurants each week to guarantee white-glove menu setup. Speak directly with our Bengaluru onboarding desk—no sales bots, no long forms.
+          </p>
+
+          <!-- Direct Email & WhatsApp Actions -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <a href="https://wa.me/919999999999?text=Namaste%20TAVLIQO%20team%2C%20I%27d%20like%20to%20schedule%20onboarding%20for%20our%20restaurant." target="_blank" rel="noopener noreferrer" class="bg-cardamom hover:bg-cardamomLight text-white font-semibold text-sm sm:text-base px-8 py-4 rounded-full transition-colors flex items-center justify-center gap-2.5">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+              </svg>
+              <span>WhatsApp Onboarding Desk</span>
+            </a>
+
+            <a href="mailto:hello@tavliqo.com?subject=Restaurant%20Onboarding%20Inquiry%20%E2%80%94%20TAVLIQO&body=Hi%20TAVLIQO%20Team%2C%0A%0AWe%20would%20like%20to%20set%20up%20TAVLIQO%20QR%20dining%20for%20our%20restaurant.%0A%0ARestaurant%20Name%3A%20%0ACity%20%26%20Neighbourhood%3A%20%0ANumber%20of%20Tables%3A%20" class="bg-alabaster hover:bg-white text-espresso font-semibold text-sm sm:text-base px-8 py-4 rounded-full transition-colors flex items-center justify-center gap-2.5">
+              <svg class="w-4 h-4 text-copper" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span>Email hello@tavliqo.com</span>
+            </a>
+          </div>
+
+          <!-- One-Click Email Copy Helper -->
+          <div class="mt-6 flex flex-wrap items-center gap-3 text-xs text-[#B8AFA8]">
+            <span>Direct address:</span>
+            <button id="copy-email-trigger" type="button" class="font-mono text-white underline decoration-stone/40 underline-offset-4 hover:text-amber-300 transition-colors inline-flex items-center gap-1.5">
+              <span>hello@tavliqo.com</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </button>
+            <span id="email-copied-pill" class="hidden font-mono text-[11px] bg-cardamom text-white px-2.5 py-0.5 rounded-full">
+              Copied to clipboard
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       6. ARCHITECTURAL FOOTER WITH WORKING LEGAL DRAWERS
+  =========================================== -->
+  <footer class="border-t border-stone bg-linen/50 py-14">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-10 border-b border-stone">
+        <div>
+          <a href="#top" class="font-serif text-2xl font-bold tracking-tight text-espresso">
+            TAVLIQ<span class="text-copper italic">O</span>
           </a>
-          <p class="text-gray-400 text-sm max-w-xs leading-relaxed mb-6">
-            Smart Dining. One Scan.<br>
-            A restaurant technology platform connecting menus, tables, and customers.
-          </p>
-          <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">
-            Product by <span class="text-white">ARJUNIX Labs</span>
+          <p class="text-sm text-muted mt-2 max-w-md">
+            Tactile QR dining and live kitchen order management built for Indian hospitality. Crafted by <span class="text-espresso font-medium">ARJUNIX Labs</span>.
           </p>
         </div>
 
-        <!-- Product -->
-        <div>
-          <h4 class="text-white font-semibold mb-4">Product</h4>
-          <ul class="space-y-3 text-sm text-gray-400">
-            <li><a href="#features" class="hover:text-[#0BA6A0] transition-colors">Features</a></li>
-            <li><a href="#how-it-works" class="hover:text-[#0BA6A0] transition-colors">How it Works</a></li>
-            <li><a href="#about" class="hover:text-[#0BA6A0] transition-colors">About Us</a></li>
-          </ul>
-        </div>
-
-        <!-- Legal -->
-        <div>
-          <h4 class="text-white font-semibold mb-4">Legal</h4>
-          <ul class="space-y-3 text-sm text-gray-400">
-            <li><a href="{% url 'core:terms' %}" class="hover:text-[#0BA6A0] transition-colors">Terms of Service</a></li>
-            <li><a href="{% url 'core:privacy' %}" class="hover:text-[#0BA6A0] transition-colors">Privacy Policy</a></li>
-          </ul>
+        <div class="flex flex-wrap items-center gap-6 sm:gap-8 text-sm font-medium text-charcoal">
+          <a href="#experience" class="hover:text-copper transition-colors">Experience</a>
+          <a href="#workflow" class="hover:text-copper transition-colors">Workflow</a>
+          <a href="#live-demo" class="hover:text-copper transition-colors">Live Demo</a>
+          <button type="button" data-open-legal="terms-modal" class="hover:text-copper transition-colors">
+            Terms of Service
+          </button>
+          <button type="button" data-open-legal="privacy-modal" class="hover:text-copper transition-colors">
+            Privacy Policy
+          </button>
         </div>
       </div>
 
-      <!-- Bottom -->
-      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p class="text-sm text-gray-500">
-          &copy; 2026 TAVLIQO. All rights reserved.
+      <div class="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-muted">
+        <p>&copy; 2026 TAVLIQO by ARJUNIX Labs. Indiranagar, Bengaluru.</p>
+        <p class="font-mono flex items-center gap-2 text-charcoal">
+          <span class="w-2 h-2 rounded-full bg-cardamom"></span>
+          <span>ALL SYSTEMS OPERATIONAL</span>
         </p>
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-[#0BA6A0]"></span>
-          <span class="text-sm text-gray-400">All systems operational</span>
-        </div>
       </div>
     </div>
   </footer>
 
-</div>
+  <!-- ==========================================
+       TERMS OF SERVICE MODAL DRAWER (MARCH 5, 2026)
+  =========================================== -->
+  <div id="terms-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-espresso/70 backdrop-blur-sm">
+    <div class="bg-alabaster rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-stone overflow-hidden">
+      <div class="px-6 sm:px-8 py-5 bg-linen border-b border-stone flex items-center justify-between flex-shrink-0">
+        <div>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-copper font-semibold">Legal • Last Updated March 5, 2026</p>
+          <h3 class="font-serif text-2xl font-semibold text-espresso mt-0.5">Terms of Service</h3>
+        </div>
+        <button type="button" data-close-legal="terms-modal" aria-label="Close Terms of Service" class="p-2 rounded-full bg-white border border-stone text-espresso hover:bg-stone transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-<!-- Smooth scroll script -->
-<script>
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        const offset = 80; // navbar height
-        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top, behavior: 'smooth' });
+      <div class="p-6 sm:p-8 overflow-y-auto thin-scroll space-y-5 text-sm text-charcoal leading-relaxed">
+        <p>
+          Welcome to <strong>TAVLIQO</strong>, a digital hospitality platform operated by <strong>ARJUNIX Labs</strong>. By onboarding your restaurant or accessing our QR menu services, you agree to these Terms of Service.
+        </p>
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-espresso mb-1.5">1. White-Glove Onboarding &amp; Account Provisioning</h4>
+          <p class="text-muted">Accounts are provisioned directly by the TAVLIQO onboarding team for verified food and beverage establishments. Restaurant operators are responsible for maintaining accurate dish pricing, tax breakdowns (GST), and FSSAI dietary classifications.</p>
+        </div>
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-espresso mb-1.5">2. Service Scope &amp; Menu Ownership</h4>
+          <p class="text-muted">TAVLIQO provides instant browser-based QR menus, table-mapped QR standee assets, real-time stock toggles, and Kitchen Order Ticket (KOT) routing. You retain full ownership of all uploaded dish photography, recipes, and brand assets.</p>
+        </div>
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-espresso mb-1.5">3. Acceptable Use &amp; Availability</h4>
+          <p class="text-muted">We target 99.9% uptime across edge-cached menu endpoints. Operators agree not to scrape, reverse-engineer, or misuse platform infrastructure. Either party may terminate service with written notice to <span class="font-mono text-espresso">legal@tavliqo.com</span>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       PRIVACY POLICY MODAL DRAWER (MARCH 5, 2026)
+  =========================================== -->
+  <div id="privacy-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-espresso/70 backdrop-blur-sm">
+    <div class="bg-alabaster rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-stone overflow-hidden">
+      <div class="px-6 sm:px-8 py-5 bg-linen border-b border-stone flex items-center justify-between flex-shrink-0">
+        <div>
+          <p class="font-mono text-[11px] uppercase tracking-wider text-cardamom font-semibold">Legal • Last Updated March 5, 2026</p>
+          <h3 class="font-serif text-2xl font-semibold text-espresso mt-0.5">Privacy Policy</h3>
+        </div>
+        <button type="button" data-close-legal="privacy-modal" aria-label="Close Privacy Policy" class="p-2 rounded-full bg-white border border-stone text-espresso hover:bg-stone transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 overflow-y-auto thin-scroll space-y-5 text-sm text-charcoal leading-relaxed">
+        <div class="bg-linen border-l-2 border-cardamom p-4 rounded-r-xl text-xs text-espresso">
+          <strong>Summary:</strong> We collect minimal operational data to serve your digital menu and route table orders. We never sell restaurant or diner data to third parties or ad networks.
+        </div>
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-espresso mb-1.5">1. Information We Collect</h4>
+          <p class="text-muted">We collect business onboarding details (restaurant name, Indiranagar/city location, operator email and phone), menu catalog content, and anonymous table-session order payloads required to display live KOT tickets.</p>
+        </div>
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-espresso mb-1.5">2. Zero Ad Tracking &amp; Data Protection</h4>
+          <p class="text-muted">All traffic is encrypted via TLS. Diners browsing a TAVLIQO QR menu are never required to create an account or install tracking cookies. Upon account closure, menu assets are removed within 24 hours.</p>
+        </div>
+        <div>
+          <h4 class="font-serif text-lg font-semibold text-espresso mb-1.5">3. Data Requests &amp; Contact</h4>
+          <p class="text-muted">For data exports, corrections, or deletion requests, contact our privacy desk at <span class="font-mono text-espresso">privacy@tavliqo.com</span>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       APPLICATION LOGIC & REAL-TIME SYNC ENGINE
+  =========================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Mobile Navigation Drawer Toggle
+      const mobileToggle = document.getElementById('mobile-nav-toggle');
+      const mobileDrawer = document.getElementById('mobile-nav-drawer');
+      const iconOpen = document.getElementById('nav-icon-open');
+      const iconClose = document.getElementById('nav-icon-close');
+
+      mobileToggle.addEventListener('click', () => {
+        const isHidden = mobileDrawer.classList.contains('hidden');
+        mobileDrawer.classList.toggle('hidden', !isHidden);
+        iconOpen.classList.toggle('hidden', isHidden);
+        iconClose.classList.toggle('hidden', !isHidden);
+      });
+
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileDrawer.classList.add('hidden');
+          iconOpen.classList.remove('hidden');
+          iconClose.classList.add('hidden');
+        });
+      });
+
+      // 2. Curated Indian Menu Data ("Dakshin & Co., 12th Main Indiranagar")
+      // Includes reliable Unsplash photography + graceful SVG fallback if offline
+      const dishes = [
+        {
+          id: 101,
+          name: 'Tandoori Paneer Tikka',
+          desc: 'Charred malai cottage cheese, bell peppers & smoked mint chutney',
+          price: 295,
+          category: 'Small Plates',
+          isVeg: true,
+          inStock: true,
+          tag: 'Chef Signature',
+          image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#F3E5D8',
+          fallbackLabel: 'PT'
+        },
+        {
+          id: 102,
+          name: 'Charcoal Malai Broccoli',
+          desc: 'Tandoor-roasted florets glazed with cardamom cream & toasted almonds',
+          price: 275,
+          category: 'Small Plates',
+          isVeg: true,
+          inStock: true,
+          tag: 'Mild Spice',
+          image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#E4ECE5',
+          fallbackLabel: 'MB'
+        },
+        {
+          id: 103,
+          name: '24-Hour Dal Makhani',
+          desc: 'Slow-simmered black urad lentils finished with white makhan & ginger',
+          price: 340,
+          category: 'Tandoor & Mains',
+          isVeg: true,
+          inStock: true,
+          tag: 'House Classic',
+          image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#EFE2D6',
+          fallbackLabel: 'DM'
+        },
+        {
+          id: 104,
+          name: 'Old Delhi Butter Chicken',
+          desc: 'Tandoor-charred chicken tikka in velvety kasuri methi tomato gravy',
+          price: 425,
+          category: 'Tandoor & Mains',
+          isVeg: false,
+          inStock: true,
+          tag: 'Bestseller',
+          image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#F4DFD3',
+          fallbackLabel: 'BC'
+        },
+        {
+          id: 105,
+          name: 'Hyderabadi Dum Biryani',
+          desc: 'Saffron-infused aged basmati, caramelized onions & burhani raita',
+          price: 390,
+          category: 'Breads & Rice',
+          isVeg: false,
+          inStock: true,
+          tag: 'Sealed Handi',
+          image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#F2E6D5',
+          fallbackLabel: 'HB'
+        },
+        {
+          id: 106,
+          name: 'Garlic Butter Naan',
+          desc: 'Leavened clay-oven flatbread brushed with roasted garlic & desi ghee',
+          price: 95,
+          category: 'Breads & Rice',
+          isVeg: true,
+          inStock: true,
+          tag: '',
+          image: 'https://images.unsplash.com/photo-1626074353765-517a681e40be?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#EFE8DC',
+          fallbackLabel: 'GN'
+        },
+        {
+          id: 107,
+          name: 'Alphonso Saffron Lassi',
+          desc: 'Hand-churned probiotic dahi blended with Ratnagiri mango & kesar',
+          price: 165,
+          category: 'Chai & Coolers',
+          isVeg: true,
+          inStock: true,
+          tag: 'Chilled',
+          image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#F6E8CC',
+          fallbackLabel: 'ML'
+        },
+        {
+          id: 108,
+          name: 'Kadak Masala Chai',
+          desc: 'Assam orthodox tea brewed with crushed green cardamom & fresh ginger',
+          price: 90,
+          category: 'Chai & Coolers',
+          isVeg: true,
+          inStock: true,
+          tag: 'Clay Kulhad',
+          image: 'https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?auto=format&fit=crop&w=240&q=80',
+          fallbackBg: '#EBDED2',
+          fallbackLabel: 'MC'
+        }
+      ];
+
+      // Application State
+      let selectedCategory = 'All';
+      let pureVegOnly = false;
+      let searchTerm = '';
+      let nextKotNumber = 104;
+      const tray = {}; // { dishId: quantity }
+
+      // Initial Live Kitchen KOT Queue
+      const kitchenTickets = [
+        {
+          kotId: 'KOT #103',
+          table: 'Table 02',
+          time: '2m ago',
+          status: 'Preparing',
+          items: '1× 24-Hour Dal Makhani, 2× Garlic Butter Naan'
+        }
+      ];
+
+      // DOM References
+      const guestMenuFeed = document.getElementById('guest-menu-feed');
+      const guestSearchInput = document.getElementById('guest-search-input');
+      const guestVegToggle = document.getElementById('guest-veg-toggle');
+      const categoryPills = document.querySelectorAll('.guest-cat-pill');
+      const guestTrayBar = document.getElementById('guest-tray-bar');
+      const trayItemCount = document.getElementById('tray-item-count');
+      const traySubtotalLabel = document.getElementById('tray-subtotal-label');
+      const guestTrayDrawer = document.getElementById('guest-tray-drawer');
+      const trayDrawerItems = document.getElementById('tray-drawer-items');
+      const drawerSubtotal = document.getElementById('drawer-subtotal');
+      const drawerGst = document.getElementById('drawer-gst');
+      const drawerGrandTotal = document.getElementById('drawer-grand-total');
+      const fireKotBtn = document.getElementById('fire-kot-btn');
+      const nextKotPill = document.getElementById('next-kot-pill');
+      const guestKotConfirmation = document.getElementById('guest-kot-confirmation');
+      const kotConfirmTitle = document.getElementById('kot-confirm-title');
+      const kitchenStockList = document.getElementById('kitchen-stock-list');
+      const liveKotFeed = document.getElementById('live-kot-feed');
+
+      // Helper: Render Authentic FSSAI Dietary Marker
+      function getFssaiMarkerHTML(isVeg) {
+        if (isVeg) {
+          return `<span class="w-3.5 h-3.5 rounded-[3px] border-[1.5px] border-cardamom bg-white inline-flex items-center justify-center flex-shrink-0" title="FSSAI Vegetarian">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cardamom"></span>
+                  </span>`;
+        }
+        return `<span class="w-3.5 h-3.5 rounded-[3px] border-[1.5px] border-[#A62626] bg-white inline-flex items-center justify-center flex-shrink-0" title="FSSAI Non-Vegetarian">
+                  <span class="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-b-[6px] border-b-[#A62626]"></span>
+                </span>`;
       }
+
+      // Render Customer Menu inside iPhone Frame
+      function renderGuestMenu() {
+        const filtered = dishes.filter(d => {
+          const matchesCat = selectedCategory === 'All' || d.category === selectedCategory;
+          const matchesVeg = !pureVegOnly || d.isVeg;
+          const matchesQuery = d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                               d.desc.toLowerCase().includes(searchTerm.toLowerCase());
+          return matchesCat && matchesVeg && matchesQuery;
+        });
+
+        if (filtered.length === 0) {
+          guestMenuFeed.innerHTML = `
+            <div class="text-center py-12 px-4">
+              <p class="font-serif text-base font-semibold text-espresso">No dishes found</p>
+              <p class="text-xs text-muted mt-1">Clear your search or toggle off Pure Veg to view the full menu.</p>
+            </div>
+          `;
+          return;
+        }
+
+        guestMenuFeed.innerHTML = filtered.map(dish => {
+          const qty = tray[dish.id] || 0;
+          return `
+            <article class="bg-white rounded-2xl border border-stone p-3 flex items-center justify-between gap-3 transition-opacity ${!dish.inStock ? 'opacity-55 bg-linen/60' : ''}">
+              <div class="flex items-start gap-3 min-w-0">
+                <!-- Dish Photography with Clean Fallback -->
+                <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-stone relative" style="background-color: ${dish.fallbackBg}">
+                  <img 
+                    src="${dish.image}" 
+                    alt="${dish.name}" 
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    class="w-full h-full object-cover ${!dish.inStock ? 'grayscale' : ''}"
+                  />
+                  <div class="hidden w-full h-full items-center justify-center font-serif text-sm font-semibold text-charcoal">
+                    ${dish.fallbackLabel}
+                  </div>
+                </div>
+
+                <!-- Dish Details -->
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    ${getFssaiMarkerHTML(dish.isVeg)}
+                    ${dish.tag ? `<span class="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-linen text-charcoal border border-stone">${dish.tag}</span>` : ''}
+                  </div>
+                  <h3 class="font-serif text-[13px] font-semibold text-espresso leading-snug truncate">${dish.name}</h3>
+                  <p class="text-[11px] text-muted line-clamp-2 leading-tight mt-0.5">${dish.desc}</p>
+                  <p class="font-mono text-xs font-semibold text-espresso mt-1.5">₹${dish.price}</p>
+                </div>
+              </div>
+
+              <!-- Quantity Stepper or Sold Out Pill -->
+              <div class="flex-shrink-0">
+                ${!dish.inStock
+                  ? `<span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#9E2A2B] bg-[#FDF2F2] border border-[#F5C6C6] px-2.5 py-1.5 rounded-xl block">Sold Out</span>`
+                  : qty === 0
+                    ? `<button type="button" data-inc="${dish.id}" class="bg-alabaster hover:bg-espresso text-espresso hover:text-alabaster border border-stone hover:border-espresso font-mono text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors">+ ADD</button>`
+                    : `<div class="flex items-center gap-2 bg-espresso text-alabaster rounded-xl px-2 py-1.5">
+                        <button type="button" data-dec="${dish.id}" aria-label="Decrease quantity" class="w-4 h-4 flex items-center justify-center font-mono text-xs hover:text-amber-300">−</button>
+                        <span class="font-mono text-xs font-semibold min-w-[14px] text-center">${qty}</span>
+                        <button type="button" data-inc="${dish.id}" aria-label="Increase quantity" class="w-4 h-4 flex items-center justify-center font-mono text-xs hover:text-amber-300">+</button>
+                      </div>`
+                }
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        // Bind Stepper Events
+        guestMenuFeed.querySelectorAll('[data-inc]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = Number(btn.getAttribute('data-inc'));
+            tray[id] = (tray[id] || 0) + 1;
+            renderGuestMenu();
+            syncTrayState();
+          });
+        });
+
+        guestMenuFeed.querySelectorAll('[data-dec]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = Number(btn.getAttribute('data-dec'));
+            if (tray[id] > 1) {
+              tray[id] -= 1;
+            } else {
+              delete tray[id];
+            }
+            renderGuestMenu();
+            syncTrayState();
+          });
+        });
+      }
+
+      // Sync Sticky Tray Bar & Drawer Totals (with 5% GST)
+      function syncTrayState() {
+        let count = 0;
+        let subtotal = 0;
+        const activeLines = [];
+
+        Object.entries(tray).forEach(([id, qty]) => {
+          const dish = dishes.find(d => d.id === Number(id));
+          if (dish && dish.inStock && qty > 0) {
+            count += qty;
+            subtotal += dish.price * qty;
+            activeLines.push({ dish, qty });
+          } else {
+            delete tray[id];
+          }
+        });
+
+        if (count === 0) {
+          guestTrayBar.classList.add('hidden');
+          guestTrayDrawer.classList.add('hidden');
+          return;
+        }
+
+        const gst = Math.round(subtotal * 0.05);
+        const total = subtotal + gst;
+
+        trayItemCount.textContent = count;
+        traySubtotalLabel.textContent = `₹${total.toLocaleString('en-IN')}`;
+        guestTrayBar.classList.remove('hidden');
+
+        // Populate Drawer Lines
+        drawerSubtotal.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+        drawerGst.textContent = `₹${gst.toLocaleString('en-IN')}`;
+        drawerGrandTotal.textContent = `₹${total.toLocaleString('en-IN')}`;
+        nextKotPill.textContent = `KOT #${nextKotNumber}`;
+
+        trayDrawerItems.innerHTML = activeLines.map(({ dish, qty }) => `
+          <div class="flex items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-stone">
+            <div class="flex items-center gap-2 min-w-0">
+              ${getFssaiMarkerHTML(dish.isVeg)}
+              <div class="truncate">
+                <p class="text-xs font-semibold text-espresso truncate">${dish.name}</p>
+                <p class="font-mono text-[11px] text-muted">₹${dish.price} × ${qty}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 bg-linen border border-stone rounded-lg px-2 py-1">
+              <button type="button" data-drawer-dec="${dish.id}" class="font-mono text-xs font-bold text-espresso px-1">−</button>
+              <span class="font-mono text-xs font-semibold text-espresso">${qty}</span>
+              <button type="button" data-drawer-inc="${dish.id}" class="font-mono text-xs font-bold text-espresso px-1">+</button>
+            </div>
+          </div>
+        `).join('');
+
+        trayDrawerItems.querySelectorAll('[data-drawer-inc]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = Number(btn.getAttribute('data-drawer-inc'));
+            tray[id] = (tray[id] || 0) + 1;
+            renderGuestMenu();
+            syncTrayState();
+          });
+        });
+
+        trayDrawerItems.querySelectorAll('[data-drawer-dec]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = Number(btn.getAttribute('data-drawer-dec'));
+            if (tray[id] > 1) tray[id] -= 1;
+            else delete tray[id];
+            renderGuestMenu();
+            syncTrayState();
+          });
+        });
+      }
+
+      // Open / Close Tray Drawer
+      document.getElementById('open-tray-drawer-btn').addEventListener('click', () => {
+        syncTrayState();
+        guestTrayDrawer.classList.remove('hidden');
+      });
+
+      document.getElementById('close-tray-drawer-btn').addEventListener('click', () => {
+        guestTrayDrawer.classList.add('hidden');
+      });
+
+      // Fire KOT Ticket from Phone to Kitchen Pass Console
+      fireKotBtn.addEventListener('click', () => {
+        const orderedSummary = Object.entries(tray)
+          .map(([id, qty]) => {
+            const d = dishes.find(item => item.id === Number(id));
+            return d ? `${qty}× ${d.name}` : '';
+          })
+          .filter(Boolean)
+          .join(', ');
+
+        if (!orderedSummary) return;
+
+        const firedKotLabel = `KOT #${nextKotNumber}`;
+        kitchenTickets.unshift({
+          kotId: firedKotLabel,
+          table: 'Table 04',
+          time: 'Just now',
+          status: 'New Order',
+          items: orderedSummary
+        });
+
+        nextKotNumber += 1;
+
+        // Clear Tray
+        Object.keys(tray).forEach(k => delete tray[k]);
+        guestTrayDrawer.classList.add('hidden');
+        syncTrayState();
+        renderGuestMenu();
+        renderKitchenKotFeed();
+
+        // Show Confirmation inside Phone
+        kotConfirmTitle.textContent = `${firedKotLabel} FIRED TO PASS`;
+        guestKotConfirmation.classList.remove('hidden');
+        setTimeout(() => {
+          guestKotConfirmation.classList.add('hidden');
+        }, 4500);
+      });
+
+      // Render Kitchen Stock Toggle List (Bento Card A)
+      function renderKitchenStockControls() {
+        const controlledIds = [102, 105, 104, 101]; // Malai Broccoli, Dum Biryani, Butter Chicken, Paneer Tikka
+        const controlledDishes = controlledIds.map(id => dishes.find(d => d.id === id)).filter(Boolean);
+
+        kitchenStockList.innerHTML = controlledDishes.map(dish => `
+          <div class="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl border border-stone bg-alabaster/70">
+            <div class="flex items-center gap-3 min-w-0">
+              ${getFssaiMarkerHTML(dish.isVeg)}
+              <div class="truncate">
+                <p class="text-sm font-semibold text-espresso truncate">${dish.name}</p>
+                <p class="font-mono text-[11px] text-muted">${dish.category} • ₹${dish.price}</p>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              data-stock-toggle="${dish.id}"
+              class="font-mono text-xs font-semibold px-3.5 py-1.5 rounded-full border transition-colors flex-shrink-0 ${
+                dish.inStock
+                  ? 'bg-cardamom/10 text-cardamom border-cardamom/30 hover:bg-cardamom hover:text-white'
+                  : 'bg-[#FDF2F2] text-[#9E2A2B] border-[#F5C6C6] hover:bg-[#9E2A2B] hover:text-white'
+              }"
+            >
+              ${dish.inStock ? 'IN STOCK' : 'MARKED SOLD OUT'}
+            </button>
+          </div>
+        `).join('');
+
+        kitchenStockList.querySelectorAll('[data-stock-toggle]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = Number(btn.getAttribute('data-stock-toggle'));
+            const dish = dishes.find(d => d.id === id);
+            if (dish) {
+              dish.inStock = !dish.inStock;
+              if (!dish.inStock && tray[id]) {
+                delete tray[id];
+              }
+              renderKitchenStockControls();
+              renderGuestMenu();
+              syncTrayState();
+            }
+          });
+        });
+      }
+
+      // Render Live KOT Queue inside Bento Console
+      function renderKitchenKotFeed() {
+        liveKotFeed.innerHTML = kitchenTickets.slice(0, 3).map(ticket => `
+          <div class="bg-white rounded-xl border border-stone p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-espresso">${ticket.kotId}</span>
+                <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-linen text-charcoal border border-stone">${ticket.table}</span>
+                <span class="font-mono text-[11px] text-muted">${ticket.time}</span>
+              </div>
+              <p class="text-xs text-charcoal mt-1.5 font-medium">${ticket.items}</p>
+            </div>
+            <span class="self-start sm:self-center font-mono text-[11px] font-semibold px-2.5 py-1 rounded-full ${
+              ticket.status === 'New Order'
+                ? 'bg-copper/15 text-copper border border-copper/30'
+                : 'bg-cardamom/10 text-cardamom border border-cardamom/25'
+            }">
+              ${ticket.status}
+            </span>
+          </div>
+        `).join('');
+      }
+
+      // Category Filter Click Handlers
+      categoryPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          selectedCategory = pill.getAttribute('data-cat');
+          categoryPills.forEach(p => {
+            p.classList.remove('bg-espresso', 'text-alabaster', 'font-semibold');
+            p.classList.add('bg-white', 'text-charcoal', 'border', 'border-stone', 'font-medium');
+          });
+          pill.classList.remove('bg-white', 'text-charcoal', 'border', 'border-stone', 'font-medium');
+          pill.classList.add('bg-espresso', 'text-alabaster', 'font-semibold');
+          renderGuestMenu();
+        });
+      });
+
+      // Pure Veg Filter Toggle
+      guestVegToggle.addEventListener('click', () => {
+        pureVegOnly = !pureVegOnly;
+        guestVegToggle.setAttribute('aria-pressed', String(pureVegOnly));
+        if (pureVegOnly) {
+          guestVegToggle.classList.remove('bg-white', 'text-charcoal', 'border-stone');
+          guestVegToggle.classList.add('bg-cardamom/10', 'text-cardamom', 'border-cardamom');
+        } else {
+          guestVegToggle.classList.add('bg-white', 'text-charcoal', 'border-stone');
+          guestVegToggle.classList.remove('bg-cardamom/10', 'text-cardamom', 'border-cardamom');
+        }
+        renderGuestMenu();
+      });
+
+      // Search Input Handler
+      guestSearchInput.addEventListener('input', (e) => {
+        searchTerm = e.target.value;
+        renderGuestMenu();
+      });
+
+      // Smooth Scroll to Phone Demo CTA
+      document.getElementById('scroll-to-phone-btn').addEventListener('click', () => {
+        document.getElementById('hero-phone-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        guestSearchInput.focus({ preventScroll: true });
+      });
+
+      // Copy Email Address Helper (Iframe-Safe execCommand)
+      const copyEmailTrigger = document.getElementById('copy-email-trigger');
+      const emailCopiedPill = document.getElementById('email-copied-pill');
+      copyEmailTrigger.addEventListener('click', () => {
+        const tempInput = document.createElement('input');
+        tempInput.value = 'hello@tavliqo.com';
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+          document.execCommand('copy');
+          emailCopiedPill.classList.remove('hidden');
+          setTimeout(() => emailCopiedPill.classList.add('hidden'), 2400);
+        } catch (e) {
+          // Graceful fallback
+        }
+        document.body.removeChild(tempInput);
+      });
+
+      // Legal Modal Drawers (Terms & Privacy)
+      function openLegalModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLegalModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('[data-open-legal]').forEach(btn => {
+        btn.addEventListener('click', () => openLegalModal(btn.getAttribute('data-open-legal')));
+      });
+
+      document.querySelectorAll('[data-close-legal]').forEach(btn => {
+        btn.addEventListener('click', () => closeLegalModal(btn.getAttribute('data-close-legal')));
+      });
+
+      ['terms-modal', 'privacy-modal'].forEach(id => {
+        const modal = document.getElementById(id);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeLegalModal(id);
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeLegalModal('terms-modal');
+          closeLegalModal('privacy-modal');
+        }
+      });
+
+      // Initialize Views
+      renderGuestMenu();
+      renderKitchenStockControls();
+      renderKitchenKotFeed();
     });
-  });
-</script>
-{% endblock %}
+  </script>
+</body>
+</html>

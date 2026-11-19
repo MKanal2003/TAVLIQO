@@ -18,11 +18,9 @@ urlpatterns = [
     path('items/<int:pk>/toggle/', views.toggle_availability, name='toggle_availability'),
     path('qr-code/', views.qr_code_view, name='qr_code_view'),
     path('qr-code/regenerate/', views.regenerate_qr, name='regenerate_qr'),
-
-    # Staff Accounts (Admin)
     path('staff/manage/', views.manage_staff, name='manage_staff'),
 
-    # Staff Dashboard (Waiter)
+    # Staff Dashboard
     path('staff/', orders_views.staff_dashboard, name='staff_dashboard'),
     path('staff/orders/create/', orders_views.staff_create_order, name='staff_order'),
     path('staff/orders/<int:pk>/advance/', orders_views.staff_advance_order, name='staff_order_advance'),
@@ -30,7 +28,7 @@ urlpatterns = [
     path('staff/orders/<int:pk>/reject/', orders_views.staff_reject_order, name='staff_order_reject'),
     path('staff/orders/<int:pk>/receipt/', orders_views.staff_order_receipt, name='staff_order_receipt'),
 
-    # Orders (Admin)
+    # Admin Orders
     path('orders/', orders_views.admin_orders, name='orders'),
     path('orders/<int:pk>/accept/', orders_views.admin_order_accept, name='order_accept'),
     path('orders/<int:pk>/reject/', orders_views.admin_order_reject, name='order_reject'),

@@ -3,7 +3,6 @@ from django.http import Http404
 from django.views.decorators.csrf import ensure_csrf_cookie
 from restaurants.models import Restaurant
 
-
 @ensure_csrf_cookie
 def menu_viewer_by_token(request, token):
     try:
@@ -12,14 +11,8 @@ def menu_viewer_by_token(request, token):
         raise Http404("Restaurant not found")
     return _render_menu(request, restaurant)
 
-
 def menu_viewer(request, slug):
-    try:
-        restaurant = Restaurant.objects.get(slug=slug)
-    except Restaurant.DoesNotExist:
-        raise Http404("Restaurant not found")
-    return redirect('menu_by_token', token=restaurant.qr_token, permanent=True)
-
+    raise Http404("Please scan the QR code to view the menu.")
 
 def _render_menu(request, restaurant):
     if not restaurant.is_active:

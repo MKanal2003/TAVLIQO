@@ -4,26 +4,14 @@ from django.utils.text import slugify
 from django.urls import reverse
 from accounts.models import User
 
-
 def generate_qr_token():
     return secrets.token_urlsafe(32)
 
-
 class Restaurant(models.Model):
-    owner = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        related_name='restaurant'
-    )
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='restaurant')
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True, max_length=300)
-    qr_token = models.CharField(
-        max_length=64,
-        unique=True,
-        db_index=True,
-        default=generate_qr_token,
-        editable=False,
-    )
+    qr_token = models.CharField(max_length=64, unique=True, db_index=True, default=generate_qr_token, editable=False)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     address = models.TextField()
@@ -61,6 +49,7 @@ class Restaurant(models.Model):
     def total_items(self):
         return self.menu_items.count()
 
+    # THESE WERE MISSING - NOW ADDED BACK
     @property
     def available_items_count(self):
         return self.menu_items.filter(is_available=True).count()
@@ -77,11 +66,7 @@ class Restaurant(models.Model):
 
 
 class Category(models.Model):
-    restaurant = models.ForeignKey(
-        Restaurant,
-        on_delete=models.CASCADE,
-        related_name='categories'
-    )
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='categories')
     name = models.CharField(max_length=100)
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -99,18 +84,8 @@ class Category(models.Model):
 
 
 class MenuItem(models.Model):
-    restaurant = models.ForeignKey(
-        Restaurant,
-        on_delete=models.CASCADE,
-        related_name='menu_items'
-    )
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='items'
-    )
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menu_items')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='items')
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2)
@@ -124,4 +99,4 @@ class MenuItem(models.Model):
         ordering = ['category__order', 'category__name', 'name']
 
     def __str__(self):
-        return f"{self.name} (₹{self.price}) — {self.restaurant.name}"
+        return f"{self.name} (₹{self.price})"
