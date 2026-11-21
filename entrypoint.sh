@@ -1,62 +1,33 @@
-#!/usr/bin/env bash
-# ─────────────────────────────────────────────────────────────────────────────
-# QR-Dine entrypoint
-#
-# Responsibilities:
-#   1. Wait for control-db and tenant-db to accept connections.
-#   2. Run migrations on both databases.
-#   3. Collect static files (safe for dev; production will move this to build).
-#   4. exec the container's CMD.
-#
-# Skipping any step via env var:
-#   SKIP_MIGRATIONS=1   → do not run migrations
-#   SKIP_COLLECTSTATIC=1 → do not run collectstatic
-# ─────────────────────────────────────────────────────────────────────────────
+import os
+from django.core.management.base import BaseCommand
+from accounts.models import User
 
-set -euo pipefail
+class Command(BaseCommand):
+    help = "Create default Super Admin accounts"
 
-echo "[entrypoint] Waiting for Postgres (control + tenant)..."
+    def handle(self, *args, **options):
+        accounts = [
+            ("SUPERADMIN1_EMAIL", "SUPERADMIN1_PASSWORD", "Primary Super Admin"),
+            ("SUPERADMIN2_EMAIL", "SUPERADMIN2_PASSWORD", "Backup Super Admin"),
+        ]
 
-python - <<'PY'
-import os, sys, time
-from urllib.parse import urlparse
-import psycopg2
+        for email_key, pw_key, label in accounts:
+            email = os.environ.get(email_key, "").strip().lower()
+            password = os.environ.get(pw_key, "").strip()
 
-def wait(name, url, timeout=120):
-    p = urlparse(url)
-    for attempt in range(1, timeout // 2 + 1):
-        try:
-            psycopg2.connect(
-                dbname=p.path.lstrip("/"),
-                user=p.username,
-                password=p.password,
-                host=p.hostname,
-                port=p.port or 5432,
-                connect_timeout=2,
-            ).close()
-            print(f"[entrypoint] {name} reachable")
-            return
-        except psycopg2.OperationalError:
-            print(f"[entrypoint] {name} not ready (attempt {attempt}/{timeout//2})")
-            time.sleep(2)
-    sys.exit(f"[entrypoint] FATAL: {name} unreachable at {url}")
+            if not email or not password:
+                continue
 
-wait("control-db", os.environ["CONTROL_DATABASE_URL"])
-wait("tenant-db",  os.environ["TENANT_DATABASE_URL"])
-PY
+            if User.objects.filter(email__iexact=email).exists():
+                self.stdout.write(f"{label}: {email} already exists — skipping")
+                continue
 
-if [[ "${SKIP_MIGRATIONS:-0}" != "1" ]]; then
-    echo "[entrypoint] Migrating control database..."
-    python manage.py migrate --noinput
-
-    echo "[entrypoint] Migrating tenant database..."
-    python manage.py migrate --database=tenant --noinput
-fi
-
-if [[ "${SKIP_COLLECTSTATIC:-0}" != "1" ]]; then
-    echo "[entrypoint] Collecting static files..."
-    python manage.py collectstatic --noinput --clear
-fi
-
-echo "[entrypoint] Starting: $*"
-exec "$@"
+            User.objects.create_user(
+                username=email,
+                email=email,
+                password=password,
+                role=User.ROLE_SUPERADMIN,
+                is_staff=True,
+                is_superuser=True,
+            )
+            self.stdout.write(self.style.SUCCESS(f"{label} created: {email}"))
