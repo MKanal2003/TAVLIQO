@@ -3,121 +3,120 @@
 
 {% block staff_content %}
 <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-    <div>
-        <h1 class="text-2xl font-heading font-bold text-[#0B1D42]">Floor Management</h1>
-        <p class="text-sm text-gray-500">Logged in as: <strong class="text-[#0BA6A0]">{{ request.staff.name }}</strong></p>
-    </div>
-    <a href="{% url 'restaurants:staff_order' %}" class="bg-[#0BA6A0] hover:bg-[#098b86] text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-[#0BA6A0]/30 flex items-center justify-center gap-2 transition-transform active:scale-95">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        Take New Order
-    </a>
+  <div>
+    <h1 class="text-2xl font-heading font-bold text-[#14110F]">Floor Management</h1>
+    <p class="text-xs sm:text-sm text-[#6B6257]">Active server: <strong class="text-[#C85A17]">{{ request.staff.name }}</strong></p>
+  </div>
+  <a href="{% url 'restaurants:staff_order' %}" class="bg-[#C85A17] hover:bg-[#A94910] text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-md flex items-center justify-center gap-2 transition-transform active:scale-95">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    Take New Order
+  </a>
 </div>
 
-<!-- KANBAN BOARD FOR STAFF -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-  
+
   <!-- NEW -->
-  <div class="bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden flex flex-col h-[75vh]">
-    <div class="px-4 py-3 bg-white border-b border-gray-200 flex justify-between items-center">
-      <h3 class="font-bold text-[#0B1D42] flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-yellow-400"></span> New Requests</h3>
-      <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full">{{ new_orders|length }}</span>
+  <div class="bg-[#FAF8F5] rounded-2xl border border-[#E6DFD5] overflow-hidden flex flex-col h-[75vh] shadow-xs">
+    <div class="px-4 py-3.5 bg-white border-b border-[#E6DFD5] flex justify-between items-center">
+      <h3 class="font-bold text-[#14110F] text-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#C85A17] animate-pulse"></span> New Requests</h3>
+      <span class="bg-[#C85A17]/15 text-[#C85A17] text-xs font-bold font-mono-num px-2.5 py-0.5 rounded-full">{{ new_orders|length }}</span>
     </div>
-    <div class="p-3 space-y-3 overflow-y-auto flex-1">
+    <div class="p-3.5 space-y-3 overflow-y-auto flex-1">
       {% for order in new_orders %}
-      <div class="bg-white p-4 rounded-xl border border-gray-200 border-l-4 border-l-yellow-400 shadow-sm">
+      <div class="bg-white p-4 rounded-xl border border-[#E6DFD5] border-l-4 border-l-[#C85A17] shadow-xs">
         <div class="flex justify-between items-start mb-2">
           <div>
-            <p class="font-bold text-[#0B1D42] text-lg">{{ order.table_label }}</p>
-            <p class="text-xs text-gray-500">#{{ order.id }} · {{ order.created_at|timesince }}</p>
+            <p class="font-bold text-[#14110F] text-base font-heading">{{ order.table_label }}</p>
+            <p class="text-xs text-[#8A7F73] font-mono-num">#{{ order.id }} · {{ order.created_at|timesince }}</p>
           </div>
         </div>
-        <div class="text-sm mb-3">
+        <div class="text-sm mb-3 space-y-1">
           {% for item in order.items.all %}
-          <div class="flex justify-between text-gray-700"><span><b>{{ item.qty }}×</b> {{ item.name_snapshot }}</span></div>
+          <div class="flex justify-between text-[#14110F]"><span><b class="font-mono-num text-[#C85A17]">{{ item.qty }}×</b> {{ item.name_snapshot }}</span></div>
           {% endfor %}
         </div>
-        {% if order.notes %}<div class="text-xs bg-yellow-50 p-2 rounded mb-3 text-yellow-800"><b>Note:</b> {{ order.notes }}</div>{% endif %}
+        {% if order.notes %}<div class="text-xs bg-[#C85A17]/8 p-2 rounded-lg mb-3 text-[#7C340B] border border-[#C85A17]/20"><b>Note:</b> {{ order.notes }}</div>{% endif %}
         <div class="flex gap-2">
           <form method="post" action="{% url 'restaurants:staff_order_accept' order.id %}" class="flex-1">
             {% csrf_token %}
-            <button type="submit" class="w-full bg-[#0BA6A0] text-white font-medium py-2 rounded-lg text-sm">Accept</button>
+            <button type="submit" class="w-full bg-[#1E4D3B] hover:bg-[#15382B] text-white font-semibold py-2 rounded-xl text-xs sm:text-sm transition-colors">Accept</button>
           </form>
         </div>
       </div>
       {% empty %}
-      <p class="text-sm text-gray-400 text-center py-4">No new requests</p>
+      <p class="text-xs text-[#8A7F73] text-center py-6">No new requests</p>
       {% endfor %}
     </div>
   </div>
 
   <!-- PREPARING -->
-  <div class="bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden flex flex-col h-[75vh]">
-    <div class="px-4 py-3 bg-white border-b border-gray-200 flex justify-between items-center">
-      <h3 class="font-bold text-[#0B1D42] flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Preparing</h3>
-      <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">{{ preparing_orders|length }}</span>
+  <div class="bg-[#FAF8F5] rounded-2xl border border-[#E6DFD5] overflow-hidden flex flex-col h-[75vh] shadow-xs">
+    <div class="px-4 py-3.5 bg-white border-b border-[#E6DFD5] flex justify-between items-center">
+      <h3 class="font-bold text-[#14110F] text-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#14110F]"></span> Preparing</h3>
+      <span class="bg-[#14110F]/10 text-[#14110F] text-xs font-bold font-mono-num px-2.5 py-0.5 rounded-full">{{ preparing_orders|length }}</span>
     </div>
-    <div class="p-3 space-y-3 overflow-y-auto flex-1">
+    <div class="p-3.5 space-y-3 overflow-y-auto flex-1">
       {% for order in preparing_orders %}
       {% with age=now|timeuntil:order.created_at %}
-      <div class="bg-white p-4 rounded-xl border border-gray-200 border-l-4 
-        {% if 'minute' in age or 'minutes' in age %}border-l-green-500
-        {% elif '10 minutes' in age or '1 hour' in age %}border-l-red-500
-        {% else %}border-l-amber-500{% endif %} shadow-sm">
+      <div class="bg-white p-4 rounded-xl border border-[#E6DFD5] border-l-4
+        {% if 'minute' in age or 'minutes' in age %}border-l-[#1E4D3B]
+        {% elif '10 minutes' in age or '1 hour' in age %}border-l-[#B4382A]
+        {% else %}border-l-[#C85A17]{% endif %} shadow-xs">
         <div class="flex justify-between items-start mb-2">
           <div>
-            <p class="font-bold text-[#0B1D42] text-lg">{{ order.table_label }}</p>
-            <p class="text-xs text-gray-500 font-bold">{{ age }}</p>
+            <p class="font-bold text-[#14110F] text-base font-heading">{{ order.table_label }}</p>
+            <p class="text-xs text-[#8A7F73] font-mono-num font-bold">{{ age }}</p>
           </div>
-          <span class="text-[10px] font-bold px-2 py-1 bg-blue-50 text-blue-700 rounded uppercase">{{ order.get_status_display }}</span>
+          <span class="text-[10px] font-bold px-2 py-1 bg-[#FAF8F5] border border-[#E6DFD5] text-[#14110F] rounded-lg uppercase">{{ order.get_status_display }}</span>
         </div>
-        <div class="text-sm mb-3">
+        <div class="text-sm mb-3 space-y-1">
           {% for item in order.items.all %}
-          <div class="flex justify-between text-gray-700"><span><b>{{ item.qty }}×</b> {{ item.name_snapshot }}</span></div>
+          <div class="flex justify-between text-[#14110F]"><span><b class="font-mono-num text-[#C85A17]">{{ item.qty }}×</b> {{ item.name_snapshot }}</span></div>
           {% endfor %}
         </div>
-        {% if order.notes %}<div class="text-xs bg-yellow-50 p-2 rounded mb-3 text-yellow-800"><b>Note:</b> {{ order.notes }}</div>{% endif %}
+        {% if order.notes %}<div class="text-xs bg-[#C85A17]/8 p-2 rounded-lg mb-3 text-[#7C340B] border border-[#C85A17]/20"><b>Note:</b> {{ order.notes }}</div>{% endif %}
         <form method="post" action="{% url 'restaurants:staff_order_advance' order.id %}">
           {% csrf_token %}
-          <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 rounded-lg text-sm hover:bg-blue-700">{% if order.status == 'CONFIRMED' %}Start Preparing{% else %}Mark Served{% endif %}</button>
+          <button type="submit" class="w-full bg-[#14110F] hover:bg-[#2A2420] text-white font-semibold py-2 rounded-xl text-xs sm:text-sm transition-colors">{% if order.status == 'CONFIRMED' %}Start Preparing{% else %}Mark Served{% endif %}</button>
         </form>
       </div>
       {% endwith %}
       {% empty %}
-      <p class="text-sm text-gray-400 text-center py-4">Nothing in kitchen</p>
+      <p class="text-xs text-[#8A7F73] text-center py-6">Nothing in kitchen</p>
       {% endfor %}
     </div>
   </div>
 
   <!-- READY -->
-  <div class="bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden flex flex-col h-[75vh]">
-    <div class="px-4 py-3 bg-white border-b border-gray-200 flex justify-between items-center">
-      <h3 class="font-bold text-[#0B1D42] flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span> Ready / Served</h3>
-      <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded-full">{{ ready_orders|length }}</span>
+  <div class="bg-[#FAF8F5] rounded-2xl border border-[#E6DFD5] overflow-hidden flex flex-col h-[75vh] shadow-xs">
+    <div class="px-4 py-3.5 bg-white border-b border-[#E6DFD5] flex justify-between items-center">
+      <h3 class="font-bold text-[#14110F] text-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#1E4D3B]"></span> Ready / Served</h3>
+      <span class="bg-[#1E4D3B]/15 text-[#1E4D3B] text-xs font-bold font-mono-num px-2.5 py-0.5 rounded-full">{{ ready_orders|length }}</span>
     </div>
-    <div class="p-3 space-y-3 overflow-y-auto flex-1">
+    <div class="p-3.5 space-y-3 overflow-y-auto flex-1">
       {% for order in ready_orders %}
-      <div class="bg-white p-4 rounded-xl border border-gray-200 border-l-4 border-l-green-500 shadow-sm">
+      <div class="bg-white p-4 rounded-xl border border-[#E6DFD5] border-l-4 border-l-[#1E4D3B] shadow-xs">
         <div class="flex justify-between items-start mb-2">
           <div>
-            <p class="font-bold text-[#0B1D42] text-lg">{{ order.table_label }}</p>
-            <p class="text-xs text-gray-500">#{{ order.id }}</p>
+            <p class="font-bold text-[#14110F] text-base font-heading">{{ order.table_label }}</p>
+            <p class="text-xs text-[#8A7F73] font-mono-num">#{{ order.id }}</p>
           </div>
         </div>
-        <div class="text-sm mb-3">
+        <div class="text-sm mb-3 space-y-1">
           {% for item in order.items.all %}
-          <div class="flex justify-between text-gray-700"><span><b>{{ item.qty }}×</b> {{ item.name_snapshot }}</span></div>
+          <div class="flex justify-between text-[#14110F]"><span><b class="font-mono-num text-[#C85A17]">{{ item.qty }}×</b> {{ item.name_snapshot }}</span></div>
           {% endfor %}
         </div>
         <div class="flex gap-2 mt-2">
-          <a href="{% url 'restaurants:staff_order_receipt' order.id %}" target="_blank" class="flex-1 bg-gray-100 text-[#0B1D42] text-center font-medium py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-200">Print Bill</a>
+          <a href="{% url 'restaurants:staff_order_receipt' order.id %}" target="_blank" class="flex-1 bg-[#FAF8F5] text-[#14110F] text-center font-semibold py-2 rounded-xl text-xs sm:text-sm border border-[#E6DFD5] hover:bg-[#EFECE6] transition-colors">Print Bill</a>
           <form method="post" action="{% url 'restaurants:staff_order_advance' order.id %}" class="flex-1">
             {% csrf_token %}
-            <button type="submit" class="w-full bg-green-600 text-white font-medium py-2 rounded-lg text-sm hover:bg-green-700">Mark Paid</button>
+            <button type="submit" class="w-full bg-[#1E4D3B] hover:bg-[#15382B] text-white font-semibold py-2 rounded-xl text-xs sm:text-sm transition-colors">Mark Paid</button>
           </form>
         </div>
       </div>
       {% empty %}
-      <p class="text-sm text-gray-400 text-center py-4">No ready orders</p>
+      <p class="text-xs text-[#8A7F73] text-center py-6">No ready orders</p>
       {% endfor %}
     </div>
   </div>
@@ -125,7 +124,6 @@
 </div>
 
 <script>
-    // Auto-refresh every 15 seconds
-    setTimeout(function(){ window.location.reload(); }, 15000);
+  setTimeout(function(){ window.location.reload(); }, 15000);
 </script>
 {% endblock %}

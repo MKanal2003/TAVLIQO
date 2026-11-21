@@ -1,47 +1,57 @@
 {% extends "base.html" %}
-{% block title %}Your Basket — {{ restaurant.name }}{% endblock %}
+{% block title %}Your Tray — {{ restaurant.name }}{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#0A0A0A] text-white pb-32">
-  <div class="bg-[#0B1D42] py-6">
-    <div class="max-w-2xl mx-auto px-6 flex items-center gap-3">
-      <a href="/r/{{ restaurant.qr_token }}/" class="text-white/70 hover:text-white">←</a>
-      <h1 class="text-xl font-heading font-bold">Your Basket</h1>
-    </div>
-  </div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <div class="max-w-2xl mx-auto px-6 py-8">
+<div class="min-h-screen bg-[#FAF8F5] text-[#14110F] pb-32" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+  <header class="bg-[#14110F] text-[#FAF8F5] py-6 px-5">
+    <div class="max-w-2xl mx-auto flex items-center gap-4">
+      <a href="/r/{{ restaurant.qr_token }}/" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">←</a>
+      <div>
+        <p class="text-[11px] uppercase tracking-wider text-[#F3A26D] font-semibold">{{ restaurant.name }}</p>
+        <h1 class="text-xl font-bold" style="font-family: 'Fraunces', serif;">Your Dining Tray</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-5 py-8">
     {% if items %}
     <div class="space-y-3 mb-6">
       {% for row in items %}
-      <div class="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-3">
-        {% if row.item.image %}<img src="{{ row.item.image.url }}" alt="" class="w-16 h-16 rounded-lg object-cover">{% endif %}
+      <div class="bg-white border border-[#E6DFD5] rounded-2xl p-4 flex items-center gap-4 shadow-xs">
+        {% if row.item.image %}
+        <img src="{{ row.item.image.url }}" alt="{{ row.item.name }}" class="w-16 h-16 rounded-xl object-cover border border-[#E6DFD5] flex-shrink-0">
+        {% endif %}
         <div class="flex-1 min-w-0">
-          <p class="font-medium">{{ row.item.name }}</p>
-          <p class="text-sm text-white/60">₹{{ row.item.price }} × {{ row.qty }}</p>
+          <p class="font-bold text-[#14110F] truncate">{{ row.item.name }}</p>
+          <p class="text-xs text-[#6B6257] mt-0.5" style="font-family: 'JetBrains Mono', monospace;">₹{{ row.item.price }} × {{ row.qty }}</p>
         </div>
-        <p class="font-heading font-bold text-[#0BA6A0]">₹{{ row.line_total }}</p>
+        <p class="font-bold text-[#14110F]" style="font-family: 'JetBrains Mono', monospace;">₹{{ row.line_total }}</p>
         <form method="post" action="/r/{{ restaurant.qr_token }}/cart/remove/{{ row.item.id }}/" class="inline">
           {% csrf_token %}
-          <button type="submit" class="text-white/40 hover:text-red-400 p-2" title="Remove one">✕</button>
+          <button type="submit" class="w-8 h-8 rounded-lg bg-[#FAF8F5] border border-[#E6DFD5] text-[#8A7F73] hover:text-[#B4382A] hover:border-[#B4382A]/40 flex items-center justify-center transition-colors" title="Remove one">✕</button>
         </form>
       </div>
       {% endfor %}
     </div>
 
-    <div class="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between mb-6">
-      <span class="text-white/70">Subtotal</span>
-      <span class="text-xl font-heading font-bold text-white">₹{{ subtotal }}</span>
+    <div class="bg-white border border-[#E6DFD5] rounded-2xl p-5 flex items-center justify-between mb-6 shadow-xs">
+      <span class="text-sm font-medium text-[#5C5349]">Tray Subtotal</span>
+      <span class="text-2xl font-bold text-[#14110F]" style="font-family: 'JetBrains Mono', monospace;">₹{{ subtotal }}</span>
     </div>
 
-    <a href="/r/{{ restaurant.qr_token }}/checkout/" class="block bg-[#0BA6A0] text-white font-bold text-center py-4 rounded-xl hover:bg-[#098b86] transition-colors">Continue to Checkout →</a>
-    <a href="/r/{{ restaurant.qr_token }}/" class="block text-center text-sm text-white/50 hover:text-white/80 mt-4">Add more items</a>
+    <a href="/r/{{ restaurant.qr_token }}/checkout/" class="block bg-[#C85A17] hover:bg-[#A94910] text-white font-semibold text-center py-4 rounded-2xl shadow-lg transition-all">Continue to Checkout →</a>
+    <a href="/r/{{ restaurant.qr_token }}/" class="block text-center text-sm font-medium text-[#6B6257] hover:text-[#14110F] mt-4">+ Add more dishes</a>
     {% else %}
-    <div class="text-center py-16">
-      <p class="text-white/50 mb-6">Your basket is empty.</p>
-      <a href="/r/{{ restaurant.qr_token }}/" class="inline-block bg-[#0BA6A0] text-white px-6 py-3 rounded-xl hover:bg-[#098b86]">Browse Menu</a>
+    <div class="bg-white border border-[#E6DFD5] rounded-3xl text-center py-16 px-6 shadow-xs">
+      <p class="text-lg font-bold text-[#14110F] mb-2" style="font-family: 'Fraunces', serif;">Your tray is empty</p>
+      <p class="text-sm text-[#6B6257] mb-6">Explore the menu to add freshly prepared dishes.</p>
+      <a href="/r/{{ restaurant.qr_token }}/" class="inline-block bg-[#14110F] text-[#FAF8F5] text-sm font-semibold px-6 py-3.5 rounded-xl hover:bg-[#2A2420] transition-colors">Browse Menu</a>
     </div>
     {% endif %}
-  </div>
+  </main>
 </div>
 {% endblock %}

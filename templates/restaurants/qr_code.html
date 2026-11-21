@@ -2,36 +2,36 @@
 {% load static %}
 {% block title %}QR Code — TAVLIQO{% endblock %}
 {% block page_title %}Your QR Code{% endblock %}
-{% block page_subtitle %}<p class="text-xs text-[#6B7280]">Share this with your customers</p>{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B6257]">Print and place on tables for instant menu access</p>{% endblock %}
 
 {% block dashboard_content %}
 <div class="max-w-2xl mx-auto">
-  <div class="bg-white rounded-2xl border border-[#E7E7E0] overflow-hidden">
-    
-    {# QR Code Display #}
-    <div class="p-12 bg-[#F4F6FA] flex flex-col items-center">
-      <div class="bg-white p-6 rounded-2xl shadow-2xl mb-6">
-        <img src="/media/{{ qr_path }}" alt="QR Code for {{ restaurant.name }}" class="w-80 h-80 object-contain">
+  <div class="bg-white rounded-3xl border border-[#E6DFD5] overflow-hidden shadow-xs">
+
+    <!-- QR Display -->
+    <div class="p-8 sm:p-12 bg-[#FAF8F5] flex flex-col items-center border-b border-[#E6DFD5]">
+      <div class="bg-white p-6 rounded-2xl border border-[#E6DFD5] shadow-lg mb-5">
+        <img src="/media/{{ qr_path }}" alt="QR Code for {{ restaurant.name }}" class="w-64 h-64 sm:w-72 sm:h-72 object-contain">
       </div>
-      <p class="text-sm text-[#6B7280] text-center mb-2">Scan this QR code to view your menu</p>
-      <p class="text-xs text-[#9CA3AF] font-mono break-all text-center max-w-md">{{ menu_url }}</p>
+      <p class="text-sm font-semibold text-[#14110F] text-center mb-1">Scan with phone camera to open menu</p>
+      <p class="text-xs text-[#8A7F73] font-mono-num break-all text-center max-w-md">{{ menu_url }}</p>
     </div>
-    
-    {# Actions #}
-    <div class="p-6 border-t border-[#E7E7E0] space-y-3">
+
+    <!-- Actions -->
+    <div class="p-6 space-y-3">
       <a href="/media/{{ qr_path }}" download="qr-code-{{ restaurant.slug }}.png"
-         class="flex items-center justify-center gap-2 bg-[#0B1D42] hover:bg-[#0BA6A0] text-white font-medium text-sm px-6 py-3 rounded-xl transition-colors w-full">
+         class="flex items-center justify-center gap-2 bg-[#14110F] hover:bg-[#C85A17] text-[#FAF8F5] font-semibold text-sm px-6 py-3.5 rounded-xl transition-colors w-full shadow-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
         </svg>
         Download QR Code
       </a>
-      
+
       <form method="post" action="{% url 'restaurants:regenerate_qr' %}"
-            onsubmit="return confirm('Regenerate QR code? All printed QR codes will stop working. You will need to download and print a new one.');">
+            onsubmit="return confirm('Regenerate QR code? All previously printed QR codes will stop working.');">
         {% csrf_token %}
         <button type="submit"
-                class="flex items-center justify-center gap-2 border border-orange-200 hover:border-orange-400 text-orange-600 font-medium text-sm px-6 py-3 rounded-xl transition-colors w-full">
+                class="flex items-center justify-center gap-2 border border-[#E6DFD5] hover:border-[#C85A17] text-[#C85A17] font-semibold text-sm px-6 py-3 rounded-xl transition-colors w-full">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -40,29 +40,16 @@
         </button>
       </form>
     </div>
-    
   </div>
-  
-  {# Instructions #}
-  <div class="mt-8 bg-[#FFF7ED] border border-[#FED7AA] rounded-xl p-6">
-    <h3 class="font-medium text-[#0A0A0A] mb-3" style="font-family:'Fraunces',serif;">How to use your QR code</h3>
-    <ol class="space-y-2 text-sm text-[#6B7280]">
-      <li class="flex gap-2">
-        <span class="font-medium text-[#D97706]">1.</span>
-        <span>Download the QR code image using the button above</span>
-      </li>
-      <li class="flex gap-2">
-        <span class="font-medium text-[#D97706]">2.</span>
-        <span>Print it and display on tables, counter, or entrance</span>
-      </li>
-      <li class="flex gap-2">
-        <span class="font-medium text-[#D97706]">3.</span>
-        <span>Customers scan with their phone camera — no app needed</span>
-      </li>
-      <li class="flex gap-2">
-        <span class="font-medium text-[#D97706]">4.</span>
-        <span>They'll see your live menu instantly</span>
-      </li>
+
+  <!-- Setup Guide -->
+  <div class="mt-6 bg-white border border-[#E6DFD5] rounded-2xl p-6 shadow-xs">
+    <h3 class="font-bold text-base text-[#14110F] mb-3 font-heading">Table Setup Guide</h3>
+    <ol class="space-y-2 text-xs sm:text-sm text-[#5C5349] font-mono-num">
+      <li><strong class="text-[#C85A17]">01.</strong> Download the high-contrast QR image above.</li>
+      <li><strong class="text-[#C85A17]">02.</strong> Print on acrylic stands or table tents.</li>
+      <li><strong class="text-[#C85A17]">03.</strong> Guests scan directly with their camera — no app required.</li>
+      <li><strong class="text-[#C85A17]">04.</strong> Live menu updates and table orders sync immediately.</li>
     </ol>
   </div>
 </div>

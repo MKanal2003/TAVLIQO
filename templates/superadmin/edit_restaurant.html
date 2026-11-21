@@ -1,61 +1,88 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Edit {{ restaurant.name }} — TAVLIQO{% endblock %}
 {% block page_title %}Restaurant Settings{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B6257]">Super Admin · Tax & Gateway Configuration</p>{% endblock %}
 
 {% block dashboard_content %}
-<div class="max-w-2xl mx-auto bg-white rounded-2xl border border-[#E7E7E0] p-8 shadow-sm">
-    <div class="mb-6 border-b border-gray-100 pb-4">
-        <h2 class="text-2xl font-bold text-[#0B1D42]" style="font-family:'Montserrat',serif;">{{ restaurant.name }}</h2>
-        <p class="text-sm text-gray-500">Manage taxes and payment gateway for this specific hotel.</p>
+<div class="max-w-2xl mx-auto bg-white rounded-2xl border border-[#E6DFD5] p-6 sm:p-8 shadow-xs sa-edit-form">
+  <div class="mb-6 border-b border-[#E6DFD5] pb-4">
+    <h2 class="text-2xl font-bold text-[#14110F] font-heading">{{ restaurant.name }}</h2>
+    <p class="text-xs sm:text-sm text-[#6B6257] mt-0.5">Configure active status, GST split, and payment gateway for this venue.</p>
+  </div>
+
+  <form method="post" class="space-y-6">
+    {% csrf_token %}
+
+    <div class="flex items-center gap-3 bg-[#FAF8F5] border border-[#E6DFD5] p-4 rounded-xl">
+      {{ form.is_active }}
+      <label class="text-sm font-semibold text-[#14110F]">Restaurant is Active</label>
     </div>
 
-    <form method="post" class="space-y-6">
-        {% csrf_token %}
-        
-        <div class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl">
-            {{ form.is_active }}
-            <label class="font-medium text-[#0B1D42]">Restaurant is Active</label>
+    <div class="border border-[#E6DFD5] rounded-2xl p-5 sm:p-6 bg-[#FAF8F5]/60">
+      <div class="flex items-center gap-3 mb-4">
+        {{ form.is_tax_enabled }}
+        <label class="text-sm font-bold text-[#14110F]">Enable GST / Tax calculation</label>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">CGST (%)</label>
+          {{ form.cgst_percentage }}
         </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">SGST (%)</label>
+          {{ form.sgst_percentage }}
+        </div>
+      </div>
+      <p class="text-xs text-[#8A7F73] mt-2.5">Example: For 5% GST, enter <span class="font-mono-num">2.50</span> in both boxes.</p>
+    </div>
 
-        <div class="border border-gray-200 rounded-xl p-6">
-            <div class="flex items-center gap-3 mb-4">
-                {{ form.is_tax_enabled }}
-                <label class="font-bold text-[#0B1D42]">Enable GST / Tax calculation</label>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">CGST (%)</label>
-                    {{ form.cgst_percentage }}
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">SGST (%)</label>
-                    {{ form.sgst_percentage }}
-                </div>
-            </div>
-            <p class="text-xs text-gray-400 mt-2">Example: For 5% GST, enter 2.50 in both boxes.</p>
+    <div class="border border-[#E6DFD5] rounded-2xl p-5 sm:p-6 bg-[#C85A17]/5">
+      <div class="flex items-center gap-3 mb-4">
+        {{ form.is_online_payment_enabled }}
+        <label class="text-sm font-bold text-[#14110F]">Enable Online Payment (Razorpay)</label>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Razorpay Key ID</label>
+          {{ form.razorpay_key_id }}
         </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Razorpay Key Secret</label>
+          {{ form.razorpay_key_secret }}
+        </div>
+      </div>
+    </div>
 
-        <div class="border border-gray-200 rounded-xl p-6 bg-[#0BA6A0]/5">
-            <div class="flex items-center gap-3 mb-4">
-                {{ form.is_online_payment_enabled }}
-                <label class="font-bold text-[#0B1D42]">Enable Online Payment (Razorpay)</label>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Razorpay Key ID</label>
-                    {{ form.razorpay_key_id }}
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Razorpay Key Secret</label>
-                    {{ form.razorpay_key_secret }}
-                </div>
-            </div>
-        </div>
-
-        <div class="flex justify-end gap-3 pt-4">
-            <a href="{% url 'superadmin:restaurants' %}" class="px-6 py-3 text-gray-500 hover:text-gray-800 font-medium">Cancel</a>
-            <button type="submit" class="bg-[#0B1D42] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#152c5c] transition-colors">Save Settings</button>
-        </div>
-    </form>
+    <div class="flex items-center justify-end gap-3 pt-3">
+      <a href="{% url 'superadmin:restaurants' %}" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-[#6B6257] hover:text-[#14110F] bg-[#FAF8F5] border border-[#E6DFD5] transition-colors">Cancel</a>
+      <button type="submit" class="bg-[#C85A17] hover:bg-[#A94910] text-white px-7 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">Save Settings</button>
+    </div>
+  </form>
 </div>
+
+<style>
+  .sa-edit-form input[type="text"],
+  .sa-edit-form input[type="password"],
+  .sa-edit-form input[type="number"] {
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #FFFFFF;
+    border: 1px solid #E6DFD5;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    color: #14110F;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .sa-edit-form input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #C85A17;
+    border-radius: 6px;
+  }
+  .sa-edit-form input:focus {
+    border-color: #C85A17;
+    box-shadow: 0 0 0 3px rgba(200, 90, 23, 0.14);
+  }
+</style>
 {% endblock %}

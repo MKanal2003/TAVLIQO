@@ -1,145 +1,145 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Analytics — TAVLIQO{% endblock %}
 {% block page_title %}Analytics & Revenue{% endblock %}
-{% block page_subtitle %}<p class="text-xs text-[#6B7280]">Track your restaurant's financial performance</p>{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B6257]">Sales performance & cash drawer reconciliation</p>{% endblock %}
 
 {% block dashboard_content %}
 <div class="space-y-6">
-    
-    <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm relative overflow-hidden">
-            <div class="absolute right-0 top-0 w-24 h-24 bg-[#0BA6A0]/5 rounded-bl-full"></div>
-            <p class="text-xs text-[#6B7280] uppercase tracking-widest font-semibold mb-2">Today's Revenue</p>
-            <p class="text-4xl font-light text-[#0B1D42]" style="font-family:'Montserrat',serif;">₹{{ today_sales }}</p>
-        </div>
-        
-        <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm relative overflow-hidden">
-            <div class="absolute right-0 top-0 w-24 h-24 bg-[#0B1D42]/5 rounded-bl-full"></div>
-            <p class="text-xs text-[#6B7280] uppercase tracking-widest font-semibold mb-2">This Month</p>
-            <p class="text-4xl font-light text-[#0B1D42]" style="font-family:'Montserrat',serif;">₹{{ month_sales }}</p>
-        </div>
-        
-        <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm relative overflow-hidden">
-            <div class="absolute right-0 top-0 w-24 h-24 bg-[#0BA6A0]/5 rounded-bl-full"></div>
-            <p class="text-xs text-[#6B7280] uppercase tracking-widest font-semibold mb-2">This Year</p>
-            <p class="text-4xl font-light text-[#0B1D42]" style="font-family:'Montserrat',serif;">₹{{ year_sales }}</p>
-        </div>
-        
-        <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm relative overflow-hidden">
-            <div class="absolute right-0 top-0 w-24 h-24 bg-green-500/5 rounded-bl-full"></div>
-            <p class="text-xs text-[#6B7280] uppercase tracking-widest font-semibold mb-2">Orders (Paid / Total)</p>
-            <p class="text-4xl font-light text-[#0B1D42]" style="font-family:'Montserrat',serif;">
-                {{ paid_orders }} <span class="text-2xl text-gray-400">/ {{ total_orders }}</span>
-            </p>
-        </div>
-    </div>
-        <!-- Cash Drawer Reconciliation -->
-    <div class="bg-[#0B1D42] rounded-2xl p-6 shadow-lg text-white">
-        <h3 class="text-lg font-semibold mb-4" style="font-family:'Montserrat',serif;">Today's Cash Drawer</h3>
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">Cash Collected</p>
-                <p class="text-3xl font-bold">₹{{ today_cash }}</p>
-            </div>
-            <div>
-                <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1">UPI / Online</p>
-                <p class="text-3xl font-bold text-[#0BA6A0]">₹{{ today_online }}</p>
-            </div>
-        </div>
-        <div class="border-t border-white/10 mt-4 pt-4 flex justify-between items-center">
-            <span class="text-sm text-gray-300">Expected in Drawer:</span>
-            <span class="text-xl font-bold">₹{{ today_cash }}</span>
-        </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white rounded-2xl p-6 border border-[#E6DFD5] shadow-xs relative overflow-hidden">
+      <div class="absolute right-0 top-0 w-24 h-24 bg-[#C85A17]/8 rounded-bl-full"></div>
+      <p class="text-xs text-[#8A7F73] uppercase tracking-widest font-semibold mb-2">Today's Revenue</p>
+      <p class="text-3xl sm:text-4xl font-bold text-[#14110F] font-mono-num">₹{{ today_sales }}</p>
     </div>
 
-    <!-- Chart -->
-    <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold text-[#0B1D42]" style="font-family:'Montserrat',serif;">Revenue (Last 7 Days)</h3>
-        </div>
-        <div class="relative h-80 w-full">
-            <canvas id="revenueChart"></canvas>
-        </div>
+    <div class="bg-white rounded-2xl p-6 border border-[#E6DFD5] shadow-xs relative overflow-hidden">
+      <div class="absolute right-0 top-0 w-24 h-24 bg-[#1E4D3B]/8 rounded-bl-full"></div>
+      <p class="text-xs text-[#8A7F73] uppercase tracking-widest font-semibold mb-2">This Month</p>
+      <p class="text-3xl sm:text-4xl font-bold text-[#14110F] font-mono-num">₹{{ month_sales }}</p>
     </div>
 
-    <!-- Daily Tracking Table -->
-    <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 shadow-sm">
-        <h3 class="text-lg font-semibold text-[#0B1D42] mb-4" style="font-family:'Montserrat',serif;">Day-by-Day Breakdown (This Month)</h3>
-        
-        {% if daily_tracking %}
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
-                <thead class="text-xs text-[#6B7280] uppercase bg-[#F4F6FA]">
-                    <tr>
-                        <th class="px-6 py-3 rounded-tl-lg">Date</th>
-                        <th class="px-6 py-3">Total Orders</th>
-                        <th class="px-6 py-3 text-right rounded-tr-lg">Revenue Collected</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    {% for day in daily_tracking %}
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4 font-medium text-[#0B1D42]">{{ day.date }}</td>
-                        <td class="px-6 py-4 text-gray-600">
-                            <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-gray-100 text-xs font-medium">
-                                {{ day.orders }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 text-right font-semibold text-[#0BA6A0]">₹{{ day.revenue }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-            <p class="text-gray-500 text-sm">No sales recorded yet this month.</p>
-        </div>
-        {% endif %}
+    <div class="bg-white rounded-2xl p-6 border border-[#E6DFD5] shadow-xs relative overflow-hidden">
+      <div class="absolute right-0 top-0 w-24 h-24 bg-[#C85A17]/8 rounded-bl-full"></div>
+      <p class="text-xs text-[#8A7F73] uppercase tracking-widest font-semibold mb-2">This Year</p>
+      <p class="text-3xl sm:text-4xl font-bold text-[#14110F] font-mono-num">₹{{ year_sales }}</p>
     </div>
+
+    <div class="bg-white rounded-2xl p-6 border border-[#E6DFD5] shadow-xs relative overflow-hidden">
+      <div class="absolute right-0 top-0 w-24 h-24 bg-[#1E4D3B]/8 rounded-bl-full"></div>
+      <p class="text-xs text-[#8A7F73] uppercase tracking-widest font-semibold mb-2">Orders (Paid / Total)</p>
+      <p class="text-3xl sm:text-4xl font-bold text-[#14110F] font-mono-num">
+        {{ paid_orders }} <span class="text-xl text-[#8A7F73]">/ {{ total_orders }}</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Cash Drawer Reconciliation -->
+  <div class="bg-[#14110F] rounded-2xl p-6 shadow-md text-[#FAF8F5] border border-[#2A2420]">
+    <h3 class="text-lg font-heading font-bold mb-4">Today's Cash Drawer</h3>
+    <div class="grid grid-cols-2 gap-6">
+      <div>
+        <p class="text-xs text-[#A89F96] uppercase tracking-wider font-semibold mb-1">Cash Collected</p>
+        <p class="text-3xl font-bold font-mono-num">₹{{ today_cash }}</p>
+      </div>
+      <div>
+        <p class="text-xs text-[#A89F96] uppercase tracking-wider font-semibold mb-1">UPI / Online</p>
+        <p class="text-3xl font-bold font-mono-num text-[#F3A26D]">₹{{ today_online }}</p>
+      </div>
+    </div>
+    <div class="border-t border-white/10 mt-4 pt-4 flex justify-between items-center">
+      <span class="text-sm text-[#A89F96]">Expected in Drawer:</span>
+      <span class="text-xl font-bold font-mono-num">₹{{ today_cash }}</span>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="bg-white rounded-2xl border border-[#E6DFD5] p-6 shadow-xs">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-lg font-heading font-bold text-[#14110F]">Revenue (Last 7 Days)</h3>
+    </div>
+    <div class="relative h-80 w-full">
+      <canvas id="revenueChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Daily Tracking Table -->
+  <div class="bg-white rounded-2xl border border-[#E6DFD5] p-6 shadow-xs">
+    <h3 class="text-lg font-heading font-bold text-[#14110F] mb-4">Day-by-Day Breakdown (This Month)</h3>
+
+    {% if daily_tracking %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead>
+          <tr class="text-[11px] text-[#8A7F73] uppercase tracking-wider bg-[#FAF8F5] border-b border-[#E6DFD5]">
+            <th class="px-6 py-3 rounded-tl-lg">Date</th>
+            <th class="px-6 py-3">Total Orders</th>
+            <th class="px-6 py-3 text-right rounded-tr-lg">Revenue Collected</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#F4F0E8]">
+          {% for day in daily_tracking %}
+          <tr class="hover:bg-[#FAF8F5] transition-colors">
+            <td class="px-6 py-4 font-semibold text-[#14110F] font-mono-num">{{ day.date }}</td>
+            <td class="px-6 py-4 text-[#5C5349]">
+              <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full bg-[#FAF8F5] border border-[#E6DFD5] text-xs font-bold font-mono-num">
+                {{ day.orders }}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-right font-bold font-mono-num text-[#1E4D3B]">₹{{ day.revenue }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-8 bg-[#FAF8F5] rounded-xl border border-dashed border-[#E6DFD5]">
+      <p class="text-[#6B6257] text-sm">No sales recorded yet this month.</p>
+    </div>
+    {% endif %}
+  </div>
 </div>
 
-<!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    let gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(11, 166, 160, 0.2)');
-    gradient.addColorStop(1, 'rgba(11, 166, 160, 0)');
+  const ctx = document.getElementById('revenueChart').getContext('2d');
+  let gradient = ctx.createLinearGradient(0, 0, 0, 300);
+  gradient.addColorStop(0, 'rgba(200, 90, 23, 0.22)');
+  gradient.addColorStop(1, 'rgba(200, 90, 23, 0)');
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ chart_labels|safe }},
-            datasets: [{
-                label: 'Revenue (₹)',
-                data: {{ chart_data|safe }},
-                borderColor: '#0BA6A0', 
-                backgroundColor: gradient,
-                borderWidth: 3,
-                pointBackgroundColor: '#0B1D42',
-                pointBorderColor: '#ffffff',
-                pointBorderWidth: 2,
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                fill: true,
-                tension: 0.4
-            }]
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ chart_labels|safe }},
+      datasets: [{
+        label: 'Revenue (₹)',
+        data: {{ chart_data|safe }},
+        borderColor: '#C85A17',
+        backgroundColor: gradient,
+        borderWidth: 3,
+        pointBackgroundColor: '#14110F',
+        pointBorderColor: '#FAF8F5',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#F4F0E8', drawBorder: false },
+          ticks: { color: '#6B6257', callback: function(value) { return '₹' + value; } }
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#F3F4F6', drawBorder: false },
-                    ticks: { color: '#6B7280', callback: function(value) { return '₹' + value; } }
-                },
-                x: { grid: { display: false }, ticks: { color: '#6B7280' } }
-            }
-        }
-    });
+        x: { grid: { display: false }, ticks: { color: '#6B6257' } }
+      }
+    }
+  });
 </script>
 {% endblock %}

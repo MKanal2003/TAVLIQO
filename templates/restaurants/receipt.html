@@ -7,38 +7,39 @@
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
-            background: #fff;
-            color: #000;
+            background: #FAF8F5;
+            color: #14110F;
             margin: 0;
             padding: 20px;
-            font-size: 14px;
+            font-size: 13px;
         }
         .receipt-container {
             max-width: 300px;
             margin: 0 auto;
-            border: 1px dashed #ccc;
+            background: #FFFFFF;
+            border: 1px dashed #8A7F73;
             padding: 20px;
         }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { font-size: 18px; margin: 0 0 5px 0; text-transform: uppercase; }
-        .header p { margin: 2px 0; font-size: 12px; }
-        .divider { border-top: 1px dashed #000; margin: 15px 0; }
-        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .items-table th { text-align: left; font-size: 12px; border-bottom: 1px solid #000; padding-bottom: 5px; }
-        .items-table td { padding: 5px 0; vertical-align: top; font-size: 13px; }
-        .items-table .qty { width: 20%; text-align: center; }
-        .items-table .amount { text-align: right; width: 30%; }
-        .totals { margin-top: 10px; font-size: 13px; }
-        .totals-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .grand-total { font-weight: bold; font-size: 16px; border-top: 1px solid #000; padding-top: 10px; margin-top: 10px; }
-        .footer { text-align: center; margin-top: 25px; font-size: 11px; }
+        .header { text-align: center; margin-bottom: 16px; }
+        .header h1 { font-size: 17px; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.04em; }
+        .header p { margin: 2px 0; font-size: 11px; color: #5C5349; }
+        .divider { border-top: 1px dashed #14110F; margin: 12px 0; }
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+        .items-table th { text-align: left; font-size: 11px; border-bottom: 1px solid #14110F; padding-bottom: 5px; text-transform: uppercase; }
+        .items-table td { padding: 5px 0; vertical-align: top; font-size: 12px; }
+        .items-table .qty { width: 18%; text-align: center; }
+        .items-table .amount { text-align: right; width: 28%; }
+        .totals { margin-top: 8px; font-size: 12px; }
+        .totals-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .grand-total { font-weight: bold; font-size: 15px; border-top: 1px solid #14110F; padding-top: 8px; margin-top: 8px; }
+        .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #5C5349; }
         .footer p { margin: 3px 0; }
-        .no-print { text-align: center; margin-top: 20px; }
-        .no-print button { background: #0B1D42; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-family: inherit; font-size: 14px; }
-        
+        .no-print { text-align: center; margin-top: 18px; }
+        .no-print button { background: #14110F; color: #FAF8F5; padding: 10px 22px; border: none; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: bold; }
+
         @media print {
             .no-print { display: none; }
-            body { padding: 0; }
+            body { padding: 0; background: #fff; }
             .receipt-container { border: none; padding: 0; max-width: 100%; }
         }
     </style>
@@ -50,12 +51,12 @@
         <h1>{{ restaurant.name }}</h1>
         {% if restaurant.address %}<p>{{ restaurant.address }}</p>{% endif %}
         {% if restaurant.phone %}<p>Ph: {{ restaurant.phone }}</p>{% endif %}
-        {% if restaurant.email %}<p>GSTIN: {{ restaurant.email }}</p>{% endif %}
+        {% if restaurant.email %}<p>GSTIN / Email: {{ restaurant.email }}</p>{% endif %}
     </div>
 
     <div class="divider"></div>
 
-    <div style="font-size: 12px; margin-bottom: 10px;">
+    <div style="font-size: 11px; margin-bottom: 8px;">
         <div style="display: flex; justify-content: space-between;">
             <span>Bill No: #{{ order.id }}</span>
             <span>{{ order.created_at|date:"d/m/y H:i" }}</span>
@@ -81,7 +82,7 @@
             <tr>
                 <td>{{ item.name_snapshot }}</td>
                 <td class="qty">{{ item.qty }}</td>
-                <td class="amount">{{ item.line_total }}</td>
+                <td class="amount">₹{{ item.line_total }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -105,8 +106,8 @@
     </div>
 
     <div class="divider"></div>
-    
-    <div style="font-size: 12px; text-align: center;">
+
+    <div style="font-size: 11px; text-align: center;">
         Payment Mode: <strong>{{ order.get_payment_intent_display }}</strong>
     </div>
 
@@ -117,7 +118,7 @@
 </div>
 
 <div class="no-print">
-    <button onclick="window.print()">Print Receipt</button>
+    <button type="button" onclick="window.print()">Print Receipt</button>
 </div>
 
 </body>

@@ -1,41 +1,42 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Live Orders — TAVLIQO{% endblock %}
 {% block page_title %}Live Orders Board{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B6257]">Real-time KOT & floor order queue</p>{% endblock %}
 
 {% block dashboard_content %}
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-  
+
   <!-- COLUMN 1: NEW ORDERS -->
-  <div class="bg-[#F4F6FA] rounded-2xl border border-[#E7E7E0] overflow-hidden flex flex-col h-[75vh]">
-    <div class="px-5 py-4 bg-white border-b border-[#E7E7E0] flex items-center justify-between sticky top-0 z-10">
-      <h3 class="font-heading font-bold text-[#0B1D42] text-lg flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span> New Requests
+  <div class="bg-[#FAF8F5] rounded-2xl border border-[#E6DFD5] overflow-hidden flex flex-col h-[75vh] shadow-xs">
+    <div class="px-5 py-4 bg-white border-b border-[#E6DFD5] flex items-center justify-between sticky top-0 z-10">
+      <h3 class="font-heading font-bold text-[#14110F] text-base flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#C85A17] animate-pulse"></span> New Requests
       </h3>
-      <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2.5 py-1 rounded-full">{{ new_orders|length }}</span>
+      <span class="bg-[#C85A17]/15 text-[#C85A17] text-xs font-bold font-mono-num px-2.5 py-1 rounded-full">{{ new_orders|length }}</span>
     </div>
-    
+
     <div class="p-4 space-y-4 overflow-y-auto flex-1">
       {% for order in new_orders %}
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 border-l-4 border-l-yellow-400">
+      <div class="bg-white rounded-xl shadow-xs border border-[#E6DFD5] p-5 border-l-4 border-l-[#C85A17]">
         <div class="flex justify-between items-start mb-3">
           <div>
-            <p class="font-bold text-[#0B1D42] text-lg">{{ order.table_label }}</p>
-            <p class="text-xs text-gray-500">#{{ order.id }} · {{ order.created_at|timesince }} ago</p>
+            <p class="font-bold text-[#14110F] text-lg font-heading">{{ order.table_label }}</p>
+            <p class="text-xs text-[#8A7F73] font-mono-num">#{{ order.id }} · {{ order.created_at|timesince }} ago</p>
           </div>
-          <span class="text-xs font-bold px-2 py-1 bg-gray-100 text-gray-600 rounded">{{ order.staff_name }}</span>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-[#FAF8F5] border border-[#E6DFD5] text-[#5C5349] rounded-lg">{{ order.staff_name }}</span>
         </div>
-        
-        <div class="space-y-1 mb-4 text-sm">
+
+        <div class="space-y-1.5 mb-4 text-sm">
           {% for item in order.items.all %}
-          <div class="flex justify-between text-gray-700">
-            <span><b class="text-[#0B1D42]">{{ item.qty }}×</b> {{ item.name_snapshot }}</span>
+          <div class="flex justify-between text-[#14110F]">
+            <span><b class="font-mono-num text-[#C85A17]">{{ item.qty }}×</b> {{ item.name_snapshot }}</span>
           </div>
           {% endfor %}
         </div>
-        
+
         {% if order.notes %}
-        <div class="mb-4 text-xs bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-100">
+        <div class="mb-4 text-xs bg-[#C85A17]/8 text-[#7C340B] p-2.5 rounded-xl border border-[#C85A17]/20">
           <b>Note:</b> {{ order.notes }}
         </div>
         {% endif %}
@@ -43,18 +44,18 @@
         <div class="flex gap-2">
           <form method="post" action="{% url 'restaurants:order_accept' order.id %}" class="flex-1">
             {% csrf_token %}
-            <button type="submit" class="w-full bg-[#0BA6A0] text-white font-medium py-2 rounded-lg hover:bg-[#098b86]">Accept</button>
+            <button type="submit" class="w-full bg-[#1E4D3B] hover:bg-[#15382B] text-white text-sm font-semibold py-2 rounded-xl transition-colors">Accept</button>
           </form>
-          <button type="button" onclick="document.getElementById('reject-{{ order.id }}').classList.toggle('hidden')" class="px-4 bg-red-50 text-red-600 font-medium py-2 rounded-lg hover:bg-red-100">Reject</button>
+          <button type="button" onclick="document.getElementById('reject-{{ order.id }}').classList.toggle('hidden')" class="px-4 bg-[#B4382A]/10 text-[#B4382A] text-sm font-semibold py-2 rounded-xl hover:bg-[#B4382A]/20 transition-colors">Reject</button>
         </div>
-        <form method="post" action="{% url 'restaurants:order_reject' order.id %}" id="reject-{{ order.id }}" class="hidden mt-2 flex gap-2">
+        <form method="post" action="{% url 'restaurants:order_reject' order.id %}" id="reject-{{ order.id }}" class="hidden mt-2.5 flex gap-2">
           {% csrf_token %}
-          <input type="text" name="reason" placeholder="Reason" required class="flex-1 px-3 py-1.5 border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-red-400">
-          <button type="submit" class="px-3 bg-red-600 text-white text-sm font-medium rounded-lg">Confirm</button>
+          <input type="text" name="reason" placeholder="Reason" required class="flex-1 px-3 py-1.5 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl text-xs focus:outline-none focus:border-[#B4382A]">
+          <button type="submit" class="px-3 bg-[#B4382A] text-white text-xs font-semibold rounded-xl">Confirm</button>
         </form>
       </div>
       {% empty %}
-      <div class="text-center py-10 text-gray-400">
+      <div class="text-center py-12 text-[#8A7F73]">
         <p class="text-sm">No new requests.</p>
       </div>
       {% endfor %}
@@ -62,54 +63,54 @@
   </div>
 
   <!-- COLUMN 2: PREPARING -->
-  <div class="bg-[#F4F6FA] rounded-2xl border border-[#E7E7E0] overflow-hidden flex flex-col h-[75vh]">
-    <div class="px-5 py-4 bg-white border-b border-[#E7E7E0] flex items-center justify-between sticky top-0 z-10">
-      <h3 class="font-heading font-bold text-[#0B1D42] text-lg flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-blue-500"></span> Preparing / Kitchen
+  <div class="bg-[#FAF8F5] rounded-2xl border border-[#E6DFD5] overflow-hidden flex flex-col h-[75vh] shadow-xs">
+    <div class="px-5 py-4 bg-white border-b border-[#E6DFD5] flex items-center justify-between sticky top-0 z-10">
+      <h3 class="font-heading font-bold text-[#14110F] text-base flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#14110F]"></span> Preparing / Kitchen
       </h3>
-      <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">{{ preparing_orders|length }}</span>
+      <span class="bg-[#14110F]/10 text-[#14110F] text-xs font-bold font-mono-num px-2.5 py-1 rounded-full">{{ preparing_orders|length }}</span>
     </div>
-    
+
     <div class="p-4 space-y-4 overflow-y-auto flex-1">
       {% for order in preparing_orders %}
       {% with age=now|timeuntil:order.created_at %}
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 border-l-4 
-        {% if 'minute' in age or 'minutes' in age and '1' not in age and '2' not in age %}border-l-green-500
-        {% elif '10 minutes' in age or '1 hour' in age %}border-l-red-500
-        {% else %}border-l-amber-500{% endif %}">
-        
+      <div class="bg-white rounded-xl shadow-xs border border-[#E6DFD5] p-5 border-l-4
+        {% if 'minute' in age or 'minutes' in age and '1' not in age and '2' not in age %}border-l-[#1E4D3B]
+        {% elif '10 minutes' in age or '1 hour' in age %}border-l-[#B4382A]
+        {% else %}border-l-[#C85A17]{% endif %}">
+
         <div class="flex justify-between items-start mb-3">
           <div>
-            <p class="font-bold text-[#0B1D42] text-lg">{{ order.table_label }}</p>
-            <p class="text-xs text-gray-500">#{{ order.id }} · <span class="font-bold text-gray-700">{{ age }}</span></p>
+            <p class="font-bold text-[#14110F] text-lg font-heading">{{ order.table_label }}</p>
+            <p class="text-xs text-[#8A7F73] font-mono-num">#{{ order.id }} · <span class="font-bold text-[#14110F]">{{ age }}</span></p>
           </div>
-          <span class="text-xs font-bold px-2 py-1 bg-blue-50 text-blue-700 rounded">{{ order.get_status_display }}</span>
+          <span class="text-[11px] font-bold px-2.5 py-1 bg-[#FAF8F5] border border-[#E6DFD5] text-[#14110F] rounded-lg">{{ order.get_status_display }}</span>
         </div>
-        
-        <div class="space-y-1 mb-4 text-sm">
+
+        <div class="space-y-1.5 mb-4 text-sm">
           {% for item in order.items.all %}
-          <div class="flex justify-between text-gray-700">
-            <span><b class="text-[#0B1D42]">{{ item.qty }}×</b> {{ item.name_snapshot }}</span>
+          <div class="flex justify-between text-[#14110F]">
+            <span><b class="font-mono-num text-[#C85A17]">{{ item.qty }}×</b> {{ item.name_snapshot }}</span>
           </div>
           {% endfor %}
         </div>
 
         {% if order.notes %}
-        <div class="mb-4 text-xs bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-100">
+        <div class="mb-4 text-xs bg-[#C85A17]/8 text-[#7C340B] p-2.5 rounded-xl border border-[#C85A17]/20">
           <b>Note:</b> {{ order.notes }}
         </div>
         {% endif %}
 
         <form method="post" action="{% url 'restaurants:order_advance' order.id %}">
           {% csrf_token %}
-          <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700">
+          <button type="submit" class="w-full bg-[#14110F] hover:bg-[#2A2420] text-white text-sm font-semibold py-2.5 rounded-xl transition-colors">
             {% if order.status == 'CONFIRMED' %}Start Preparing{% else %}Mark Served{% endif %}
           </button>
         </form>
       </div>
       {% endwith %}
       {% empty %}
-      <div class="text-center py-10 text-gray-400">
+      <div class="text-center py-12 text-[#8A7F73]">
         <p class="text-sm">No orders in kitchen.</p>
       </div>
       {% endfor %}
@@ -117,40 +118,40 @@
   </div>
 
   <!-- COLUMN 3: READY / SERVED -->
-  <div class="bg-[#F4F6FA] rounded-2xl border border-[#E7E7E0] overflow-hidden flex flex-col h-[75vh]">
-    <div class="px-5 py-4 bg-white border-b border-[#E7E7E0] flex items-center justify-between sticky top-0 z-10">
-      <h3 class="font-heading font-bold text-[#0B1D42] text-lg flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-green-500"></span> Ready / Served
+  <div class="bg-[#FAF8F5] rounded-2xl border border-[#E6DFD5] overflow-hidden flex flex-col h-[75vh] shadow-xs">
+    <div class="px-5 py-4 bg-white border-b border-[#E6DFD5] flex items-center justify-between sticky top-0 z-10">
+      <h3 class="font-heading font-bold text-[#14110F] text-base flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#1E4D3B]"></span> Ready / Served
       </h3>
-      <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">{{ ready_orders|length }}</span>
+      <span class="bg-[#1E4D3B]/15 text-[#1E4D3B] text-xs font-bold font-mono-num px-2.5 py-1 rounded-full">{{ ready_orders|length }}</span>
     </div>
-    
+
     <div class="p-4 space-y-4 overflow-y-auto flex-1">
       {% for order in ready_orders %}
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 border-l-4 border-l-green-500">
+      <div class="bg-white rounded-xl shadow-xs border border-[#E6DFD5] p-5 border-l-4 border-l-[#1E4D3B]">
         <div class="flex justify-between items-start mb-3">
           <div>
-            <p class="font-bold text-[#0B1D42] text-lg">{{ order.table_label }}</p>
-            <p class="text-xs text-gray-500">#{{ order.id }}</p>
+            <p class="font-bold text-[#14110F] text-lg font-heading">{{ order.table_label }}</p>
+            <p class="text-xs text-[#8A7F73] font-mono-num">#{{ order.id }}</p>
           </div>
-          <span class="text-xs font-bold px-2 py-1 bg-green-50 text-green-700 rounded">Served</span>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-[#1E4D3B]/10 text-[#1E4D3B] rounded-lg">Served</span>
         </div>
-        
-        <div class="flex justify-between items-center border-t border-gray-100 pt-3 mt-3">
-          <span class="text-sm text-gray-500">Total</span>
-          <span class="font-bold text-[#0B1D42]">₹{{ order.total }}</span>
+
+        <div class="flex justify-between items-center border-t border-[#F4F0E8] pt-3 mt-3">
+          <span class="text-xs font-medium text-[#6B6257]">Total</span>
+          <span class="font-bold text-[#14110F] font-mono-num">₹{{ order.total }}</span>
         </div>
 
         <div class="flex gap-2 mt-4">
-          <a href="{% url 'restaurants:order_receipt' order.id %}" target="_blank" class="flex-1 bg-gray-100 text-[#0B1D42] text-center font-medium py-2 rounded-lg hover:bg-gray-200 border border-gray-200">Print Bill</a>
+          <a href="{% url 'restaurants:order_receipt' order.id %}" target="_blank" class="flex-1 bg-[#FAF8F5] text-[#14110F] text-center text-xs font-semibold py-2.5 rounded-xl hover:bg-[#EFECE6] border border-[#E6DFD5] transition-colors">Print Bill</a>
           <form method="post" action="{% url 'restaurants:order_advance' order.id %}" class="flex-1">
             {% csrf_token %}
-            <button type="submit" class="w-full bg-green-600 text-white font-medium py-2 rounded-lg hover:bg-green-700">Mark Paid</button>
+            <button type="submit" class="w-full bg-[#1E4D3B] hover:bg-[#15382B] text-white text-xs font-semibold py-2.5 rounded-xl transition-colors">Mark Paid</button>
           </form>
         </div>
       </div>
       {% empty %}
-      <div class="text-center py-10 text-gray-400">
+      <div class="text-center py-12 text-[#8A7F73]">
         <p class="text-sm">No ready orders.</p>
       </div>
       {% endfor %}
@@ -160,10 +161,8 @@
 </div>
 
 <script>
-  // Auto-refresh every 20 seconds if idle
   let last = Date.now();
   ['click','keydown','scroll','touchstart'].forEach(e => document.addEventListener(e, () => last = Date.now()));
   setInterval(() => { if (Date.now() - last > 20000) location.reload(); }, 5000);
 </script>
-
 {% endblock %}

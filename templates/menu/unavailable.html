@@ -1,17 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Menu Unavailable — {{ restaurant.name }}{% endblock %}
+{% block title %}Menu Paused — {{ restaurant.name }}{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#0A0A0A] flex items-center justify-center px-6">
-  <div class="text-center">
-    <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
-      <svg class="w-8 h-8 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<div class="min-h-screen bg-[#FAF8F5] text-[#14110F] flex items-center justify-center px-6" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+  <div class="max-w-md w-full bg-white border border-[#E6DFD5] rounded-3xl p-8 text-center shadow-xs">
+    <div class="w-14 h-14 bg-[#C85A17]/10 rounded-2xl flex items-center justify-center mx-auto mb-5 text-[#C85A17]">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
       </svg>
     </div>
-    <h1 class="text-2xl font-medium text-white mb-2" style="font-family:'Fraunces',serif;">{{ restaurant.name }}</h1>
-    <p class="text-white/50 mb-6">This restaurant's menu is temporarily unavailable.</p>
-    <p class="text-white/30 text-sm">Please ask restaurant staff for assistance.</p>
+    <h1 class="text-2xl font-bold text-[#14110F] mb-2" style="font-family: 'Fraunces', serif;">{{ restaurant.name }}</h1>
+    <p class="text-sm text-[#5C5349] mb-4">Our digital menu is currently paused between service hours.</p>
+    <p class="text-xs text-[#8A7F73]">Please check with your table server for assistance.</p>
   </div>
 </div>
 {% endblock %}

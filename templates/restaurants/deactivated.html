@@ -3,26 +3,25 @@
 {% block title %}Restaurant Deactivated — TAVLIQO{% endblock %}
 
 {% block body %}
-<div class="min-h-screen flex items-center justify-center p-6 bg-[#F4F6FA]">
-  <div class="max-w-md w-full bg-white rounded-2xl border border-[#E7E7E0] p-8 text-center shadow-lg">
-    <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-      <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="min-h-screen flex items-center justify-center p-5 bg-[#FAF8F5]">
+  <div class="max-w-md w-full bg-white rounded-3xl border border-[#E6DFD5] p-8 sm:p-10 text-center shadow-xl">
+    <div class="w-16 h-16 bg-[#B4382A]/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#B4382A]">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
       </svg>
     </div>
-    <h1 class="text-2xl text-[#0A0A0A] mb-3" style="font-family:'Fraunces',serif;">Restaurant Deactivated</h1>
-    <p class="text-sm text-[#6B7280] mb-4">
-      <strong class="text-[#0A0A0A]">{{ restaurant.name }}</strong> has been deactivated by the platform administrator.
+    <h1 class="text-2xl font-bold text-[#14110F] mb-3 font-heading">Restaurant Deactivated</h1>
+    <p class="text-sm text-[#6B6257] mb-3">
+      <strong class="text-[#14110F]">{{ restaurant.name }}</strong> has been deactivated by the platform administrator.
     </p>
-    <p class="text-sm text-[#6B7280] mb-8">
-      Your menu is hidden from customers and ordering is disabled.
-      Contact support to reactivate your account.
+    <p class="text-xs sm:text-sm text-[#8A7F73] mb-8 leading-relaxed">
+      Your digital menu is hidden from guests and ordering is paused. Contact support to restore your workspace.
     </p>
     <form method="post" action="{% url 'accounts:logout' %}">
       {% csrf_token %}
       <button type="submit"
-              class="bg-[#0B1D42] text-white text-sm font-medium px-6 py-2.5 rounded-xl hover:bg-[#0BA6A0] transition-colors">
+              class="bg-[#14110F] hover:bg-[#C85A17] text-[#FAF8F5] text-sm font-semibold px-7 py-3 rounded-xl transition-colors">
         Sign Out
       </button>
     </form>

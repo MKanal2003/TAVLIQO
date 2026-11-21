@@ -1,175 +1,197 @@
 {% extends "base.html" %}
-{% block title %}{{ restaurant.name }} — Menu{% endblock %}
+{% block title %}{{ restaurant.name }} — Digital Menu{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#0A0A0A] text-white pb-24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Restaurant Header -->
-  <div class="bg-[#0B1D42] py-8 px-6">
-    <div class="max-w-4xl mx-auto flex items-center gap-4">
-      {% if restaurant.logo %}
-      <img src="{{ restaurant.logo.url }}" alt="{{ restaurant.name }}" class="w-16 h-16 rounded-xl object-cover border-2 border-white/20">
-      {% else %}
-      <div class="w-16 h-16 rounded-xl bg-[#0BA6A0] flex items-center justify-center border-2 border-white/20">
-        <span class="text-2xl font-bold font-heading">{{ restaurant.name|first|upper }}</span>
-      </div>
-      {% endif %}
-      <div>
-        <h1 class="text-2xl font-heading font-bold">{{ restaurant.name }}</h1>
-        {% if restaurant.address %}<p class="text-sm text-white/60">{{ restaurant.address }}</p>{% endif %}
+<div class="min-h-screen bg-[#FAF8F5] text-[#14110F] pb-32" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+
+  <!-- Editorial Restaurant Header -->
+  <header class="bg-[#14110F] text-[#FAF8F5] relative overflow-hidden">
+    <div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image: radial-gradient(#C85A17 1px, transparent 1px); background-size: 20px 20px;"></div>
+    <div class="max-w-3xl mx-auto px-5 pt-7 pb-8 relative z-10 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4 min-w-0">
+        {% if restaurant.logo %}
+        <img src="{{ restaurant.logo.url }}" alt="{{ restaurant.name }}" class="w-16 h-16 rounded-2xl object-cover border border-[#C85A17]/40 shadow-lg flex-shrink-0">
+        {% else %}
+        <div class="w-16 h-16 rounded-2xl bg-[#C85A17] flex items-center justify-center shadow-lg flex-shrink-0">
+          <span class="text-2xl font-bold text-[#FAF8F5]" style="font-family: 'Fraunces', serif;">{{ restaurant.name|first|upper }}</span>
+        </div>
+        {% endif %}
+        <div class="min-w-0">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C85A17]/20 border border-[#C85A17]/40 text-[#F3A26D] text-[11px] font-semibold tracking-wide uppercase mb-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#C85A17] animate-pulse"></span> Table Menu
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight truncate" style="font-family: 'Fraunces', serif;">{{ restaurant.name }}</h1>
+          {% if restaurant.address %}
+          <p class="text-xs sm:text-sm text-[#A89F96] truncate mt-0.5">{{ restaurant.address }}</p>
+          {% endif %}
+        </div>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- Sticky Category Tabs -->
-  <div class="sticky top-0 z-40 bg-[#0A0A0A]/95 backdrop-blur-md border-b border-white/10 px-6 py-3 overflow-x-auto no-scrollbar">
-    <div class="max-w-4xl mx-auto flex gap-2">
-      <button onclick="filterCategory('all', this)" class="category-tab active bg-[#0BA6A0] text-white px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors">All</button>
+  <div class="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E6DFD5] px-5 py-3 overflow-x-auto no-scrollbar">
+    <div class="max-w-3xl mx-auto flex gap-2">
+      <button onclick="filterCategory('all', this)" class="category-tab active bg-[#14110F] text-[#FAF8F5] px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shadow-sm">All Dishes</button>
       {% for cat in categories %}
-      <button onclick="filterCategory('{{ cat.pk }}', this)" class="category-tab bg-white/10 text-white/70 hover:bg-white/20 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors">{{ cat.name }}</button>
+      <button onclick="filterCategory('{{ cat.pk }}', this)" class="category-tab bg-[#EFECE6] text-[#5C5349] hover:bg-[#E6DFD5] px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all">{{ cat.name }}</button>
       {% endfor %}
-      <button onclick="filterCategory('uncategorised', this)" class="category-tab bg-white/10 text-white/70 hover:bg-white/20 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Other</button>
+      <button onclick="filterCategory('uncategorised', this)" class="category-tab bg-[#EFECE6] text-[#5C5349] hover:bg-[#E6DFD5] px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all">Other</button>
     </div>
   </div>
 
-  <div class="max-w-4xl mx-auto px-6 py-6">
-    
-    <!-- Search & Filter Chips -->
-    <div class="mb-6 space-y-4">
+  <main class="max-w-3xl mx-auto px-5 pt-6">
+    <!-- Search & Dietary Filter Chips -->
+    <div class="mb-7 space-y-3">
       <div class="relative">
-        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" id="search-input" placeholder="Search dishes..." class="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/50 focus:border-[#0BA6A0] outline-none">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A7F73]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="search-input" placeholder="Search dishes, spices, or ingredients..." class="w-full pl-11 pr-4 py-3 bg-white border border-[#E6DFD5] rounded-2xl text-sm text-[#14110F] placeholder-[#8A7F73] focus:border-[#C85A17] focus:ring-2 focus:ring-[#C85A17]/15 outline-none shadow-xs transition-all">
       </div>
-      
-      <div class="flex gap-2 overflow-x-auto no-scrollbar">
-        <button onclick="toggleVegFilter(this)" id="veg-chip" class="filter-chip flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white/5 border border-white/10 text-white/60 transition-all">
-          <span class="w-3 h-3 border border-green-500 rounded-sm flex items-center justify-center"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span></span> Veg
+
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+        <button onclick="toggleVegFilter(this)" id="veg-chip" class="filter-chip flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-[#E6DFD5] text-[#5C5349] transition-all">
+          <span class="w-3.5 h-3.5 border-[1.5px] border-[#1E4D3B] rounded-[3px] flex items-center justify-center"><span class="w-1.5 h-1.5 bg-[#1E4D3B] rounded-full"></span></span>
+          Pure Veg
         </button>
-        <button onclick="toggleNonVegFilter(this)" id="nonveg-chip" class="filter-chip flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white/5 border border-white/10 text-white/60 transition-all">
-          <span class="w-3 h-3 border border-red-500 rounded-sm flex items-center justify-center"><span class="w-1.5 h-1.5 bg-red-500 rounded-full transform rotate-45"></span></span> Non-Veg
+        <button onclick="toggleNonVegFilter(this)" id="nonveg-chip" class="filter-chip flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-[#E6DFD5] text-[#5C5349] transition-all">
+          <span class="w-3.5 h-3.5 border-[1.5px] border-[#B4382A] rounded-[3px] flex items-center justify-center"><span class="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-b-[6px] border-b-[#B4382A]"></span></span>
+          Non-Veg
         </button>
-        <button onclick="toggleAvailableFilter(this)" id="available-chip" class="filter-chip flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white/5 border border-white/10 text-white/60 transition-all">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Available
+        <button onclick="toggleAvailableFilter(this)" id="available-chip" class="filter-chip flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-[#E6DFD5] text-[#5C5349] transition-all">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          In Stock Only
         </button>
       </div>
     </div>
 
-    <!-- Menu Items -->
+    <!-- Menu Sections -->
     <div id="menu-container">
       {% for cat in categories %}
-      <div class="category-section mb-8" data-category="{{ cat.pk }}">
-        <h2 class="text-lg font-heading font-bold mb-4 text-[#0BA6A0]">{{ cat.name }}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section class="category-section mb-9" data-category="{{ cat.pk }}">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-[#14110F]" style="font-family: 'Fraunces', serif;">{{ cat.name }}</h2>
+          <span class="h-px flex-1 bg-[#E6DFD5] ml-4"></span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {% for item in cat.items.all %}
-          <div class="menu-item bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4 {% if not item.is_available %}opacity-50{% endif %}"
-               data-name="{{ item.name|lower }}" data-category="{{ cat.pk }}"
-               data-vegetarian="{{ item.is_vegetarian|yesno:'true,false' }}" data-available="{{ item.is_available|yesno:'true,false' }}">
-            {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-24 h-24 rounded-xl object-cover flex-shrink-0">
-            {% else %}
-            <div class="w-24 h-24 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-              <svg class="w-8 h-8 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            </div>
-            {% endif %}
-            
+          <article class="menu-item bg-white border border-[#E6DFD5] rounded-2xl p-4 flex gap-4 shadow-xs hover:shadow-md transition-all {% if not item.is_available %}opacity-60 bg-[#F4F0E8]{% endif %}"
+                   data-id="{{ item.id }}"
+                   data-price="{{ item.price }}"
+                   data-name="{{ item.name|lower }}"
+                   data-category="{{ cat.pk }}"
+                   data-vegetarian="{{ item.is_vegetarian|yesno:'true,false' }}"
+                   data-available="{{ item.is_available|yesno:'true,false' }}">
+
             <div class="flex-1 min-w-0 flex flex-col justify-between">
               <div>
-                <div class="flex items-center gap-2 mb-1">
+                <div class="flex items-center gap-2 mb-1.5">
                   {% if item.is_vegetarian %}
-                  <span class="w-4 h-4 border-2 border-green-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-green-500 rounded-full"></span></span>
+                  <span title="Vegetarian" class="w-4 h-4 border-[1.5px] border-[#1E4D3B] rounded-[4px] flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-[#1E4D3B] rounded-full"></span></span>
                   {% else %}
-                  <span class="w-4 h-4 border-2 border-red-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-red-500 rounded-full rotate-45"></span></span>
+                  <span title="Non-Vegetarian" class="w-4 h-4 border-[1.5px] border-[#B4382A] rounded-[4px] flex items-center justify-center flex-shrink-0"><span class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[7px] border-b-[#B4382A]"></span></span>
                   {% endif %}
-                  <h3 class="font-medium text-white text-sm truncate">{{ item.name }}</h3>
+                  <h3 class="font-bold text-[#14110F] text-base leading-snug truncate">{{ item.name }}</h3>
                 </div>
-                {% if item.description %}<p class="text-xs text-white/50 line-clamp-2">{{ item.description }}</p>{% endif %}
+                {% if item.description %}
+                <p class="text-xs text-[#6B6257] line-clamp-2 leading-relaxed">{{ item.description }}</p>
+                {% endif %}
               </div>
-              
-              <div class="flex items-center justify-between mt-2">
-                <span class="font-heading font-bold text-[#0BA6A0]">₹{{ item.price }}</span>
-                
+
+              <div class="flex items-center justify-between mt-3 pt-2 border-t border-[#F4F0E8]">
+                <span class="font-semibold text-[#14110F] text-base" style="font-family: 'JetBrains Mono', monospace;">₹{{ item.price }}</span>
+
                 {% if item.is_available %}
-                <div class="flex items-center gap-2 bg-white/10 rounded-lg p-1" id="stepper-{{ item.id }}">
-                  <button onclick="updateCart({{ item.id }}, 'remove', this)" class="w-7 h-7 flex items-center justify-center bg-white/10 rounded text-white hover:bg-white/20 transition-colors">−</button>
-                  <span class="text-sm font-bold w-4 text-center" id="qty-{{ item.id }}">0</span>
-                  <button onclick="updateCart({{ item.id }}, 'add', this)" class="w-7 h-7 flex items-center justify-center bg-[#0BA6A0] rounded text-white hover:bg-[#098b86] transition-colors">+</button>
+                <div class="flex items-center gap-1.5 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl p-1" id="stepper-{{ item.id }}">
+                  <button onclick="updateCart({{ item.id }}, 'remove', this)" class="w-7 h-7 flex items-center justify-center rounded-lg text-[#5C5349] hover:bg-[#E6DFD5] font-bold transition-colors">−</button>
+                  <span class="text-xs font-bold w-5 text-center text-[#14110F]" style="font-family: 'JetBrains Mono', monospace;" id="qty-{{ item.id }}">0</span>
+                  <button onclick="updateCart({{ item.id }}, 'add', this)" class="w-7 h-7 flex items-center justify-center bg-[#C85A17] rounded-lg text-white hover:bg-[#A94910] font-bold transition-colors">+</button>
                 </div>
                 {% else %}
-                <span class="text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-300">Sold Out</span>
+                <span class="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-[#B4382A]/10 text-[#B4382A]">Sold Out</span>
                 {% endif %}
               </div>
             </div>
-          </div>
+
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-24 h-24 rounded-xl object-cover flex-shrink-0 border border-[#E6DFD5] {% if not item.is_available %}grayscale{% endif %}">
+            {% endif %}
+          </article>
           {% endfor %}
         </div>
-      </div>
+      </section>
       {% endfor %}
 
-      <!-- Uncategorised -->
+      <!-- Uncategorised Items -->
       {% with uncategorised=all_items|dictsort:"name" %}
       {% if uncategorised %}
-      <div class="category-section mb-8 hidden" data-category="uncategorised">
-        <h2 class="text-lg font-heading font-bold mb-4 text-[#0BA6A0]">Other Items</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section class="category-section mb-9 hidden" data-category="uncategorised">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-[#14110F]" style="font-family: 'Fraunces', serif;">House Specials</h2>
+          <span class="h-px flex-1 bg-[#E6DFD5] ml-4"></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {% for item in uncategorised %}{% if not item.category %}
-          <div class="menu-item bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4 {% if not item.is_available %}opacity-50{% endif %}"
-               data-name="{{ item.name|lower }}" data-category="uncategorised"
-               data-vegetarian="{{ item.is_vegetarian|yesno:'true,false' }}" data-available="{{ item.is_available|yesno:'true,false' }}">
-            <!-- Same item card HTML as above -->
-            {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-24 h-24 rounded-xl object-cover flex-shrink-0">
-            {% else %}
-            <div class="w-24 h-24 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-              <svg class="w-8 h-8 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            </div>
-            {% endif %}
-            
+          <article class="menu-item bg-white border border-[#E6DFD5] rounded-2xl p-4 flex gap-4 shadow-xs {% if not item.is_available %}opacity-60 bg-[#F4F0E8]{% endif %}"
+                   data-id="{{ item.id }}"
+                   data-price="{{ item.price }}"
+                   data-name="{{ item.name|lower }}"
+                   data-category="uncategorised"
+                   data-vegetarian="{{ item.is_vegetarian|yesno:'true,false' }}"
+                   data-available="{{ item.is_available|yesno:'true,false' }}">
             <div class="flex-1 min-w-0 flex flex-col justify-between">
               <div>
-                <div class="flex items-center gap-2 mb-1">
+                <div class="flex items-center gap-2 mb-1.5">
                   {% if item.is_vegetarian %}
-                  <span class="w-4 h-4 border-2 border-green-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-green-500 rounded-full"></span></span>
+                  <span class="w-4 h-4 border-[1.5px] border-[#1E4D3B] rounded-[4px] flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-[#1E4D3B] rounded-full"></span></span>
                   {% else %}
-                  <span class="w-4 h-4 border-2 border-red-500 rounded flex items-center justify-center flex-shrink-0"><span class="w-2 h-2 bg-red-500 rounded-full rotate-45"></span></span>
+                  <span class="w-4 h-4 border-[1.5px] border-[#B4382A] rounded-[4px] flex items-center justify-center flex-shrink-0"><span class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[7px] border-b-[#B4382A]"></span></span>
                   {% endif %}
-                  <h3 class="font-medium text-white text-sm truncate">{{ item.name }}</h3>
+                  <h3 class="font-bold text-[#14110F] text-base leading-snug truncate">{{ item.name }}</h3>
                 </div>
-                {% if item.description %}<p class="text-xs text-white/50 line-clamp-2">{{ item.description }}</p>{% endif %}
+                {% if item.description %}<p class="text-xs text-[#6B6257] line-clamp-2">{{ item.description }}</p>{% endif %}
               </div>
-              
-              <div class="flex items-center justify-between mt-2">
-                <span class="font-heading font-bold text-[#0BA6A0]">₹{{ item.price }}</span>
-                
+              <div class="flex items-center justify-between mt-3 pt-2 border-t border-[#F4F0E8]">
+                <span class="font-semibold text-[#14110F] text-base" style="font-family: 'JetBrains Mono', monospace;">₹{{ item.price }}</span>
                 {% if item.is_available %}
-                <div class="flex items-center gap-2 bg-white/10 rounded-lg p-1" id="stepper-{{ item.id }}">
-                  <button onclick="updateCart({{ item.id }}, 'remove', this)" class="w-7 h-7 flex items-center justify-center bg-white/10 rounded text-white hover:bg-white/20 transition-colors">−</button>
-                  <span class="text-sm font-bold w-4 text-center" id="qty-{{ item.id }}">0</span>
-                  <button onclick="updateCart({{ item.id }}, 'add', this)" class="w-7 h-7 flex items-center justify-center bg-[#0BA6A0] rounded text-white hover:bg-[#098b86] transition-colors">+</button>
+                <div class="flex items-center gap-1.5 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl p-1" id="stepper-{{ item.id }}">
+                  <button onclick="updateCart({{ item.id }}, 'remove', this)" class="w-7 h-7 flex items-center justify-center rounded-lg text-[#5C5349] hover:bg-[#E6DFD5] font-bold">−</button>
+                  <span class="text-xs font-bold w-5 text-center text-[#14110F]" style="font-family: 'JetBrains Mono', monospace;" id="qty-{{ item.id }}">0</span>
+                  <button onclick="updateCart({{ item.id }}, 'add', this)" class="w-7 h-7 flex items-center justify-center bg-[#C85A17] rounded-lg text-white hover:bg-[#A94910] font-bold">+</button>
                 </div>
                 {% else %}
-                <span class="text-xs px-2 py-1 rounded-full bg-red-500/20 text-red-300">Sold Out</span>
+                <span class="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-[#B4382A]/10 text-[#B4382A]">Sold Out</span>
                 {% endif %}
               </div>
             </div>
-          </div>
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-24 h-24 rounded-xl object-cover flex-shrink-0 border border-[#E6DFD5]">
+            {% endif %}
+          </article>
           {% endif %}{% endfor %}
         </div>
-      </div>
+      </section>
       {% endif %}
       {% endwith %}
     </div>
-  </div>
+  </main>
 </div>
 
-<!-- Bottom Sheet Cart -->
+<!-- Floating Tray Bar -->
 <div id="cart-bottom-sheet" class="fixed bottom-0 left-0 right-0 z-50 transform translate-y-full transition-transform duration-300">
-  <div class="max-w-4xl mx-auto px-4 pb-4">
-    <div class="bg-[#0BA6A0] rounded-2xl p-4 shadow-2xl flex items-center justify-between">
+  <div class="max-w-3xl mx-auto px-4 pb-5">
+    <div class="bg-[#14110F] text-[#FAF8F5] rounded-2xl p-4 shadow-2xl border border-[#C85A17]/30 flex items-center justify-between">
       <div>
-        <p class="text-sm text-white/80 font-medium" id="cart-summary-text">0 items</p>
-        <p class="text-xl font-heading font-bold text-white" id="cart-total-price">₹0</p>
+        <p class="text-xs text-[#A89F96] font-medium uppercase tracking-wider" id="cart-summary-text">{{ cart_count }} items selected</p>
+        <p class="text-xl font-bold text-white mt-0.5" style="font-family: 'JetBrains Mono', monospace;" id="cart-total-price">View Basket</p>
       </div>
-      <a href="/r/{{ restaurant.qr_token }}/cart/" class="bg-[#0B1D42] text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-[#152c5c] transition-colors">View Basket →</a>
+      <a href="/r/{{ restaurant.qr_token }}/cart/" class="bg-[#C85A17] hover:bg-[#A94910] text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-lg flex items-center gap-2">
+        View Tray <span>→</span>
+      </a>
     </div>
   </div>
 </div>
@@ -177,76 +199,88 @@
 <script>
 function getCookie(name){let v=null;if(document.cookie&&document.cookie!==''){const cs=document.cookie.split(';');for(let i=0;i<cs.length;i++){const c=cs[i].trim();if(c.substring(0,name.length+1)===(name+'=')){v=decodeURIComponent(c.substring(name.length+1));break;}}}return v;}
 
-// Cart Logic
+let totalCartCount = {{ cart_count|default:0 }};
+
 async function updateCart(itemId, action, btn) {
+  const qtyEl = document.getElementById('qty-' + itemId);
+  const currentQty = parseInt(qtyEl.textContent || '0', 10);
+  if (action === 'remove' && currentQty <= 0) return;
+
   btn.disabled = true;
   try {
-    const url = action === 'add' 
+    const url = action === 'add'
       ? `/r/{{ restaurant.qr_token }}/cart/add/${itemId}/`
       : `/r/{{ restaurant.qr_token }}/cart/remove/${itemId}/`;
-      
+
     const res = await fetch(url, {
       method: 'POST',
       headers: {'X-CSRFToken': getCookie('csrftoken')}
     });
     if (!res.ok) throw new Error('Failed');
-    
-    // Refresh the page to update the server-rendered cart
-    location.reload(); 
+
+    const newQty = action === 'add' ? currentQty + 1 : Math.max(0, currentQty - 1);
+    qtyEl.textContent = newQty;
+    totalCartCount = action === 'add' ? totalCartCount + 1 : Math.max(0, totalCartCount - 1);
+
+    const sheet = document.getElementById('cart-bottom-sheet');
+    if (totalCartCount > 0) {
+      sheet.classList.remove('translate-y-full');
+      document.getElementById('cart-summary-text').textContent = `${totalCartCount} item${totalCartCount > 1 ? 's' : ''} in tray`;
+    } else {
+      sheet.classList.add('translate-y-full');
+    }
   } catch (e) {
-    alert('Could not update cart.');
+    alert('Could not update tray. Please try again.');
+  } finally {
     btn.disabled = false;
   }
 }
 
-// Filtering Logic
-let activeCategory = 'all';
-let vegFilterActive = false;
-let nonVegFilterActive = false;
-let availableFilterActive = false;
-let searchQuery = '';
+let activeCategory = 'all', vegFilterActive = false, nonVegFilterActive = false, availableFilterActive = false, searchQuery = '';
 
 function filterCategory(catId, btn) {
   activeCategory = catId;
   document.querySelectorAll('.category-tab').forEach(b => {
-    b.classList.remove('bg-[#0BA6A0]', 'text-white');
-    b.classList.add('bg-white/10', 'text-white/70');
+    b.classList.remove('bg-[#14110F]', 'text-[#FAF8F5]');
+    b.classList.add('bg-[#EFECE6]', 'text-[#5C5349]');
   });
-  btn.classList.remove('bg-white/10', 'text-white/70');
-  btn.classList.add('bg-[#0BA6A0]', 'text-white');
+  btn.classList.remove('bg-[#EFECE6]', 'text-[#5C5349]');
+  btn.classList.add('bg-[#14110F]', 'text-[#FAF8F5]');
   applyFilters();
 }
 
-function toggleVegFilter(btn) {
+function toggleVegFilter() {
   vegFilterActive = !vegFilterActive;
   if (vegFilterActive) nonVegFilterActive = false;
-  updateChipUI('veg-chip', vegFilterActive);
-  updateChipUI('nonveg-chip', false);
+  updateChipUI('veg-chip', vegFilterActive, '#1E4D3B');
+  updateChipUI('nonveg-chip', false, '#B4382A');
   applyFilters();
 }
 
-function toggleNonVegFilter(btn) {
+function toggleNonVegFilter() {
   nonVegFilterActive = !nonVegFilterActive;
   if (nonVegFilterActive) vegFilterActive = false;
-  updateChipUI('nonveg-chip', nonVegFilterActive);
-  updateChipUI('veg-chip', false);
+  updateChipUI('nonveg-chip', nonVegFilterActive, '#B4382A');
+  updateChipUI('veg-chip', false, '#1E4D3B');
   applyFilters();
 }
 
-function toggleAvailableFilter(btn) {
+function toggleAvailableFilter() {
   availableFilterActive = !availableFilterActive;
-  updateChipUI('available-chip', availableFilterActive);
+  updateChipUI('available-chip', availableFilterActive, '#C85A17');
   applyFilters();
 }
 
-function updateChipUI(id, active) {
+function updateChipUI(id, active, hex) {
   const el = document.getElementById(id);
   if (active) {
-    el.classList.remove('bg-white/5', 'text-white/60');
-    el.classList.add('bg-[#0BA6A0]', 'text-white', 'border-[#0BA6A0]');
+    el.style.backgroundColor = hex;
+    el.style.borderColor = hex;
+    el.style.color = '#FFFFFF';
   } else {
-    el.classList.add('bg-white/5', 'text-white/60');
-    el.classList.remove('bg-[#0BA6A0]', 'text-white', 'border-[#0BA6A0]');
+    el.style.backgroundColor = '#FFFFFF';
+    el.style.borderColor = '#E6DFD5';
+    el.style.color = '#5C5349';
   }
 }
 
@@ -263,24 +297,18 @@ function applyFilters() {
     if (vegFilterActive && item.dataset.vegetarian !== 'true') show = false;
     if (nonVegFilterActive && item.dataset.vegetarian === 'true') show = false;
     if (availableFilterActive && item.dataset.available !== 'true') show = false;
-    
     item.classList.toggle('hidden', !show);
   });
 
-  // Hide empty sections
   document.querySelectorAll('.category-section').forEach(section => {
     const visibleItems = section.querySelectorAll('.menu-item:not(.hidden)');
-    if (visibleItems.length === 0) section.classList.add('hidden');
-    else section.classList.remove('hidden');
+    section.classList.toggle('hidden', visibleItems.length === 0);
   });
 }
 
-// Auto-show cart bottom sheet if items exist
 {% if cart_count > 0 %}
 document.getElementById('cart-bottom-sheet').classList.remove('translate-y-full');
-document.getElementById('cart-summary-text').textContent = '{{ cart_count }} items';
-// To calculate actual total price in JS would require injecting all item prices, 
-// so we just say "View Basket" and let the server handle the exact math on the next page.
+document.getElementById('cart-summary-text').textContent = '{{ cart_count }} item{{ cart_count|pluralize }} in tray';
 {% endif %}
 </script>
 {% endblock %}

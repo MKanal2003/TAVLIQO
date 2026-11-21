@@ -1,84 +1,109 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Create Restaurant — TAVLIQO{% endblock %}
 {% block page_title %}Create Restaurant{% endblock %}
-{% block page_subtitle %}<p class="text-xs text-[#6B7280]">Super Admin · Restaurant Onboarding</p>{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B6257]">Super Admin · Restaurant Onboarding</p>{% endblock %}
 
 {% block dashboard_content %}
 <div class="max-w-3xl">
-  <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 mb-4">
-    <p class="text-sm text-[#6B7280]">
-      This creates the Restaurant Admin account and the Restaurant profile in a single step.
-      Share the temporary password with the owner over a secure channel — not plain email or chat.
+  <div class="bg-white rounded-2xl border border-[#E6DFD5] p-5 mb-5 shadow-xs">
+    <p class="text-xs sm:text-sm text-[#5C5349] leading-relaxed">
+      Creates the Restaurant Admin account and restaurant profile together. Share temporary credentials over a secure channel rather than plain chat.
     </p>
   </div>
 
-  <form method="post" class="bg-white rounded-2xl border border-[#E7E7E0] p-6 space-y-6">
+  <form method="post" class="bg-white rounded-2xl border border-[#E6DFD5] p-6 sm:p-8 space-y-6 shadow-xs sa-form">
     {% csrf_token %}
 
     {% if form.non_field_errors %}
-    <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <div class="rounded-xl border border-[#B4382A]/30 bg-[#B4382A]/10 px-4 py-3 text-sm text-[#B4382A] font-medium">
       {{ form.non_field_errors.0 }}
     </div>
     {% endif %}
 
     <div>
-      <h3 class="font-medium text-[#0A0A0A] mb-4" style="font-family:'Fraunces',serif;">Owner Account</h3>
+      <h3 class="font-bold text-lg text-[#14110F] font-heading mb-4">Owner Account</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-xs text-[#6B7280] font-medium mb-1">Owner email *</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Owner email *</label>
           {{ form.owner_email }}
-          {% if form.owner_email.errors %}<p class="text-xs text-red-600 mt-1">{{ form.owner_email.errors.0 }}</p>{% endif %}
+          {% if form.owner_email.errors %}<p class="text-xs text-[#B4382A] mt-1">{{ form.owner_email.errors.0 }}</p>{% endif %}
         </div>
         <div>
-          <label class="block text-xs text-[#6B7280] font-medium mb-1">Owner phone</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Owner phone</label>
           {{ form.owner_phone }}
-          {% if form.owner_phone.errors %}<p class="text-xs text-red-600 mt-1">{{ form.owner_phone.errors.0 }}</p>{% endif %}
+          {% if form.owner_phone.errors %}<p class="text-xs text-[#B4382A] mt-1">{{ form.owner_phone.errors.0 }}</p>{% endif %}
         </div>
         <div class="md:col-span-2">
-          <label class="block text-xs text-[#6B7280] font-medium mb-1">Temporary password *</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Temporary password *</label>
           {{ form.password }}
-          {% if form.password.errors %}<p class="text-xs text-red-600 mt-1">{{ form.password.errors.0 }}</p>{% endif %}
-          <p class="text-xs text-[#9CA3AF] mt-1">Minimum 8 characters. Owner can change this after first login.</p>
+          {% if form.password.errors %}<p class="text-xs text-[#B4382A] mt-1">{{ form.password.errors.0 }}</p>{% endif %}
+          <p class="text-xs text-[#8A7F73] mt-1">Minimum 8 characters. Owner can update this after signing in.</p>
         </div>
       </div>
     </div>
 
-    <hr class="border-[#E7E7E0]">
+    <hr class="border-[#E6DFD5]">
 
     <div>
-      <h3 class="font-medium text-[#0A0A0A] mb-4" style="font-family:'Fraunces',serif;">Restaurant Profile</h3>
+      <h3 class="font-bold text-lg text-[#14110F] font-heading mb-4">Restaurant Profile</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
-          <label class="block text-xs text-[#6B7280] font-medium mb-1">Restaurant name *</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Restaurant name *</label>
           {{ form.restaurant_name }}
-          {% if form.restaurant_name.errors %}<p class="text-xs text-red-600 mt-1">{{ form.restaurant_name.errors.0 }}</p>{% endif %}
+          {% if form.restaurant_name.errors %}<p class="text-xs text-[#B4382A] mt-1">{{ form.restaurant_name.errors.0 }}</p>{% endif %}
         </div>
         <div>
-          <label class="block text-xs text-[#6B7280] font-medium mb-1">Restaurant phone</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Restaurant phone</label>
           {{ form.restaurant_phone }}
-          {% if form.restaurant_phone.errors %}<p class="text-xs text-red-600 mt-1">{{ form.restaurant_phone.errors.0 }}</p>{% endif %}
+          {% if form.restaurant_phone.errors %}<p class="text-xs text-[#B4382A] mt-1">{{ form.restaurant_phone.errors.0 }}</p>{% endif %}
         </div>
         <div class="md:col-span-2">
-          <label class="block text-xs text-[#6B7280] font-medium mb-1">Address *</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Address *</label>
           {{ form.address }}
-          {% if form.address.errors %}<p class="text-xs text-red-600 mt-1">{{ form.address.errors.0 }}</p>{% endif %}
+          {% if form.address.errors %}<p class="text-xs text-[#B4382A] mt-1">{{ form.address.errors.0 }}</p>{% endif %}
         </div>
         <div class="md:col-span-2">
-          <label class="block text-xs text-[#6B7280] font-medium mb-1">Description</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Description</label>
           {{ form.description }}
-          {% if form.description.errors %}<p class="text-xs text-red-600 mt-1">{{ form.description.errors.0 }}</p>{% endif %}
+          {% if form.description.errors %}<p class="text-xs text-[#B4382A] mt-1">{{ form.description.errors.0 }}</p>{% endif %}
         </div>
       </div>
     </div>
 
     <div class="flex items-center justify-end gap-3 pt-2">
       <a href="{% url 'superadmin:restaurants' %}"
-         class="px-4 py-2 rounded-xl text-sm text-[#6B7280] hover:text-[#0A0A0A] transition-colors">Cancel</a>
+         class="px-5 py-2.5 rounded-xl text-sm font-semibold text-[#6B6257] hover:text-[#14110F] bg-[#FAF8F5] border border-[#E6DFD5] transition-colors">Cancel</a>
       <button type="submit"
-              class="bg-[#0BA6A0] text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-[#0B1D42] transition-colors">
-        Create restaurant
+              class="bg-[#C85A17] hover:bg-[#A94910] text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm">
+        Create Restaurant
       </button>
     </div>
   </form>
 </div>
+
+<style>
+  .sa-form input[type="text"],
+  .sa-form input[type="email"],
+  .sa-form input[type="password"],
+  .sa-form input[type="tel"],
+  .sa-form textarea,
+  .sa-form select {
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #FAF8F5;
+    border: 1px solid #E6DFD5;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    color: #14110F;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .sa-form input:focus,
+  .sa-form textarea:focus,
+  .sa-form select:focus {
+    background-color: #FFFFFF;
+    border-color: #C85A17;
+    box-shadow: 0 0 0 3px rgba(200, 90, 23, 0.14);
+  }
+</style>
 {% endblock %}

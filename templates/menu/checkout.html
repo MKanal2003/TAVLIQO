@@ -2,112 +2,119 @@
 {% block title %}Checkout — {{ restaurant.name }}{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-[#0A0A0A] text-white pb-12">
-  <div class="bg-[#0BA6A0] py-6"> <!-- Teal Header -->
-    <div class="max-w-2xl mx-auto px-6 flex items-center gap-3">
-      <a href="/r/{{ restaurant.qr_token }}/cart/" class="text-white/70 hover:text-white">←</a>
-      <h1 class="text-xl font-medium" style="font-family:'Montserrat',serif;">Checkout</h1>
-    </div>
-  </div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <div class="max-w-2xl mx-auto px-6 py-8">
-
-    <div class="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
-      <h2 class="text-sm uppercase tracking-wider text-white/50 mb-3">Order Summary</h2>
-      {% for row in items %}
-      <div class="flex items-center justify-between text-sm py-1">
-        <span>{{ row.item.name }} × {{ row.qty }}</span>
-        <span class="text-white/80">₹{{ row.line_total }}</span>
+<div class="min-h-screen bg-[#FAF8F5] text-[#14110F] pb-14" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+  <header class="bg-[#14110F] text-[#FAF8F5] py-6 px-5">
+    <div class="max-w-2xl mx-auto flex items-center gap-4">
+      <a href="/r/{{ restaurant.qr_token }}/cart/" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">←</a>
+      <div>
+        <p class="text-[11px] uppercase tracking-wider text-[#F3A26D] font-semibold">{{ restaurant.name }}</p>
+        <h1 class="text-xl font-bold" style="font-family: 'Fraunces', serif;">Confirm Order</h1>
       </div>
-      {% endfor %}
-      
-      <div class="border-t border-white/10 mt-3 pt-3 space-y-2">
-        <div class="flex items-center justify-between text-sm text-white/60">
-          <span>Subtotal</span>
-          <span>₹{{ subtotal }}</span>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-5 py-8">
+    <!-- Bill Summary Card -->
+    <div class="bg-white border border-[#E6DFD5] rounded-2xl p-5 mb-6 shadow-xs">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-[#8A7F73] mb-3">Bill Summary</h2>
+      <div class="space-y-2">
+        {% for row in items %}
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-[#14110F] font-medium">{{ row.item.name }} <span class="text-[#8A7F73]">× {{ row.qty }}</span></span>
+          <span class="text-[#5C5349]" style="font-family: 'JetBrains Mono', monospace;">₹{{ row.line_total }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="border-t border-dashed border-[#E6DFD5] mt-4 pt-3 space-y-1.5">
+        <div class="flex items-center justify-between text-xs text-[#6B6257]">
+          <span>Item Total</span>
+          <span style="font-family: 'JetBrains Mono', monospace;">₹{{ subtotal }}</span>
         </div>
         {% if restaurant.is_tax_enabled %}
-        <div class="flex items-center justify-between text-sm text-white/60">
+        <div class="flex items-center justify-between text-xs text-[#6B6257]">
           <span>CGST ({{ restaurant.cgst_percentage }}%)</span>
-          <span>₹{{ cgst_amount|floatformat:2 }}</span>
+          <span style="font-family: 'JetBrains Mono', monospace;">₹{{ cgst_amount|floatformat:2 }}</span>
         </div>
-        <div class="flex items-center justify-between text-sm text-white/60">
+        <div class="flex items-center justify-between text-xs text-[#6B6257]">
           <span>SGST ({{ restaurant.sgst_percentage }}%)</span>
-          <span>₹{{ sgst_amount|floatformat:2 }}</span>
+          <span style="font-family: 'JetBrains Mono', monospace;">₹{{ sgst_amount|floatformat:2 }}</span>
         </div>
         {% endif %}
-        <div class="flex items-center justify-between pt-2 border-t border-white/10 mt-2">
-          <span class="font-medium text-white">Total</span>
-          <span class="text-xl font-semibold text-white" style="font-family:'Montserrat',serif;">₹{{ total|floatformat:2 }}</span>
+        <div class="flex items-center justify-between pt-3 border-t border-[#E6DFD5] mt-2">
+          <span class="font-bold text-[#14110F]">Grand Total</span>
+          <span class="text-xl font-bold text-[#C85A17]" style="font-family: 'JetBrains Mono', monospace;">₹{{ total|floatformat:2 }}</span>
         </div>
       </div>
     </div>
 
     {% if messages %}
       {% for message in messages %}
-      <div class="bg-red-500/20 border border-red-500/40 text-red-200 p-3 rounded-xl mb-4 text-sm">{{ message }}</div>
+      <div class="bg-[#B4382A]/10 border border-[#B4382A]/30 text-[#B4382A] p-3.5 rounded-xl mb-5 text-sm font-medium">{{ message }}</div>
       {% endfor %}
     {% endif %}
 
-    <form method="post" class="bg-white/5 border border-white/10 rounded-xl p-6 space-y-5">
+    <!-- Guest Details Form -->
+    <form method="post" class="bg-white border border-[#E6DFD5] rounded-2xl p-6 space-y-5 shadow-xs">
       {% csrf_token %}
 
       <div>
-        <label class="block text-sm font-medium mb-1.5">Your Name *</label>
-        <input type="text" name="name" required placeholder="e.g. Priya"
-               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-[#0BA6A0] outline-none">
+        <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Your Name *</label>
+        <input type="text" name="name" required placeholder="e.g. Aarav"
+               class="w-full px-4 py-3 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl text-sm text-[#14110F] placeholder-[#8A7F73] focus:border-[#C85A17] focus:bg-white outline-none transition-all">
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-1.5">Table / Location *</label>
-        <input type="text" name="table_label" required placeholder="e.g. Table 5, Takeaway, Car 3"
-               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-[#0BA6A0] outline-none">
-        <p class="text-xs text-white/40 mt-1">Tell us where to serve you.</p>
+        <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Table / Location *</label>
+        <input type="text" name="table_label" required placeholder="e.g. Table 04, Courtyard, Takeaway"
+               class="w-full px-4 py-3 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl text-sm text-[#14110F] placeholder-[#8A7F73] focus:border-[#C85A17] focus:bg-white outline-none transition-all">
+        <p class="text-[11px] text-[#8A7F73] mt-1">So our servers bring it straight to you.</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-1.5">Phone (optional)</label>
+        <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Phone (optional)</label>
         <input type="tel" name="phone" placeholder="+91 …"
-               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-[#0BA6A0] outline-none">
-      </div>
-
-      <!-- Order Notes -->
-      <div>
-        <label class="block text-sm font-medium mb-1.5">Special Instructions (optional)</label>
-        <textarea name="notes" rows="2" placeholder="e.g. Less spicy, No onion, Extra napkins"
-               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-[#0BA6A0] outline-none resize-none"></textarea>
+               class="w-full px-4 py-3 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl text-sm text-[#14110F] placeholder-[#8A7F73] focus:border-[#C85A17] focus:bg-white outline-none transition-all">
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-2">Payment Mode *</label>
+        <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-1.5">Kitchen Instructions (optional)</label>
+        <textarea name="notes" rows="2" placeholder="e.g. Medium spicy, Jain preparation, Extra raita"
+                  class="w-full px-4 py-3 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl text-sm text-[#14110F] placeholder-[#8A7F73] focus:border-[#C85A17] focus:bg-white outline-none resize-none transition-all"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-[#5C5349] mb-2">Payment Mode *</label>
         <div class="grid grid-cols-2 gap-3">
           <label class="cursor-pointer">
             <input type="radio" name="payment_intent" value="CASH" checked class="peer sr-only">
-            <div class="border border-white/20 rounded-xl p-4 text-center peer-checked:border-[#0BA6A0] peer-checked:bg-[#0BA6A0]/20 transition-all">
-              <p class="font-medium">Cash</p>
+            <div class="border border-[#E6DFD5] bg-[#FAF8F5] rounded-xl p-3.5 text-center peer-checked:border-[#C85A17] peer-checked:bg-[#C85A17]/10 peer-checked:text-[#C85A17] transition-all">
+              <p class="font-bold text-sm">Pay at Counter / Cash</p>
             </div>
           </label>
-          
+
           {% if restaurant.is_online_payment_enabled %}
           <label class="cursor-pointer">
             <input type="radio" name="payment_intent" value="ONLINE" class="peer sr-only">
-            <div class="border border-white/20 rounded-xl p-4 text-center peer-checked:border-[#0BA6A0] peer-checked:bg-[#0BA6A0]/20 transition-all">
-              <p class="font-medium">Online (UPI)</p>
+            <div class="border border-[#E6DFD5] bg-[#FAF8F5] rounded-xl p-3.5 text-center peer-checked:border-[#C85A17] peer-checked:bg-[#C85A17]/10 peer-checked:text-[#C85A17] transition-all">
+              <p class="font-bold text-sm">Online (UPI)</p>
             </div>
           </label>
           {% endif %}
         </div>
       </div>
 
-      <label class="flex items-start gap-3 cursor-pointer">
-        <input type="checkbox" name="terms_accepted" required class="mt-1 w-4 h-4 accent-[#0BA6A0]">
-        <span class="text-sm text-white/70">
-          I agree to the Terms and Privacy Policy.
-        </span>
+      <label class="flex items-start gap-3 cursor-pointer pt-1">
+        <input type="checkbox" name="terms_accepted" required class="mt-0.5 w-4 h-4 accent-[#C85A17] rounded">
+        <span class="text-xs text-[#6B6257]">I agree to the restaurant's Terms and Privacy Policy.</span>
       </label>
 
-      <button type="submit" class="w-full bg-[#0BA6A0] text-white font-semibold py-3.5 rounded-xl hover:bg-[#098b86] transition-colors">Place Order</button>
+      <button type="submit" class="w-full bg-[#C85A17] hover:bg-[#A94910] text-white font-semibold py-4 rounded-2xl shadow-lg transition-all">Send Order to Kitchen</button>
     </form>
-  </div>
+  </main>
 </div>
 {% endblock %}

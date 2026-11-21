@@ -1,81 +1,85 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Menu Items — TAVLIQO{% endblock %}
 {% block page_title %}Menu Items{% endblock %}
-{% block page_subtitle %}<p class="text-xs text-[#6B7280]">{{ items|length }} item{{ items|length|pluralize }}</p>{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B6257] font-mono-num">{{ items|length }} dish{{ items|length|pluralize:"es" }}</p>{% endblock %}
 
 {% block header_actions %}
-<a href="{% url 'restaurants:add_item' %}" 
-   class="bg-[#0B1D42] hover:bg-[#0BA6A0] text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-colors">
-  + Add Item
+<a href="{% url 'restaurants:add_item' %}"
+   class="bg-[#C85A17] hover:bg-[#A94910] text-white text-xs sm:text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm">
+  + Add Dish
 </a>
 {% endblock %}
 
 {% block dashboard_content %}
 
-{# Category Filter #}
+<!-- Category Filter -->
 <div class="flex flex-wrap gap-2 mb-6">
   <a href="{% url 'restaurants:menu_items' %}"
-     class="px-4 py-2 rounded-lg text-sm font-medium transition-colors
-            {% if not selected_category %}bg-[#0B1D42] text-white{% else %}bg-white border border-[#E7E7E0] text-[#6B7280] hover:border-[#0B1D42]{% endif %}">
-    All Items
+     class="px-4 py-2 rounded-xl text-xs font-semibold transition-all
+            {% if not selected_category %}bg-[#14110F] text-[#FAF8F5] shadow-xs{% else %}bg-white border border-[#E6DFD5] text-[#5C5349] hover:border-[#14110F]{% endif %}">
+    All Dishes
   </a>
   {% for cat in categories %}
   <a href="?category={{ cat.pk }}"
-     class="px-4 py-2 rounded-lg text-sm font-medium transition-colors
-            {% if selected_category == cat.pk %}bg-[#0B1D42] text-white{% else %}bg-white border border-[#E7E7E0] text-[#6B7280] hover:border-[#0B1D42]{% endif %}">
-    {{ cat.name }} ({{ cat.items.count }})
+     class="px-4 py-2 rounded-xl text-xs font-semibold transition-all
+            {% if selected_category == cat.pk %}bg-[#14110F] text-[#FAF8F5] shadow-xs{% else %}bg-white border border-[#E6DFD5] text-[#5C5349] hover:border-[#14110F]{% endif %}">
+    {{ cat.name }} <span class="font-mono-num opacity-75">({{ cat.items.count }})</span>
   </a>
   {% endfor %}
 </div>
 
-{# Items Grid #}
+<!-- Items Grid -->
 {% if items %}
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
   {% for item in items %}
-  <div class="bg-white rounded-2xl border border-[#E7E7E0] overflow-hidden group">
-    {# Image #}
+  <div class="bg-white rounded-2xl border border-[#E6DFD5] overflow-hidden group shadow-xs hover:shadow-md transition-all">
     {% if item.image %}
-    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-48 object-cover">
+    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-48 object-cover border-b border-[#F4F0E8]">
     {% else %}
-    <div class="w-full h-48 bg-[#F5F5F0] flex items-center justify-center">
-      <svg class="w-16 h-16 text-[#E7E7E0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+    <div class="w-full h-48 bg-[#FAF8F5] border-b border-[#F4F0E8] flex items-center justify-center">
+      <svg class="w-14 h-14 text-[#DDD5C7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
       </svg>
     </div>
     {% endif %}
-    
-    {# Content #}
+
     <div class="p-5">
-      <div class="flex items-start justify-between mb-2">
+      <div class="flex items-start justify-between gap-2 mb-2">
         <div class="flex-1 min-w-0">
-          <h3 class="font-medium text-[#0A0A0A] truncate">{{ item.name }}</h3>
-          <p class="text-xs text-[#6B7280] truncate">
+          <div class="flex items-center gap-2">
+            {% if item.is_vegetarian %}
+            <span class="w-3.5 h-3.5 border-[1.5px] border-[#1E4D3B] rounded-[3px] flex items-center justify-center flex-shrink-0"><span class="w-1.5 h-1.5 bg-[#1E4D3B] rounded-full"></span></span>
+            {% else %}
+            <span class="w-3.5 h-3.5 border-[1.5px] border-[#B4382A] rounded-[3px] flex items-center justify-center flex-shrink-0"><span class="w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-b-[5.5px] border-b-[#B4382A]"></span></span>
+            {% endif %}
+            <h3 class="font-bold text-[#14110F] truncate">{{ item.name }}</h3>
+          </div>
+          <p class="text-xs text-[#8A7F73] truncate mt-0.5">
             {% if item.category %}{{ item.category.name }}{% else %}Uncategorised{% endif %}
           </p>
         </div>
-        <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full flex-shrink-0 ml-2
-          {% if item.is_available %}bg-[#E0F2FE] text-[#065F46]{% else %}bg-red-50 text-red-600{% endif %}">
-          <span class="w-1.5 h-1.5 rounded-full {% if item.is_available %}bg-[#0BA6A0]{% else %}bg-red-500{% endif %}"></span>
+        <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full flex-shrink-0
+          {% if item.is_available %}bg-[#1E4D3B]/10 text-[#1E4D3B]{% else %}bg-[#B4382A]/10 text-[#B4382A]{% endif %}">
+          <span class="w-1.5 h-1.5 rounded-full {% if item.is_available %}bg-[#1E4D3B]{% else %}bg-[#B4382A]{% endif %}"></span>
           {% if item.is_available %}Available{% else %}Sold Out{% endif %}
         </span>
       </div>
-      
+
       {% if item.description %}
-      <p class="text-sm text-[#6B7280] mb-3 line-clamp-2">{{ item.description }}</p>
+      <p class="text-xs text-[#6B6257] mb-3 line-clamp-2 leading-relaxed">{{ item.description }}</p>
       {% endif %}
-      
-      <p class="text-lg font-medium text-[#0B1D42] mb-4" style="font-family:'Fraunces',serif;">₹{{ item.price }}</p>
-      
-      {# Actions #}
+
+      <p class="text-lg font-bold text-[#14110F] font-mono-num mb-4">₹{{ item.price }}</p>
+
       <div class="flex items-center gap-2">
-        <button onclick="toggleAvailability({{ item.pk }}, this)" 
+        <button type="button" onclick="toggleAvailability({{ item.pk }}, this)"
                 data-available="{{ item.is_available|lower }}"
-                class="flex-1 text-xs font-medium py-2 rounded-lg transition-colors
-                       {% if item.is_available %}bg-orange-50 text-orange-600 hover:bg-orange-100{% else %}bg-emerald-50 text-emerald-600 hover:bg-emerald-100{% endif %}">
+                class="flex-1 text-xs font-semibold py-2.5 rounded-xl transition-colors
+                       {% if item.is_available %}bg-[#C85A17]/10 text-[#C85A17] hover:bg-[#C85A17]/20{% else %}bg-[#1E4D3B]/10 text-[#1E4D3B] hover:bg-[#1E4D3B]/20{% endif %}">
           <span class="toggle-label">{% if item.is_available %}Mark Sold Out{% else %}Mark Available{% endif %}</span>
         </button>
         <a href="{% url 'restaurants:edit_item' item.pk %}"
-           class="p-2 text-[#6B7280] hover:text-[#0B1D42] hover:bg-[#F5F5F0] rounded-lg transition-colors"
+           class="p-2.5 text-[#5C5349] hover:text-[#14110F] hover:bg-[#FAF8F5] border border-transparent hover:border-[#E6DFD5] rounded-xl transition-all"
            title="Edit">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -85,7 +89,7 @@
               onsubmit="return confirm('Delete {{ item.name }}?')" class="inline">
           {% csrf_token %}
           <button type="submit"
-                  class="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  class="p-2.5 text-[#B4382A]/75 hover:text-[#B4382A] hover:bg-[#B4382A]/10 rounded-xl transition-colors"
                   title="Delete">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -98,17 +102,17 @@
   {% endfor %}
 </div>
 {% else %}
-<div class="bg-white rounded-2xl border border-[#E7E7E0] py-20 text-center">
-  <div class="w-16 h-16 bg-[#F5F5F0] rounded-2xl flex items-center justify-center mx-auto mb-5">
-    <svg class="w-8 h-8 text-[#E0F2FE]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+<div class="bg-white rounded-2xl border border-[#E6DFD5] py-20 text-center px-6">
+  <div class="w-16 h-16 bg-[#FAF8F5] border border-[#E6DFD5] rounded-2xl flex items-center justify-center mx-auto mb-5 text-[#8A7F73]">
+    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
     </svg>
   </div>
-  <h3 class="text-lg font-medium text-[#0A0A0A] mb-2" style="font-family:'Fraunces',serif;">No menu items yet</h3>
-  <p class="text-sm text-[#6B7280] mb-6">Add your first dish to get started</p>
+  <h3 class="text-lg font-bold text-[#14110F] mb-2 font-heading">No menu items yet</h3>
+  <p class="text-sm text-[#6B6257] mb-6">Add your first dish to publish it to your live QR menu.</p>
   <a href="{% url 'restaurants:add_item' %}"
-     class="inline-block bg-[#0B1D42] text-white text-sm px-5 py-2.5 rounded-xl hover:bg-[#0BA6A0] transition-colors">
-    Add First Item
+     class="inline-block bg-[#C85A17] hover:bg-[#A94910] text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors">
+    Add First Dish
   </a>
 </div>
 {% endif %}
@@ -119,7 +123,7 @@ function toggleAvailability(itemId, button) {
   const label = button.querySelector('.toggle-label');
   const originalText = label.textContent;
   label.textContent = 'Updating...';
-  
+
   fetch(`/dashboard/items/${itemId}/toggle/`, {
     method: 'POST',
     headers: {
@@ -130,24 +134,20 @@ function toggleAvailability(itemId, button) {
   .then(response => response.json())
   .then(data => {
     if (data.status === 'ok') {
-      // Update badge and button
       const card = button.closest('.group');
       const badge = card.querySelector('.rounded-full');
-      const dot = badge.querySelector('.w-1\\.5');
-      
+
       if (data.is_available) {
-        badge.className = 'inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full flex-shrink-0 ml-2 bg-[#E0F2FE] text-[#065F46]';
-        dot.className = 'w-1.5 h-1.5 rounded-full bg-[#0BA6A0]';
-        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#0BA6A0]"></span>Available';
-        
-        button.className = 'flex-1 text-xs font-medium py-2 rounded-lg transition-colors bg-orange-50 text-orange-600 hover:bg-orange-100';
+        badge.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full flex-shrink-0 bg-[#1E4D3B]/10 text-[#1E4D3B]';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#1E4D3B]"></span>Available';
+
+        button.className = 'flex-1 text-xs font-semibold py-2.5 rounded-xl transition-colors bg-[#C85A17]/10 text-[#C85A17] hover:bg-[#C85A17]/20';
         label.textContent = 'Mark Sold Out';
       } else {
-        badge.className = 'inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full flex-shrink-0 ml-2 bg-red-50 text-red-600';
-        dot.className = 'w-1.5 h-1.5 rounded-full bg-red-500';
-        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>Sold Out';
-        
-        button.className = 'flex-1 text-xs font-medium py-2 rounded-lg transition-colors bg-emerald-50 text-emerald-600 hover:bg-emerald-100';
+        badge.className = 'inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full flex-shrink-0 bg-[#B4382A]/10 text-[#B4382A]';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#B4382A]"></span>Sold Out';
+
+        button.className = 'flex-1 text-xs font-semibold py-2.5 rounded-xl transition-colors bg-[#1E4D3B]/10 text-[#1E4D3B] hover:bg-[#1E4D3B]/20';
         label.textContent = 'Mark Available';
       }
     } else {
@@ -156,13 +156,11 @@ function toggleAvailability(itemId, button) {
     }
     button.disabled = false;
   })
-  .catch(error => {
-    console.error('Error:', error);
+  .catch(() => {
     label.textContent = 'Error';
     setTimeout(() => { label.textContent = originalText; }, 2000);
     button.disabled = false;
   });
 }
 </script>
-
 {% endblock %}

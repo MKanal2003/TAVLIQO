@@ -3,71 +3,70 @@
 
 {% block staff_content %}
 <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-6">
-  
+
   <!-- Left: Menu Items -->
   <div class="flex-1">
-    <div class="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
-      <div class="flex gap-2 overflow-x-auto w-full pb-2">
-        <button onclick="filterCat('all', this)" class="category-btn active bg-[#0B1D42] text-white px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap">All</button>
+    <div class="mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div class="flex gap-2 overflow-x-auto no-scrollbar w-full pb-1">
+        <button type="button" onclick="filterCat('all', this)" class="category-btn active bg-[#14110F] text-[#FAF8F5] px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors">All</button>
         {% for cat in categories %}
-        <button onclick="filterCat('{{ cat.pk }}', this)" class="category-btn bg-white border border-gray-200 text-[#0B1D42] px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap">{{ cat.name }}</button>
+        <button type="button" onclick="filterCat('{{ cat.pk }}', this)" class="category-btn bg-white border border-[#E6DFD5] text-[#5C5349] hover:border-[#14110F] px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors">{{ cat.name }}</button>
         {% endfor %}
       </div>
-      <input type="text" id="search" placeholder="Search..." class="w-full sm:w-64 px-4 py-2 border border-gray-200 rounded-xl text-sm focus:border-[#0BA6A0] outline-none">
+      <input type="text" id="search" placeholder="Search dishes..." class="w-full sm:w-64 px-4 py-2.5 bg-white border border-[#E6DFD5] rounded-xl text-xs sm:text-sm text-[#14110F] focus:border-[#C85A17] outline-none">
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4" id="item-grid">
       {% for item in menu_items %}
-      <button type="button" onclick="addToCart({{ item.id }}, '{{ item.name }}', {{ item.price }}, this)" 
-              class="item-card bg-white border border-gray-200 rounded-2xl p-3 text-left hover:border-[#0BA6A0] hover:shadow-md transition-all active:scale-95"
+      <button type="button" onclick="addToCart({{ item.id }}, '{{ item.name|escapejs }}', {{ item.price }}, this)"
+              class="item-card bg-white border border-[#E6DFD5] rounded-2xl p-3 text-left hover:border-[#C85A17] hover:shadow-md transition-all active:scale-95"
               data-category="{{ item.category_id|default:'none' }}" data-name="{{ item.name|lower }}">
         {% if item.image %}
-        <img src="{{ item.image.url }}" class="w-full h-24 object-cover rounded-xl mb-3">
+        <img src="{{ item.image.url }}" class="w-full h-24 object-cover rounded-xl mb-2.5 border border-[#F4F0E8]">
         {% else %}
-        <div class="w-full h-24 bg-gray-100 rounded-xl mb-3 flex items-center justify-center"><span class="text-xs text-gray-400">No Image</span></div>
+        <div class="w-full h-24 bg-[#FAF8F5] border border-[#F4F0E8] rounded-xl mb-2.5 flex items-center justify-center"><span class="text-xs text-[#8A7F73]">No Image</span></div>
         {% endif %}
-        <p class="font-bold text-[#0B1D42] text-sm truncate">{{ item.name }}</p>
-        <p class="text-[#0BA6A0] font-bold text-sm">₹{{ item.price }}</p>
+        <p class="font-bold text-[#14110F] text-sm truncate">{{ item.name }}</p>
+        <p class="text-[#C85A17] font-bold text-sm font-mono-num mt-0.5">₹{{ item.price }}</p>
       </button>
       {% endfor %}
     </div>
   </div>
 
-  <!-- Right: Sticky Cart -->
+  <!-- Right: Sticky Order Tray -->
   <div class="w-full md:w-80 flex-shrink-0">
-    <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg sticky top-6">
-      <h3 class="font-heading font-bold text-[#0B1D42] text-lg mb-4">Current Order</h3>
-      
+    <div class="bg-white rounded-2xl border border-[#E6DFD5] p-6 shadow-lg sticky top-6">
+      <h3 class="font-heading font-bold text-[#14110F] text-lg mb-4">Current Order</h3>
+
       <form method="post" id="order-form">
         {% csrf_token %}
         <input type="hidden" name="items_json" id="items_json">
-        
-        <div class="space-y-3 mb-6">
+
+        <div class="space-y-3 mb-5">
           <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1">Table / Location</label>
-            <input type="text" name="table_label" required placeholder="e.g. Table 5, Car 2"
-                   class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:border-[#0BA6A0] outline-none">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#5C5349] mb-1">Table / Location</label>
+            <input type="text" name="table_label" required placeholder="e.g. Table 04, Courtyard"
+                   class="w-full px-3.5 py-2 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl text-sm text-[#14110F] focus:border-[#C85A17] focus:bg-white outline-none">
           </div>
           <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1">Payment Mode</label>
-            <select name="payment_intent" class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:border-[#0BA6A0] outline-none">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-[#5C5349] mb-1">Payment Mode</label>
+            <select name="payment_intent" class="w-full px-3.5 py-2 bg-[#FAF8F5] border border-[#E6DFD5] rounded-xl text-sm text-[#14110F] focus:border-[#C85A17] focus:bg-white outline-none">
               <option value="CASH">Cash</option>
               <option value="ONLINE">UPI / Online</option>
             </select>
           </div>
         </div>
 
-        <div id="cart-items" class="space-y-2 mb-4 max-h-60 overflow-y-auto pr-2">
-          <!-- JS will inject cart items here -->
-          <p class="text-sm text-gray-400 text-center py-4" id="empty-cart-msg">Tap items to add them</p>
+        <div id="cart-items" class="space-y-2 mb-4 max-h-60 overflow-y-auto pr-1">
+          <p class="text-xs text-[#8A7F73] text-center py-4" id="empty-cart-msg">Tap dishes to add them</p>
         </div>
 
-        <div class="border-t border-gray-100 pt-4 flex items-center justify-between mb-4">
-          <span class="font-medium text-gray-500">Total</span>
-          <span class="text-xl font-heading font-bold text-[#0B1D42]" id="cart-total">₹0</span>
+        <div class="border-t border-[#E6DFD5] pt-4 flex items-center justify-between mb-4">
+          <span class="text-sm font-medium text-[#5C5349]">Total</span>
+          <span class="text-xl font-bold text-[#14110F] font-mono-num" id="cart-total">₹0</span>
         </div>
 
-        <button type="submit" class="w-full bg-[#0BA6A0] text-white font-bold py-3 rounded-xl hover:bg-[#098b86] transition-colors shadow-lg shadow-[#0BA6A0]/30">
+        <button type="submit" class="w-full bg-[#C85A17] hover:bg-[#A94910] text-white text-sm font-semibold py-3 rounded-xl transition-colors shadow-md">
           Send to Kitchen
         </button>
       </form>
@@ -77,17 +76,16 @@
 
 <script>
   let cart = {};
-  
+
   function addToCart(id, name, price, btn) {
     if (!cart[id]) cart[id] = { name, price, qty: 0 };
     cart[id].qty += 1;
     renderCart();
-    
-    // Visual feedback on tile
-    btn.classList.add('border-[#0BA6A0]', 'ring-2', 'ring-[#0BA6A0]/20');
-    setTimeout(() => btn.classList.remove('border-[#0BA6A0]', 'ring-2', 'ring-[#0BA6A0]/20'), 300);
+
+    btn.classList.add('border-[#C85A17]', 'ring-2', 'ring-[#C85A17]/20');
+    setTimeout(() => btn.classList.remove('border-[#C85A17]', 'ring-2', 'ring-[#C85A17]/20'), 250);
   }
-  
+
   function updateQty(id, delta) {
     if (!cart[id]) return;
     cart[id].qty += delta;
@@ -97,16 +95,14 @@
 
   function renderCart() {
     const container = document.getElementById('cart-items');
-    const emptyMsg = document.getElementById('empty-cart-msg');
     const totalEl = document.getElementById('cart-total');
     const hiddenInput = document.getElementById('items_json');
-    
+
     container.innerHTML = '';
     let total = 0;
-    let itemIds = [];
-    
+
     if (Object.keys(cart).length === 0) {
-      container.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">Tap items to add them</p>';
+      container.innerHTML = '<p class="text-xs text-[#8A7F73] text-center py-4">Tap dishes to add them</p>';
       totalEl.textContent = '₹0';
       hiddenInput.value = '';
       return;
@@ -114,39 +110,34 @@
 
     for (const [id, item] of Object.entries(cart)) {
       total += item.price * item.qty;
-      itemIds.push(id); // For backend form parsing
-      
+
       const div = document.createElement('div');
-      div.className = 'flex items-center justify-between bg-gray-50 p-2 rounded-lg text-sm';
+      div.className = 'flex items-center justify-between bg-[#FAF8F5] border border-[#E6DFD5] p-2.5 rounded-xl text-xs';
       div.innerHTML = `
         <div class="flex-1 truncate pr-2">
-          <p class="font-medium text-[#0B1D42] truncate">${item.name}</p>
-          <p class="text-xs text-gray-500">₹${item.price}</p>
+          <p class="font-bold text-[#14110F] truncate">${item.name}</p>
+          <p class="text-[#8A7F73] font-mono-num">₹${item.price}</p>
         </div>
-        <div class="flex items-center gap-2">
-          <button type="button" onclick="updateQty(${id}, -1)" class="w-6 h-6 bg-white border border-gray-200 rounded text-gray-600">-</button>
-          <span class="font-bold w-4 text-center">${item.qty}</span>
-          <button type="button" onclick="updateQty(${id}, 1)" class="w-6 h-6 bg-white border border-gray-200 rounded text-gray-600">+</button>
+        <div class="flex items-center gap-1.5">
+          <button type="button" onclick="updateQty(${id}, -1)" class="w-6 h-6 bg-white border border-[#E6DFD5] rounded-lg text-[#14110F] font-bold">−</button>
+          <span class="font-bold font-mono-num w-4 text-center">${item.qty}</span>
+          <button type="button" onclick="updateQty(${id}, 1)" class="w-6 h-6 bg-[#C85A17] rounded-lg text-white font-bold">+</button>
         </div>
       `;
       container.appendChild(div);
     }
-    
+
     totalEl.textContent = '₹' + total.toFixed(2);
-    
-    // We need to submit the form in the format the backend expects: item_ids and qty_X
-    // Since Django forms are tricky with dynamic names, we'll append hidden inputs dynamically on submit
+    hiddenInput.value = JSON.stringify(cart);
   }
 
-  // Handle Form Submission
   document.getElementById('order-form').addEventListener('submit', function(e) {
     if (Object.keys(cart).length === 0) {
       e.preventDefault();
-      alert("Please add items to the order first.");
+      alert("Please add dishes to the order first.");
       return;
     }
-    
-    // Append hidden inputs for items and qty
+
     for (const [id, item] of Object.entries(cart)) {
       const itemInput = document.createElement('input');
       itemInput.type = 'hidden';
@@ -162,29 +153,23 @@
     }
   });
 
-  // Filters
   document.getElementById('search').addEventListener('input', function(e) {
     const query = e.target.value.toLowerCase();
     document.querySelectorAll('.item-card').forEach(card => {
-      const match = card.dataset.name.includes(query);
-      card.style.display = match ? 'block' : 'none';
+      card.style.display = card.dataset.name.includes(query) ? 'block' : 'none';
     });
   });
 
   function filterCat(catId, btn) {
     document.querySelectorAll('.category-btn').forEach(b => {
-      b.classList.remove('bg-[#0B1D42]', 'text-white');
-      b.classList.add('bg-white', 'text-[#0B1D42]', 'border', 'border-gray-200');
+      b.classList.remove('bg-[#14110F]', 'text-[#FAF8F5]');
+      b.classList.add('bg-white', 'border', 'border-[#E6DFD5]', 'text-[#5C5349]');
     });
-    btn.classList.remove('bg-white', 'text-[#0B1D42]', 'border', 'border-gray-200');
-    btn.classList.add('bg-[#0B1D42]', 'text-white');
+    btn.classList.remove('bg-white', 'border', 'border-[#E6DFD5]', 'text-[#5C5349]');
+    btn.classList.add('bg-[#14110F]', 'text-[#FAF8F5]');
 
     document.querySelectorAll('.item-card').forEach(card => {
-      if (catId === 'all' || card.dataset.category === catId) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+      card.style.display = (catId === 'all' || card.dataset.category === catId) ? 'block' : 'none';
     });
   }
 </script>

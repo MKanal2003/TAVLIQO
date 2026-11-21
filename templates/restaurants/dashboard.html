@@ -1,68 +1,77 @@
 {% extends "base_dashboard.html" %}
 {% block title %}Dashboard — TAVLIQO{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
-{% block page_subtitle %}<p class="text-xs text-[#6B7280]">Overview of your restaurant</p>{% endblock %}
+{% block page_subtitle %}<p class="text-xs text-[#6B6257]">Daily service & menu overview</p>{% endblock %}
 
 {% block dashboard_content %}
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
   <!-- Revenue Card -->
-  <div class="bg-gradient-to-br from-[#0B1D42] to-[#152c5c] rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
-    <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-bl-full"></div>
-    <p class="text-sm text-gray-300 font-medium mb-2">Today's Revenue</p>
-    <p class="text-4xl font-heading font-bold">₹{{ today_revenue }}</p>
-    <a href="{% url 'restaurants:analytics' %}" class="inline-block mt-4 text-xs font-semibold text-[#0BA6A0] hover:text-white transition-colors">View Analytics →</a>
+  <div class="bg-[#14110F] rounded-2xl p-6 text-[#FAF8F5] shadow-md relative overflow-hidden border border-[#2A2420]">
+    <div class="absolute right-0 top-0 w-32 h-32 bg-[#C85A17]/15 rounded-bl-full"></div>
+    <p class="text-xs text-[#A89F96] uppercase tracking-widest font-semibold mb-2">Today's Revenue</p>
+    <p class="text-4xl font-bold font-mono-num text-[#FAF8F5]">₹{{ today_revenue }}</p>
+    <a href="{% url 'restaurants:analytics' %}" class="inline-block mt-4 text-xs font-semibold text-[#F3A26D] hover:text-white transition-colors">View Analytics →</a>
   </div>
 
   <!-- Active Orders Card -->
-  <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm flex flex-col justify-between">
+  <div class="bg-white rounded-2xl p-6 border border-[#E6DFD5] shadow-xs flex flex-col justify-between">
     <div>
-      <p class="text-sm text-gray-500 font-medium mb-2">Active Orders</p>
-      <p class="text-4xl font-heading font-bold text-[#0B1D42]">{{ active_orders_count }}</p>
+      <p class="text-xs text-[#8A7F73] uppercase tracking-widest font-semibold mb-2">Active Orders</p>
+      <p class="text-4xl font-bold text-[#14110F] font-mono-num">{{ active_orders_count }}</p>
     </div>
-    <a href="{% url 'restaurants:orders' %}" class="inline-block mt-4 text-xs font-semibold text-[#0BA6A0] hover:text-[#0B1D42] transition-colors">Go to Live Board →</a>
+    <a href="{% url 'restaurants:orders' %}" class="inline-block mt-4 text-xs font-semibold text-[#C85A17] hover:text-[#A94910] transition-colors">Go to Live Board →</a>
   </div>
 
   <!-- Quick Actions -->
-  <div class="bg-white rounded-2xl p-6 border border-[#E7E7E0] shadow-sm">
-    <p class="text-sm text-gray-500 font-medium mb-3">Quick Actions</p>
-    <div class="space-y-2">
-      <a href="{% url 'restaurants:add_item' %}" class="flex items-center gap-2 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0]"><div class="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">+</div> Add Menu Item</a>
-      <a href="{% url 'restaurants:qr_code_view' %}" class="flex items-center gap-2 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0]"><div class="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">◫</div> View QR Code</a>
-      <a href="{% url 'restaurants:manage_staff' %}" class="flex items-center gap-2 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0]"><div class="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">👤</div> Manage Staff</a>
+  <div class="bg-white rounded-2xl p-6 border border-[#E6DFD5] shadow-xs">
+    <p class="text-xs text-[#8A7F73] uppercase tracking-widest font-semibold mb-3">Quick Actions</p>
+    <div class="space-y-2.5">
+      <a href="{% url 'restaurants:add_item' %}" class="flex items-center gap-2.5 text-sm font-semibold text-[#14110F] hover:text-[#C85A17] transition-colors">
+        <span class="w-6 h-6 rounded-lg bg-[#FAF8F5] border border-[#E6DFD5] flex items-center justify-center text-xs font-mono-num text-[#C85A17]">+</span>
+        Add Menu Item
+      </a>
+      <a href="{% url 'restaurants:qr_code_view' %}" class="flex items-center gap-2.5 text-sm font-semibold text-[#14110F] hover:text-[#C85A17] transition-colors">
+        <span class="w-6 h-6 rounded-lg bg-[#FAF8F5] border border-[#E6DFD5] flex items-center justify-center text-xs font-mono-num text-[#1E4D3B]">◫</span>
+        View QR Code
+      </a>
+      <a href="{% url 'restaurants:manage_staff' %}" class="flex items-center gap-2.5 text-sm font-semibold text-[#14110F] hover:text-[#C85A17] transition-colors">
+        <span class="w-6 h-6 rounded-lg bg-[#FAF8F5] border border-[#E6DFD5] flex items-center justify-center text-xs font-mono-num text-[#5C5349]">👤</span>
+        Manage Staff
+      </a>
     </div>
   </div>
 </div>
 
 <!-- Top Sellers & Menu Info -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 shadow-sm">
-    <h3 class="text-lg font-heading font-bold text-[#0B1D42] mb-4">Top 3 Best Sellers (Paid)</h3>
+  <div class="bg-white rounded-2xl border border-[#E6DFD5] p-6 shadow-xs">
+    <h3 class="text-lg font-heading font-bold text-[#14110F] mb-4">Top 3 Best Sellers (Paid)</h3>
     {% if top_items %}
-      <div class="space-y-4">
+      <div class="divide-y divide-[#F4F0E8]">
         {% for item in top_items %}
-        <div class="flex items-center justify-between">
+        <div class="py-3 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-full bg-[#0BA6A0]/10 text-[#0BA6A0] font-bold flex items-center justify-center text-sm">{{ forloop.counter }}</span>
-            <span class="font-medium text-[#0B1D42]">{{ item.name_snapshot }}</span>
+            <span class="w-8 h-8 rounded-full bg-[#C85A17]/10 text-[#C85A17] font-bold font-mono-num flex items-center justify-center text-xs">{{ forloop.counter }}</span>
+            <span class="font-semibold text-[#14110F] text-sm">{{ item.name_snapshot }}</span>
           </div>
-          <span class="text-sm font-bold bg-gray-100 px-3 py-1 rounded-full">{{ item.total_qty }} sold</span>
+          <span class="text-xs font-bold font-mono-num bg-[#FAF8F5] border border-[#E6DFD5] text-[#14110F] px-3 py-1 rounded-full">{{ item.total_qty }} sold</span>
         </div>
         {% endfor %}
       </div>
     {% else %}
-      <p class="text-sm text-gray-500">No paid orders yet to calculate top sellers.</p>
+      <p class="text-sm text-[#6B6257]">No paid orders yet to calculate top sellers.</p>
     {% endif %}
   </div>
 
-  <div class="bg-white rounded-2xl border border-[#E7E7E0] p-6 shadow-sm flex flex-col justify-center items-center text-center">
-    <div class="w-16 h-16 bg-[#0BA6A0]/10 rounded-full flex items-center justify-center mb-4">
-      <svg class="w-8 h-8 text-[#0BA6A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+  <div class="bg-white rounded-2xl border border-[#E6DFD5] p-6 shadow-xs flex flex-col justify-center items-center text-center">
+    <div class="w-16 h-16 bg-[#1E4D3B]/10 rounded-2xl flex items-center justify-center mb-4 text-[#1E4D3B]">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
     </div>
-    <h3 class="text-lg font-heading font-bold text-[#0B1D42] mb-1">Menu Size</h3>
-    <p class="text-3xl font-bold text-[#0BA6A0] mb-1">{{ total_items }} items</p>
-    <p class="text-sm text-gray-500">across {{ total_categories }} categories</p>
-    <a href="{% url 'restaurants:menu_items' %}" class="mt-4 text-sm font-medium text-[#0B1D42] hover:text-[#0BA6A0] underline">Manage Menu</a>
+    <h3 class="text-lg font-heading font-bold text-[#14110F] mb-1">Menu Size</h3>
+    <p class="text-3xl font-bold font-mono-num text-[#1E4D3B] mb-1">{{ total_items }} items</p>
+    <p class="text-xs sm:text-sm text-[#6B6257]">across {{ total_categories }} categories</p>
+    <a href="{% url 'restaurants:menu_items' %}" class="mt-4 text-xs sm:text-sm font-semibold text-[#14110F] hover:text-[#C85A17] underline transition-colors">Manage Menu</a>
   </div>
 </div>
 
