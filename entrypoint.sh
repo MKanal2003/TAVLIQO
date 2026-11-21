@@ -1,63 +1,147 @@
+
 #!/usr/bin/env bash
-# ─────────────────────────────────────────────────────────────────────────────
-# TAVLIQO entrypoint
-#
-# Responsibilities:
-#   1. Wait for control-db and tenant-db to accept connections.
-#   2. Run migrations on both databases.
-#   3. Seed the Super Admin accounts (safe to run repeatedly).
-#   4. Collect static files.
-#   5. exec the container's CMD.
-# ─────────────────────────────────────────────────────────────────────────────
 
-set -euo pipefail
+# =============================================================================
+# TAVLIQO - Production Entrypoint
+# =============================================================================
 
-echo "[TAVLIQO] Waiting for both PostgreSQL databases..."
+set -Eeuo pipefail
+
+echo "================================================="
+echo "       TAVLIQO APPLICATION STARTUP"
+echo "================================================="
+
+# -----------------------------------------------------------------------------
+# 1. Validate required environment variables
+# -----------------------------------------------------------------------------
+
+: "${CONTROL_DATABASE_URL:?CONTROL_DATABASE_URL is required}"
+: "${TENANT_DATABASE_URL:?TENANT_DATABASE_URL is required}"
+
+echo "[TAVLIQO] Environment variables validated."
+
+# -----------------------------------------------------------------------------
+# 2. Wait for PostgreSQL databases
+# -----------------------------------------------------------------------------
+
+echo "[TAVLIQO] Waiting for PostgreSQL databases..."
 
 python - <<'PY'
-import os, sys, time
+import os
+import sys
+import time
 from urllib.parse import urlparse
+
 import psycopg2
 
-def wait(name, url, timeout=120):
-    p = urlparse(url)
-    for attempt in range(1, timeout // 2 + 1):
-        try:
-            psycopg2.connect(
-                dbname=p.path.lstrip("/"),
-                user=p.username,
-                password=p.password,
-                host=p.hostname,
-                port=p.port or 5432,
-                connect_timeout=2,
-            ).close()
-            print(f"[TAVLIQO] {name} reachable")
-            return
-        except psycopg2.OperationalError:
-            print(f"[TAVLIQO] {name} not ready (attempt {attempt}/{timeout//2})")
-            time.sleep(2)
-    sys.exit(f"[TAVLIQO] FATAL: {name} unreachable at {url}")
 
-wait("CONTROL_DATABASE_URL", os.environ["CONTROL_DATABASE_URL"])
-wait("TENANT_DATABASE_URL",  os.environ["TENANT_DATABASE_URL"])
+def wait_for_database(name, database_url, timeout=120):
+    parsed = urlparse(database_url)
+    deadline = time.time() + timeout
+
+    while time.time() < deadline:
+        try:
+            connection = psycopg2.connect(
+                dbname=parsed.path.lstrip("/"),
+                user=parsed.username,
+                password=parsed.password,
+                host=parsed.hostname,
+                port=parsed.port or 5432,
+                connect_timeout=5,
+                sslmode="require",
+            )
+
+            connection.close()
+
+            print(f"[TAVLIQO] {name} is ready.", flush=True)
+            return
+
+        except psycopg2.OperationalError as error:
+            print(
+                f"[TAVLIQO] Waiting for {name}: {error}",
+                flush=True
+            )
+            time.sleep(3)
+
+    sys.exit(f"[TAVLIQO] ERROR: {name} connection timed out.")
+
+
+wait_for_database(
+    "CONTROL_DATABASE_URL",
+    os.environ["CONTROL_DATABASE_URL"]
+)
+
+wait_for_database(
+    "TENANT_DATABASE_URL",
+    os.environ["TENANT_DATABASE_URL"]
+)
+
+print("[TAVLIQO] Both databases are reachable.", flush=True)
 PY
 
+# -----------------------------------------------------------------------------
+# 3. Apply database migrations
+# -----------------------------------------------------------------------------
+
 if [[ "${SKIP_MIGRATIONS:-0}" != "1" ]]; then
+
     echo "[TAVLIQO] Applying control database migrations..."
+
     python manage.py migrate --noinput
 
+    echo "[TAVLIQO] Control database migrations completed."
+
     echo "[TAVLIQO] Applying tenant database migrations..."
+
     python manage.py migrate --database=tenant --noinput
-    
-    # NEW: Automatically create Super Admins on startup
-    echo "[TAVLIQO] Seeding Super Admins..."
-    python manage.py seed_super_admins || echo "[TAVLIQO] Seed skipped or already exists."
+
+    echo "[TAVLIQO] Tenant database migrations completed."
+
+else
+    echo "[TAVLIQO] Database migrations skipped."
 fi
+
+# -----------------------------------------------------------------------------
+# 4. Create or update Super Admin accounts
+# -----------------------------------------------------------------------------
+
+echo "[TAVLIQO] Initializing Super Admin accounts..."
+
+python manage.py seed_super_admins
+
+echo "[TAVLIQO] Super Admin initialization completed."
+
+# -----------------------------------------------------------------------------
+# 5. Collect static files
+# -----------------------------------------------------------------------------
 
 if [[ "${SKIP_COLLECTSTATIC:-0}" != "1" ]]; then
+
     echo "[TAVLIQO] Collecting static files..."
-    python manage.py collectstatic --noinput --clear
+
+    python manage.py collectstatic --noinput
+
+    echo "[TAVLIQO] Static files collection completed."
+
+else
+    echo "[TAVLIQO] Static files collection skipped."
 fi
 
-echo "[TAVLIQO] Starting application: $*"
+# -----------------------------------------------------------------------------
+# 6. Start application
+# -----------------------------------------------------------------------------
+
+echo "================================================="
+echo "       TAVLIQO STARTING APPLICATION"
+echo "================================================="
+
+if [[ $# -eq 0 ]]; then
+    set -- gunicorn qrdine.wsgi:application \
+        --bind 0.0.0.0:8000 \
+        --workers "${WEB_CONCURRENCY:-3}" \
+        --timeout 60
+fi
+
+echo "[TAVLIQO] Starting: $*"
+
 exec "$@"
