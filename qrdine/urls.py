@@ -7,10 +7,10 @@ from menu.views import menu_viewer_by_token
 urlpatterns = [
     path('manage-qrdine/', admin.site.urls),
     
+    # Public routes
     path('r/<str:token>/', menu_viewer_by_token, name='menu_by_token'),
     path('r/<str:token>/', include('orders.urls')),
     path('menu/', include('menu.urls')),
-
     path('', include('core.urls')),
     path('accounts/', include('accounts.urls')),
     path('dashboard/', include('restaurants.urls')),
@@ -20,5 +20,6 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# Custom error handlers
 handler404 = 'core.views.custom_404'
 handler500 = 'core.views.custom_500'

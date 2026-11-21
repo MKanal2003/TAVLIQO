@@ -7,27 +7,22 @@ from .forms import LoginForm
 from .models import StaffUser
 from restaurants.models import Restaurant
 
-
 @ratelimit(key='ip', rate='10/m', block=True)
 def login_view(request):
     if request.user.is_authenticated:
-        if request.user.is_superadmin():
-            return redirect('superadmin:dashboard')
-        return redirect('restaurants:dashboard')
+        return redirect('core:login_redirect')
 
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            if user.is_superadmin():
-                return redirect('superadmin:dashboard')
-            return redirect('restaurants:dashboard')
+            messages.success(request, f"Welcome back, {user.email}!")
+            return redirect('core:login_redirect')
     else:
         form = LoginForm()
 
     return render(request, 'accounts/login.html', {'form': form})
-
 
 @require_POST
 def logout_view(request):
@@ -35,8 +30,6 @@ def logout_view(request):
     messages.info(request, "You've been logged out successfully.")
     return redirect('core:landing')
 
-
-# BUG FIX: Added rate limit to prevent brute forcing the 4-digit PIN
 @ratelimit(key='ip', rate='5/m', block=True)
 def staff_login_view(request, slug):
     restaurant = get_object_or_404(Restaurant, slug=slug)

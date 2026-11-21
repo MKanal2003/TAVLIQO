@@ -203,7 +203,7 @@ LOGGING = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'restaurants:dashboard'
+LOGIN_REDIRECT_URL = 'core:login_redirect'
 LOGOUT_REDIRECT_URL = 'core:landing'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
