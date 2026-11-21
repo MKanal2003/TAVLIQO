@@ -1,0 +1,63 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tavliqo-web
+    env_file:
+      - .env
+    environment:
+      CONTROL_DATABASE_URL: ${CONTROL_DATABASE_URL}
+      TENANT_DATABASE_URL: ${TENANT_DATABASE_URL}
+      DEBUG: ${DEBUG:-False}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-http://localhost:8000}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    volumes:
+      - tavliqo_media:/app/media
+      - tavliqo_static:/app/staticfiles
+    depends_on:
+      control-db:
+        condition: service_healthy
+      tenant-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  control-db:
+    image: postgres:16-alpine
+    container_name: tavliqo-control-db
+    environment:
+      POSTGRES_DB: ${CONTROL_DB_NAME:-tavliqo_control}
+      POSTGRES_USER: ${DB_USER:-tavliqo}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    volumes:
+      - tavliqo_control_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  tenant-db:
+    image: postgres:16-alpine
+    container_name: tavliqo-tenant-db
+    environment:
+      POSTGRES_DB: ${TENANT_DB_NAME:-tavliqo_tenant}
+      POSTGRES_USER: ${DB_USER:-tavliqo}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+    volumes:
+      - tavliqo_tenant_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  tavliqo_control_db:
+  tavliqo_tenant_db:
+  tavliqo_media:
+  tavliqo_static:
